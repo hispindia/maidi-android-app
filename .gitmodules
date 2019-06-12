@@ -1,0 +1,3 @@
+[submodule "caf_android"]
+	path = caf_android
+	url = https://bss_longpham@bitbucket.org/beesightsoft/caf_android.git
