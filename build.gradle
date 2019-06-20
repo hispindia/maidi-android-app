@@ -1,0 +1,75 @@
+// Top-level build file where you can add configuration options common to all sub-projects/modules.
+
+buildscript {
+    ext.kotlin_version = '1.3.21'
+    repositories {
+        google()
+        jcenter()
+        
+    }
+    dependencies {
+        classpath 'com.android.tools.build:gradle:3.4.0'
+        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
+        classpath "org.jetbrains.kotlin:kotlin-allopen:$kotlin_version"
+        // NOTE: Do not place your application dependencies here; they belong
+        // in the individual module build.gradle files
+    }
+}
+
+allprojects {
+    repositories {
+        jcenter()
+        mavenCentral()
+        google()
+        maven { url "https://jitpack.io" }
+        maven {
+            url 'https://maven.google.com'
+        }
+        maven {
+            url uri('mint-plugin-repo-5.2.4')
+        }
+    }
+}
+
+ext{
+    buildToolsVersion = "28.0.0"
+    minSdkVersion = 21
+    compileSdkVersion = 28
+    targetSdkVersion = 28
+    versionCode = 1
+    versionName = "0.0.1"
+
+    libraries = [
+            // android libs
+            supportVersion    : "28.0.0",
+            lib_supportVersion: "23.3.0",
+            progressBarVersion: "1.2.0",
+
+            // testing libs
+            jUnitVersion      : "4.12",
+
+            //Common libs
+            kotlin_version : '1.3.11',
+            mosby_version : '3.1.1',
+            rxandroid_version : "2.1.1",
+            rxjava_version : '1.1.5',
+            rxkotlin_version : '2.3.0',
+            retrofit_version : '2.5.0',
+            dagger2_version : '2.22',
+            okhttp3_version : '3.14.1',
+            butterknife_version : '10.1.0',
+            dbflow_version: '4.2.4',
+
+            //Additional_version
+            chuck_version : '1.1.0',
+            glide_version : '4.9.0',
+            threeten_version : '1.2.0',
+            timber_version : '4.7.1'
+    ]
+}
+
+
+
+task clean(type: Delete) {
+    delete rootProject.buildDir
+}

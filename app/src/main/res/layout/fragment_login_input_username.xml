@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:orientation="vertical"
+              android:gravity="center_horizontal"
+              android:paddingLeft="10dp"
+              android:paddingRight="10dp"
+              android:paddingTop="30dp"
+              android:paddingBottom="30dp"
+              android:background="@color/colorPrimary"
+              android:theme="@style/DarkBlueBackgroundTheme"
+>
+
+    <ImageView android:layout_width="80dp"
+               android:layout_height="80dp"
+               android:src="@mipmap/ic_launcher"
+    />
+
+    <TextView android:layout_width="wrap_content"
+              android:layout_height="wrap_content"
+              android:text="MAIDI APP"
+              android:textSize="20dp"
+              android:layout_marginTop="50dp"
+    />
+
+    <View android:layout_width="match_parent"
+          android:layout_height="0dp"
+          android:layout_weight="0.3"/>
+
+    <TextView android:layout_width="wrap_content"
+              android:layout_height="wrap_content"
+              android:text="@string/login_username_instruction"
+    />
+
+    <EditText
+            android:id="@+id/fragment_login_input_username_edt_username"
+            android:layout_width="match_parent"
+              android:layout_height="40dp"
+              android:hint="@string/login_input_username_hint"
+              android:layout_marginTop="10dp"
+              android:background="@drawable/bg_white_round_gray_strokes"
+              android:paddingLeft="10dp"
+              android:paddingRight="10dp"
+    />
+
+    <TextView
+            android:id="@+id/fragment_login_input_username_btn_next"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/next"
+            android:textColor="@color/purple"
+            android:textAllCaps="true"
+            android:paddingLeft="30dp"
+            android:paddingRight="30dp"
+            android:paddingTop="5dp"
+            android:paddingBottom="5dp"
+            android:layout_marginTop="20dp"
+            android:clickable="true"
+            android:background="@drawable/bg_white_round_gray_strokes"
+    />
+
+    <TextView android:layout_width="wrap_content"
+              android:layout_height="wrap_content"
+              android:text="@string/login_forgot_username"
+              android:textStyle="italic"
+              android:padding="10dp"
+              android:layout_marginTop="20dp"
+    />
+
+    <View android:layout_width="match_parent"
+          android:layout_height="0dp"
+          android:layout_weight="0.7"/>
+
+    <TextView android:layout_width="wrap_content"
+              android:layout_height="wrap_content"
+              android:text="@string/login_contact_help"
+    />
+
+</LinearLayout>

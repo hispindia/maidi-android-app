@@ -1,0 +1,21 @@
+<resources>
+    <string name="app_name">MAIDI</string>
+
+    <!-- ************** GLOBAL VALUES *********** -->
+    <string name="next">Next</string>
+    <string name="login">Login</string>
+    <string name="password">Password</string>
+
+    <!-- ************** LOGIN SCREEN ************ -->
+    <string name="login_app_title">MAIDI APP</string>
+    <string name="login_username_instruction">
+        Enter username for health workers. If you\'re not please enter mobile number instead
+    </string>
+    <string name="login_input_username_hint">Username or Phone Number</string>
+    <string name="login_input_password_hint">Enter your password</string>
+    <string name="login_forgot_username">Forget username</string>
+    <string name="login_forgot_password">Forget password</string>
+    <string name="login_contact_help">Get help! Contact +9347472983</string>
+
+
+</resources>
