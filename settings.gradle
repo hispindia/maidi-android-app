@@ -1,2 +1,3 @@
-include ':app', ':caf'
+include ':app', ':caf', ':core'
 project(':caf').projectDir = new File('android_caf/caf')
+project(':core').projectDir = new File('dhis2-sdk/core')
