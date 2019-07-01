@@ -1,9 +1,7 @@
 package com.app.maidi.utils
 
-import android.app.Activity
 import android.content.Context
 import android.content.SharedPreferences
-import androidx.fragment.app.FragmentActivity
 
 class AppPreferences {
 
@@ -18,14 +16,16 @@ class AppPreferences {
 
         private var appPreferences: AppPreferences? = null
 
-        fun getInstance(context: Activity?) : AppPreferences?{
-            if(appPreferences == null)
-                appPreferences = AppPreferences(context)
+        fun init(context: Context){
+            appPreferences = AppPreferences(context)
+        }
+
+        fun getInstance() : AppPreferences?{
             return appPreferences
         }
     }
 
-    constructor(context : Activity?){
+    constructor(context : Context?){
         if(context != null){
             prefs = context.getSharedPreferences(APP_PREFERENCES_NAME, Context.MODE_PRIVATE)
         }
@@ -53,5 +53,10 @@ class AppPreferences {
 
     fun clearData(){
         prefs.edit().clear().apply()
+    }
+
+    fun isUserLoggedIn() : Boolean{
+        return appPreferences!!.getValue(USERNAME_KEY) != null
+                && appPreferences!!.getValue(PASSWORD_KEY) != null
     }
 }

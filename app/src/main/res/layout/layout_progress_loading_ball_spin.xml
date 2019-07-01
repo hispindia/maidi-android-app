@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              xmlns:app="http://schemas.android.com/apk/res-auto"
+              xmlns:tools="http://schemas.android.com/tools"
+              android:layout_width="100dp"
+              android:layout_height="wrap_content"
+              android:layout_gravity="center"
+              android:orientation="vertical"
+              tools:ignore="MissingPrefix">
+
+    <com.app.maidi.widget.LoadingIndicatorView
+        android:id="@+id/layout_loading_rotate"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        app:indicator="BallSpinFadeLoader"
+        app:indicator_color="#ffffff"/>
+
+    <TextView
+            android:id="@+id/layout_loading_tv_message"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="13.4dp"
+            android:textColor="@android:color/white"/>
+</LinearLayout>

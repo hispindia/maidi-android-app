@@ -7,4 +7,10 @@
     <color name="purple">#7200b2</color>
 
     <color name="dark_blue">#266BC9</color>
+    <color name="light_blue">#80266BC9</color>
+    <color name="red">#eb5a52</color>
+
+    <!-- Main Activity -->
+    <color name="button_gray_color">#f4f6f6</color>
+    <color name="button_gray_stroke_color">#d9dddf</color>
 </resources>

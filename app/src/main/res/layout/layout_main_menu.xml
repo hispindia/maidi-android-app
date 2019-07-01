@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:orientation="vertical"
+              android:layout_width="225.5dp"
+              android:layout_height="match_parent">
+
+    <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="MAIDI"
+            android:textStyle="bold"
+            android:textSize="35dp"
+            android:layout_marginTop="50dp"
+            android:layout_marginLeft="29.8dp"
+            android:textColor="@android:color/white"
+            fontPath="fonts/NunitoSans-Bold.ttf"
+    />
+
+    <LinearLayout
+            android:id="@+id/layout_main_menu_ll_restore"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingTop="10dp"
+            android:paddingBottom="10dp"
+            android:paddingLeft="28.8dp"
+            android:gravity="center_vertical"
+            android:layout_marginTop="51dp"
+            android:tag="ll_restore">
+
+        <ImageView
+                android:layout_width="23dp"
+                android:layout_height="23dp"
+                android:src="@drawable/ic_restore"
+                android:tint="@android:color/white"/>
+
+        <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/sync"
+                android:textColor="@android:color/white"
+                android:textSize="13.4dp"
+                android:layout_marginLeft="10dp"
+                fontPath="fonts/NunitoSans-Bold.ttf"/>
+
+    </LinearLayout>
+
+    <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginLeft="28.8dp"
+            android:layout_marginRight="10dp"
+            android:background="@android:color/white"
+    />
+
+    <LinearLayout
+            android:id="@+id/layout_main_menu_ll_signout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingTop="10dp"
+            android:paddingBottom="10dp"
+            android:paddingLeft="28.8dp"
+            android:gravity="center_vertical"
+            android:tag="ll_signout">
+
+        <ImageView
+                android:layout_width="23dp"
+                android:layout_height="23dp"
+                android:src="@drawable/ic_sign_out"
+                android:tint="@android:color/white"/>
+
+        <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/logout"
+                android:textColor="@android:color/white"
+                android:textSize="13.4dp"
+                android:layout_marginLeft="10dp"
+                fontPath="fonts/NunitoSans-Bold.ttf"/>
+
+    </LinearLayout>
+
+</LinearLayout>

@@ -8,6 +8,8 @@ apply plugin: 'kotlin-kapt'
 
 apply plugin: 'kotlin-allopen'
 
+apply plugin: 'com.google.gms.google-services'
+
 def lib = rootProject.ext.libraries
 
 android {
@@ -74,14 +76,27 @@ dependencies {
     implementation "com.squareup.okhttp3:okhttp:${lib.okhttp3_version}"
     implementation "com.squareup.okhttp3:logging-interceptor:${lib.okhttp3_version}"
 
-    //DBFlow
+    //Calligraphy
+    implementation "uk.co.chrisjenx:calligraphy:${lib.calligraphyVersion}"
+
+    /*//DBFlow
     annotationProcessor "com.github.Raizlabs.DBFlow:dbflow-processor:${lib.dbflow_version}"
     implementation "com.github.Raizlabs.DBFlow:dbflow-core:${lib.dbflow_version}"
-    implementation "com.github.Raizlabs.DBFlow:dbflow:${lib.dbflow_version}"
+    implementation "com.github.Raizlabs.DBFlow:dbflow:${lib.dbflow_version}"*/
 
     //ButterKnife
     implementation "com.jakewharton:butterknife:${lib.butterknife_version}"
     kapt "com.jakewharton:butterknife-compiler:${lib.butterknife_version}"
 
+    //Firebase
+    implementation "com.google.firebase:firebase-auth:${lib.firebase_version}"
+
+    //Chuck
+    implementation "com.readystatesoftware.chuck:library:${lib.chuck_version}"
+
+    debugImplementation 'com.amitshekhar.android:debug-db:1.0.6'
+
     implementation project(path: ':caf')
+    implementation project(path: ':core')
+    implementation project(path: ':ResideMenu')
 }

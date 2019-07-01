@@ -6,7 +6,7 @@ import com.raizlabs.android.dbflow.annotation.PrimaryKey
 import com.raizlabs.android.dbflow.annotation.Table
 import com.raizlabs.android.dbflow.structure.BaseModel
 
-@Table(database = MaidiDatabase::class)
+//@Table(database = MaidiDatabase::class)
 class User : BaseModel(){
 
     @PrimaryKey

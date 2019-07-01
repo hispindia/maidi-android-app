@@ -12,6 +12,8 @@ import com.app.maidi.services.account.DefaultAccountService
 import com.app.maidi.utils.Constants
 import com.beesightsoft.caf.services.log.DefaultLogService
 import com.beesightsoft.caf.services.log.LogService
+import com.squareup.otto.Bus
+import com.squareup.otto.ThreadEnforcer
 import dagger.Module
 import dagger.Provides
 import java.lang.Exception
@@ -41,6 +43,11 @@ class AppModules{
         }
 
         return defaultLogService
+    }
+
+    @Provides
+    fun provideBus() : Bus {
+        return Bus(ThreadEnforcer.ANY)
     }
 
     @Provides

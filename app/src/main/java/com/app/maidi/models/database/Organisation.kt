@@ -5,7 +5,7 @@ import com.raizlabs.android.dbflow.annotation.Column
 import com.raizlabs.android.dbflow.annotation.Table
 import com.raizlabs.android.dbflow.structure.BaseModel
 
-@Table(database = MaidiDatabase::class)
+//@Table(database = MaidiDatabase::class)
 class Organisation: BaseModel() {
 
     @Column(name = "id")
