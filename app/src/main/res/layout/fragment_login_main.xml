@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              xmlns:app="http://schemas.android.com/apk/res-auto"
+              android:orientation="vertical"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:gravity="center_horizontal"
+              android:paddingLeft="20dp"
+              android:paddingRight="20dp"
+              android:background="@android:color/white">
+
+    <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="MAIDI"
+            android:textSize="35dp"
+            android:layout_marginTop="50dp"
+            android:textColor="@color/dark_blue"
+            fontPath="fonts/NunitoSans-Bold.ttf"/>
+
+    <View
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="0.2"/>
+
+    <com.google.android.material.textfield.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+        <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/fragment_login_main_et_username"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textSize="13.4dp"
+                android:hint="@string/login_input_username_hint"/>
+
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <View android:layout_width="match_parent" android:layout_height="10dp"/>
+
+    <com.google.android.material.textfield.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:passwordToggleEnabled="true"
+            app:passwordToggleDrawable="@drawable/ic_black_eye"
+            app:passwordToggleTint="#BBBBBB">
+
+        <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/fragment_login_main_et_password"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textSize="13.4dp"
+                android:hint="@string/login_input_password_hint"
+                android:inputType="textPassword"
+        />
+
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <View android:layout_width="match_parent" android:layout_height="50dp"/>
+
+    <androidx.cardview.widget.CardView
+            android:id="@+id/fragment_login_main_btn_login"
+            android:layout_width="match_parent"
+            android:layout_height="44dp"
+            app:cardCornerRadius="4dp"
+            app:cardElevation="5dp">
+
+        <TextView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:text="@string/login"
+                android:textColor="@android:color/white"
+                android:background="@drawable/button_blue_selector"
+        />
+
+    </androidx.cardview.widget.CardView>
+
+    <View android:layout_width="match_parent" android:layout_height="10dp"/>
+
+    <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/or"/>
+
+    <View android:layout_width="match_parent" android:layout_height="10dp"/>
+
+    <androidx.cardview.widget.CardView
+            android:id="@+id/fragment_login_main_btn_beneficiary_login"
+            android:layout_width="match_parent"
+            android:layout_height="44dp"
+            app:cardElevation="5dp">
+
+        <TextView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:text="@string/login_beneficiary"
+                android:textColor="@color/dark_blue"
+                android:background="@drawable/button_white_blue_stroke_selector"
+        />
+
+    </androidx.cardview.widget.CardView>
+
+    <View
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="0.8"/>
+
+</LinearLayout>

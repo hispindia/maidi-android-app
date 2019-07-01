@@ -3,19 +3,39 @@
 
     <!-- ************** GLOBAL VALUES *********** -->
     <string name="next">Next</string>
-    <string name="login">Login</string>
+    <string name="login">Log In</string>
     <string name="password">Password</string>
+    <string name="or">OR</string>
+    <string name="resend_otp">Resend OTP</string>
+    <string name="invalid_otp">Invalid OTP</string>
+    <string name="submit">Submit</string>
+    <string name="sync">Sync</string>
+    <string name="logout">Logout</string>
 
     <!-- ************** LOGIN SCREEN ************ -->
     <string name="login_app_title">MAIDI APP</string>
     <string name="login_username_instruction">
         Enter username for health workers. If you\'re not please enter mobile number instead
     </string>
-    <string name="login_input_username_hint">Username or Phone Number</string>
-    <string name="login_input_password_hint">Enter your password</string>
+    <string name="login_input_username_hint">Username</string>
+    <string name="login_input_password_hint">Password</string>
     <string name="login_forgot_username">Forget username</string>
     <string name="login_forgot_password">Forget password</string>
     <string name="login_contact_help">Get help! Contact +9347472983</string>
+    <string name="login_beneficiary">Beneficiary Login</string>
 
+    <!-- ************** Health Worker Menu ********** -->
+    <string name="child_registration">Child \nRegistration</string>
+    <string name="immunization_card">Immunization \nCard</string>
+    <string name="monthly_workplan">Monthly \nWorkplan</string>
+    <string name="survey">Survey</string>
+    <string name="aefi">Adverse Event \nFollowing \nImmunization \n(AEFI)</string>
+    <string name="iec_bcc">IEC/BCC</string>
+
+    <!-- *************** Beneficiary Login ************ -->
+    <string name="enter_phone_number">Enter your mobile number to get started!</string>
+    <string name="otp_instructions">We have sent you the OTP via SMS for \nmobile number verification</string>
+    <string name="didt_get_otp">Didn\'t get the OTP?</string>
+    <string name="mobile">Mobile</string>
 
 </resources>

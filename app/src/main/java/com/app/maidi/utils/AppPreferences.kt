@@ -2,40 +2,61 @@ package com.app.maidi.utils
 
 import android.content.Context
 import android.content.SharedPreferences
-import androidx.fragment.app.FragmentActivity
 
 class AppPreferences {
 
     private val APP_PREFERENCES_NAME = "maidi:preferences"
     private val SERVER_URL_KEY = "key:serverUrl"
-    private val USERNAME_KEY = "key:userName"
+    private val USERNAME_KEY = "key:username"
+    private val PASSWORD_KEY = "key:password"
 
     private lateinit var prefs : SharedPreferences
 
-    constructor(context : FragmentActivity?){
+    companion object{
+
+        private var appPreferences: AppPreferences? = null
+
+        fun init(context: Context){
+            appPreferences = AppPreferences(context)
+        }
+
+        fun getInstance() : AppPreferences?{
+            return appPreferences
+        }
+    }
+
+    constructor(context : Context?){
         if(context != null){
             prefs = context.getSharedPreferences(APP_PREFERENCES_NAME, Context.MODE_PRIVATE)
         }
     }
 
-    fun putUsername(username: String){
+    fun putUserAuthentication(username: String, password: String){
+        putValue(USERNAME_KEY, username)
+        putValue(PASSWORD_KEY, password)
+    }
+
+    fun putValue(key: String, value: String){
         var editor = prefs.edit()
 
-        if(prefs.contains(USERNAME_KEY)){
-            editor.remove(USERNAME_KEY)
+        if(prefs.contains(key)){
+            editor.remove(key)
         }
 
-        editor.putString(USERNAME_KEY, username)
+        editor.putString(key, value)
         editor.apply()
     }
 
-    fun getUsername() : String {
-        if(prefs.contains(USERNAME_KEY))
-            return prefs.getString(USERNAME_KEY, null)
-        return ""
+    fun getValue(key: String) : String{
+        return prefs.getString(key, null)
     }
 
     fun clearData(){
-        prefs.edit().remove(USERNAME_KEY)
+        prefs.edit().clear().apply()
+    }
+
+    fun isUserLoggedIn() : Boolean{
+        return appPreferences!!.getValue(USERNAME_KEY) != null
+                && appPreferences!!.getValue(PASSWORD_KEY) != null
     }
 }

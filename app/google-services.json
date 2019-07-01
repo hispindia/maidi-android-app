@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "15292701146",
+    "firebase_url": "https://demomaidi.firebaseio.com",
+    "project_id": "demomaidi",
+    "storage_bucket": "demomaidi.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:15292701146:android:544df16c5f57f036",
+        "android_client_info": {
+          "package_name": "com.app.maidi"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "15292701146-na6re83u2cfds2kd5gc02ktg8pa988eu.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.app.maidi",
+            "certificate_hash": "b5ca805b1386ad26e80aaae74107f9b69b7df1bd"
+          }
+        },
+        {
+          "client_id": "15292701146-rmjkkl7t05d64g3acb24fqcpo7u8d6fk.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBlAE5X9ycBRw5_LYZNiS7IPBeSTF9dN48"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "15292701146-rmjkkl7t05d64g3acb24fqcpo7u8d6fk.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

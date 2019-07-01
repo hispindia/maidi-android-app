@@ -1,6 +1,6 @@
-[submodule "sdk"]
-	path = sdk
-	url = https://github.com/dhis2/dhis2-android-sdk.git
 [submodule "android_caf"]
 	path = android_caf
 	url = https://bss_longpham@bitbucket.org/beesightsoft/caf_android.git
+[submodule "dhis2-sdk"]
+	path = dhis2-sdk
+	url = https://github.com/dhis2/dhis2-android-sdk.git
