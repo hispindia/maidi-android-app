@@ -6,6 +6,12 @@
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
+        <item name="android:windowActivityTransitions">true</item>
+
+        <!-- Enter and exit transitions -->
+        <item name="android:windowEnterTransition">@transition/window_slide_right</item>
+        <item name="android:windowExitTransition">@transition/window_slide_left</item>
+
     </style>
 
     <style name="DarkBlueBackgroundTheme" parent="AppTheme">

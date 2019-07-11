@@ -43,6 +43,7 @@
                 android:textSize="13.4dp"
                 android:hint="@string/mobile"
                 android:inputType="phone"
+                android:maxLength="10"
                 />
 
     </com.google.android.material.textfield.TextInputLayout>

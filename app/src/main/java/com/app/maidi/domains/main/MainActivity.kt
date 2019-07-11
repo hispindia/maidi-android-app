@@ -1,6 +1,8 @@
 package com.app.maidi.domains.main
 
 import android.content.Intent
+import android.content.res.ColorStateList
+import android.graphics.Color
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
@@ -12,15 +14,17 @@ import butterknife.OnClick
 import com.app.maidi.MainApplication
 import com.app.maidi.R
 import com.app.maidi.domains.base.BaseActivity
-import com.app.maidi.domains.login.DaggerLoginComponent
 import com.app.maidi.domains.login.LoginActivity
+import com.app.maidi.domains.child_registration.ChildRegistrationActivity
+import com.app.maidi.domains.main.fragments.MainBeneficiaryFragment
+import com.app.maidi.domains.main.fragments.MainFragment
 import com.app.maidi.infrastructures.ActivityModules
+import com.app.maidi.utils.Constants
 import com.special.ResideMenu.ResideMenu
 import com.squareup.otto.Subscribe
 import org.hisp.dhis.android.sdk.controllers.DhisController
 import org.hisp.dhis.android.sdk.controllers.DhisService
 import org.hisp.dhis.android.sdk.controllers.PeriodicSynchronizerController
-import org.hisp.dhis.android.sdk.controllers.UserController
 import org.hisp.dhis.android.sdk.controllers.metadata.MetaDataController
 import org.hisp.dhis.android.sdk.events.LoadingMessageEvent
 import org.hisp.dhis.android.sdk.events.UiEvent
@@ -43,12 +47,18 @@ class MainActivity : BaseActivity<MainView, MainPresenter>(), View.OnClickListen
     lateinit var llSignOut: LinearLayout
 
     lateinit var userRoleId: String
+    lateinit var ivMenu: ImageView
+    lateinit var tvTitle: TextView
 
     @BindView(R.id.activity_main_rl_content)
-    lateinit var rlContent: RelativeLayout
+    lateinit var rlContent: LinearLayout
+
+    @BindView(R.id.activity_main_actionbar)
+    lateinit var actionbar: RelativeLayout
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        setContentView(R.layout.activity_main)
 
         userRoleId = AppPreferences(this).userRole
 
@@ -56,10 +66,10 @@ class MainActivity : BaseActivity<MainView, MainPresenter>(), View.OnClickListen
 
         for(role in roleUsers){
             if(role.id.equals(userRoleId)){
-                if(role.name.equals("Guest role"))
-                    setContentView(R.layout.activity_main_beneficiary)
+                if(role.name.equals(Constants.GUEST_ROLE))
+                    transformFragment(R.id.activity_main_fl_content, MainBeneficiaryFragment())
                 else
-                    setContentView(R.layout.activity_main)
+                    transformFragment(R.id.activity_main_fl_content, MainFragment())
             }
         }
 
@@ -81,6 +91,9 @@ class MainActivity : BaseActivity<MainView, MainPresenter>(), View.OnClickListen
         llRestore.setOnClickListener(this)
         llSignOut.setOnClickListener(this)
 
+        ivMenu = actionbar.findViewById(R.id.layout_actionbar_iv_action)
+        tvTitle = actionbar.findViewById(R.id.layout_actionbar_tv_title)
+
         setupCloseMenu(rlContent, this)
     }
 
@@ -92,15 +105,6 @@ class MainActivity : BaseActivity<MainView, MainPresenter>(), View.OnClickListen
     override fun onPause() {
         super.onPause()
         Dhis2Application.bus.unregister(this)
-    }
-
-    @OnClick(R.id.activity_main_iv_menu)
-    fun onMenuClicked(){
-        if(!resideMenu.isOpened) {
-            resideMenu.openMenu(ResideMenu.DIRECTION_LEFT)
-        }else{
-            resideMenu.closeMenu()
-        }
     }
 
     @Subscribe
@@ -134,6 +138,32 @@ class MainActivity : BaseActivity<MainView, MainPresenter>(), View.OnClickListen
             logout()
             resideMenu.closeMenu()
         }
+    }
+
+    fun transparentActionBar(){
+        actionbar.setBackgroundResource(android.R.color.transparent)
+        tvTitle.text = ""
+        ivMenu.setImageResource(R.drawable.ic_black_menu)
+        ivMenu.imageTintList = null
+
+        ivMenu.setOnClickListener({
+            if(!resideMenu.isOpened) {
+                resideMenu.openMenu(ResideMenu.DIRECTION_LEFT)
+            }else{
+                resideMenu.closeMenu()
+            }
+        })
+    }
+
+    fun solidActionBar(title: String){
+        actionbar.setBackgroundResource(R.color.dark_blue)
+        tvTitle.text = title
+        ivMenu.setImageResource(R.drawable.ic_arrow_left)
+        ivMenu.imageTintList = ColorStateList.valueOf(Color.WHITE)
+
+        ivMenu.setOnClickListener({
+            onBackPressed()
+        })
     }
 
     fun setupCloseMenu(view: View, activity: AppCompatActivity) {

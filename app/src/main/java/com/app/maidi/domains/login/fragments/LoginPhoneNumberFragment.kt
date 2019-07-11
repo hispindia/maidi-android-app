@@ -16,6 +16,7 @@ import com.app.maidi.domains.login.LoginActivity
 import com.app.maidi.domains.login.LoginPresenter
 import com.app.maidi.domains.login.LoginView
 import com.app.maidi.utils.Constants
+import com.app.maidi.utils.Utils
 import com.google.android.material.textfield.TextInputEditText
 import com.google.firebase.FirebaseException
 import com.google.firebase.auth.PhoneAuthCredential
@@ -23,6 +24,7 @@ import com.google.firebase.auth.PhoneAuthProvider
 
 class LoginPhoneNumberFragment : BaseFragment(){
 
+    lateinit var loginActivity: LoginActivity
     lateinit var loginPresenter: LoginPresenter
     lateinit var verificationChangeListener: PhoneAuthProvider.OnVerificationStateChangedCallbacks
 
@@ -30,9 +32,10 @@ class LoginPhoneNumberFragment : BaseFragment(){
     lateinit var etPhoneNumber: TextInputEditText
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+        loginActivity = activity as LoginActivity
         createPresenter()
 
-        var viewGroup = (activity as LoginActivity).layoutInflater.inflate(R.layout.fragment_login_input_phone, container, false)
+        var viewGroup = loginActivity.layoutInflater.inflate(R.layout.fragment_login_input_phone, container, false)
         ButterKnife.bind(this, viewGroup)
         verificationChangeListener = object : PhoneAuthProvider.OnVerificationStateChangedCallbacks(){
 
@@ -41,20 +44,20 @@ class LoginPhoneNumberFragment : BaseFragment(){
             }
 
             override fun onVerificationFailed(p0: FirebaseException?) {
-                (activity as LoginActivity).hideLoading()
-                Toast.makeText(activity, p0!!.message, Toast.LENGTH_LONG).show()
+                loginActivity.hideLoading()
+                Toast.makeText(loginActivity, p0!!.message, Toast.LENGTH_LONG).show()
             }
 
             override fun onCodeSent(verificationId: String?, resendToken: PhoneAuthProvider.ForceResendingToken?) {
                 super.onCodeSent(verificationId, resendToken)
-                (activity as LoginActivity).hideLoading()
+                loginActivity.hideLoading()
                 var bundle: Bundle = Bundle()
                 var loginOTPFragment = LoginOTPFragment()
                 bundle.putString(Constants.PHONE_NUMBER, etPhoneNumber.text!!.toString())
                 bundle.putString(Constants.VERIFICATION_ID, verificationId)
                 bundle.putParcelable(Constants.RESEND_TOKEN, resendToken)
                 loginOTPFragment.arguments = bundle
-                (activity as LoginActivity).transformFragment(R.id.activity_login_fl_fragment, loginOTPFragment)
+                loginActivity.transformFragment(R.id.activity_login_fl_fragment, loginOTPFragment)
             }
         }
         return viewGroup
@@ -62,13 +65,23 @@ class LoginPhoneNumberFragment : BaseFragment(){
 
     @OnClick(R.id.fragment_login_input_phone_btn_next)
     fun onNext(){
+        loginActivity.hideKeyBoard(loginActivity)
         if(!etPhoneNumber.text!!.isEmpty()){
-            loginPresenter.sendVerifyRequest(activity as Activity, etPhoneNumber.text.toString(), verificationChangeListener)
+            if(Utils.isValidPhoneNumber(etPhoneNumber.text.toString())){
+                var phoneNumberWithPrefix = Constants.PHONE_NUMBER_PREFIX + etPhoneNumber.text.toString()
+                loginPresenter.sendVerifyRequest(loginActivity, phoneNumberWithPrefix, verificationChangeListener)
+                return
+            }
+
+            Toast.makeText(loginActivity, resources.getString(R.string.phone_number_invalid), Toast.LENGTH_LONG).show()
+            return
         }
+
+        Toast.makeText(loginActivity, resources.getString(R.string.phone_number_not_been_typed), Toast.LENGTH_LONG).show()
     }
 
     fun createPresenter(): LoginPresenter {
-        this.loginPresenter = (activity as LoginActivity).loginPresenter
+        this.loginPresenter = loginActivity.loginPresenter
         return this.loginPresenter
     }
 

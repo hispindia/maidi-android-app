@@ -33,6 +33,18 @@ android {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
     }
+    flavorDimensions 'default'
+    productFlavors {
+        dev {
+            dimension = 'default'
+        }
+        staging {
+            dimension = 'default'
+        }
+        production {
+            dimension = 'default'
+        }
+    }
 }
 
 allOpen {
@@ -94,9 +106,14 @@ dependencies {
     //Chuck
     implementation "com.readystatesoftware.chuck:library:${lib.chuck_version}"
 
+    //Circular imageview
+    implementation "de.hdodenhof:circleimageview:${lib.circular_imageview}"
+
+    //DebugDB
     debugImplementation 'com.amitshekhar.android:debug-db:1.0.6'
 
     implementation project(path: ':caf')
     implementation project(path: ':core')
     implementation project(path: ':ResideMenu')
+    implementation project(path: ':singledateandtimepicker')
 }

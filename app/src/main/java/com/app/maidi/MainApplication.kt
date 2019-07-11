@@ -3,6 +3,7 @@ package com.app.maidi
 import android.app.Activity
 import android.app.Application
 import android.database.sqlite.SQLiteDatabase
+import android.util.Log
 import com.amitshekhar.DebugDB
 import com.app.maidi.database.MaidiDatabase
 import com.app.maidi.infrastructures.AppComponent
@@ -11,9 +12,11 @@ import com.app.maidi.infrastructures.DaggerAppComponent
 import com.app.maidi.utils.AppPreferences
 import com.google.firebase.FirebaseApp
 import com.raizlabs.android.dbflow.config.FlowManager
+import okhttp3.internal.Util
 import org.hisp.dhis.android.sdk.persistence.Dhis2Application
 import org.hisp.dhis.android.sdk.persistence.Dhis2Database
 import org.hisp.dhis.android.sdk.persistence.migrations.MigrationUtil
+import org.hisp.dhis.android.sdk.utils.Utils
 import uk.co.chrisjenx.calligraphy.CalligraphyConfig
 import javax.inject.Inject
 
@@ -38,6 +41,11 @@ class MainApplication : Dhis2Application() {
             .appModules(AppModules(this))
             .build()
         )
+
+        var encrypt = Utils.encryptStrAndToBase64("Maidi@123")
+        Log.d("Encrypt String", encrypt)
+        var decrypt = Utils.decryptStrAndFromBase64(encrypt)
+        Log.d("Decrypt String", decrypt)
     }
 
     fun getApplicationComponent() = applicationComponent

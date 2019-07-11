@@ -85,7 +85,7 @@ class LoginPresenter : BasePresenter<LoginView>{
         FirebaseAuth.getInstance().signInWithCredential(credential)
             .addOnCompleteListener { task ->
                 if(task.isSuccessful){
-                    login("guest", "Maidi@123")
+                    view.signInWithVerifyCodeSuccess()
                 }else{
                     view.getApiFailed(task.exception)
                 }

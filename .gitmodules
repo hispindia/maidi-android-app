@@ -4,3 +4,4 @@
 [submodule "dhis2-sdk"]
 	path = dhis2-sdk
 	url = https://github.com/dhis2/dhis2-android-sdk.git
+	ignore = dirty

@@ -11,6 +11,14 @@
     <string name="submit">Submit</string>
     <string name="sync">Sync</string>
     <string name="logout">Logout</string>
+    <string name="search">Search</string>
+    <string name="enter_dob">Enter DOB</string>
+    <string name="vaccine">Vaccine</string>
+    <string name="date_due">Date due</string>
+
+    <!-- *************** GLOBAL WARNING STRING ************* -->
+    <string name="phone_number_invalid">The phone number is invalid. Please recheck and try again</string>
+    <string name="phone_number_not_been_typed">You need to type your phone number to continue</string>
 
     <!-- ************** LOGIN SCREEN ************ -->
     <string name="login_app_title">MAIDI APP</string>
@@ -25,17 +33,33 @@
     <string name="login_beneficiary">Beneficiary Login</string>
 
     <!-- ************** Health Worker Menu ********** -->
-    <string name="child_registration">Child \nRegistration</string>
-    <string name="immunization_card">Immunization \nCard</string>
-    <string name="monthly_workplan">Monthly \nWorkplan</string>
+    <string name="child_registration">Child Registration</string>
+    <string name="immunization_card">Immunisation Card</string>
+    <string name="monthly_workplan">Monthly Workplan</string>
     <string name="survey">Survey</string>
-    <string name="aefi">Adverse Event \nFollowing \nImmunization \n(AEFI)</string>
+    <string name="aefi">Adverse Event Following Immunization (AEFI)</string>
     <string name="iec_bcc">IEC/BCC</string>
+    <string name="my_immunisation">My Immunisation</string>
 
     <!-- *************** Beneficiary Login ************ -->
     <string name="enter_phone_number">Enter your mobile number to get started!</string>
     <string name="otp_instructions">We have sent you the OTP via SMS for \nmobile number verification</string>
     <string name="didt_get_otp">Didn\'t get the OTP?</string>
     <string name="mobile">Mobile</string>
+
+    <!--- **************** Child Registration ************* -->
+    <string name="first_name">First Name</string>
+    <string name="last_name">Last Name</string>
+    <string name="date_of_birth">Date of Birth</string>
+    <string name="gender">Gender</string>
+    <string name="mother_name">Mothers\'s Name</string>
+    <string name="state">State</string>
+    <string name="district">District</string>
+    <string name="block">Block</string>
+    <string name="village_ward">Village/Ward</string>
+
+    <!--- *************** My Immunisation ************* -->
+    <string name="my_immunisation_title">My Immunisation</string>
+
 
 </resources>
