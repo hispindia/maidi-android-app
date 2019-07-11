@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+             xmlns:app="http://schemas.android.com/apk/res-auto"
+             android:orientation="vertical"
+             android:layout_width="match_parent"
+             android:layout_height="wrap_content">
+
+    <FrameLayout android:id="@+id/item_my_registration_fl_background"
+                 android:layout_width="match_parent"
+                 android:layout_height="match_parent"
+                 android:layout_marginLeft="43.2dp"
+                 android:background="@color/lighter_gray"/>
+
+    <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="19.2dp"
+            android:layout_marginRight="14.6dp"
+            android:paddingTop="9.6dp"
+            android:paddingBottom="9.6dp">
+
+        <de.hdodenhof.circleimageview.CircleImageView
+                android:id="@+id/item_my_registration_civ_avatar"
+                android:layout_width="42.2dp"
+                android:layout_height="42.2dp"
+                android:src="@mipmap/ic_launcher"
+                android:elevation="5dp"
+                app:civ_border_width="1dp"
+                app:civ_border_color="@android:color/white"/>
+
+        <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:orientation="vertical"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp">
+
+            <TextView
+                    android:id="@+id/item_my_registration_tv_name"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Daniel Jordan"
+                    android:textSize="15.4dp"
+                    android:textColor="@android:color/black"
+                    fontPath="fonts/NunitoSans-Bold.ttf"
+            />
+
+            <TextView
+                    android:id="@+id/item_my_registration_tv_description"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="In hac habitasse platea dictumst. Vivamus adip."
+                    android:textSize="11.5dp"
+                    android:textColor="@android:color/black"
+                    android:singleLine="true"/>
+
+        </LinearLayout>
+
+        <TextView
+                android:id="@+id/item_my_registration_tv_time"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="6:03 PM"/>
+
+    </LinearLayout>
+
+</FrameLayout>

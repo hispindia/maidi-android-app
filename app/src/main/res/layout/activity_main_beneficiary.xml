@@ -9,18 +9,10 @@
         tools:context=".domains.main.MainActivity"
         android:background="@android:color/white">
 
-    <ImageView
-            android:id="@+id/activity_main_iv_menu"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:paddingLeft="19.2dp"
-            android:paddingRight="19.2dp"
-            android:paddingTop="8.8dp"
-            android:paddingBottom="8.8dp"
-            android:src="@drawable/ic_black_menu"/>
+    <include android:id="@+id/activity_main_actionbar" layout="@layout/layout_actionbar"/>
 
     <TextView
-            android:id="@+id/activity_main_health_worker_tv_title"
+            android:id="@+id/activity_main_tv_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="MAIDI"
@@ -38,13 +30,13 @@
             android:layout_marginRight="29dp"
             android:layout_marginTop="85.2dp"
             android:orientation="vertical"
-            android:layout_below="@+id/activity_main_health_worker_tv_title"
+            android:layout_below="@+id/activity_main_tv_title"
     >
 
         <LinearLayout android:layout_width="match_parent" android:layout_height="126.7dp">
 
             <FrameLayout
-                    android:id="@+id/activity_main_health_worker_fl_child_registration"
+                    android:id="@+id/activity_main_fl_child_registration"
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
                     android:layout_weight="0.5"
@@ -64,7 +56,7 @@
             <View android:layout_width="14.4dp" android:layout_height="match_parent"/>
 
             <FrameLayout
-                    android:id="@+id/activity_main_health_worker_fl_immunization_card"
+                    android:id="@+id/activity_main_fl_immunization_card"
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
                     android:layout_weight="0.5"

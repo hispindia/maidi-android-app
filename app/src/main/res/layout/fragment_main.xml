@@ -1,0 +1,266 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:id="@+id/activity_main_rl_content"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:context=".domains.main.MainActivity"
+        android:background="@android:color/white">
+
+    <TextView
+            android:id="@+id/activity_main_tv_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="MAIDI"
+            android:textSize="30dp"
+            android:layout_marginTop="58.9dp"
+            android:textColor="@color/dark_blue"
+            android:layout_centerHorizontal="true"
+            fontPath="fonts/NunitoSans-Bold.ttf"
+    />
+
+    <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="29dp"
+            android:layout_marginRight="29dp"
+            android:layout_marginTop="40dp"
+            android:orientation="vertical"
+            android:layout_below="@+id/activity_main_tv_title"
+    >
+
+        <LinearLayout android:layout_width="match_parent" android:layout_height="126.7dp">
+
+            <FrameLayout
+                    android:id="@+id/activity_main_fl_child_registration"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="0.5"
+                    android:background="@drawable/button_gray_gray_stroke_selector"
+                    android:padding="12.5dp"
+            >
+                <LinearLayout android:layout_width="match_parent"
+                              android:layout_height="match_parent"
+                              android:orientation="vertical"
+                              android:gravity="center">
+
+                    <ImageView android:layout_width="wrap_content"
+                               android:layout_height="wrap_content"
+                               android:src="@drawable/ic_baby_boy"
+                               android:layout_marginBottom="5dp"
+                    />
+
+                    <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="@string/child_registration"
+                            android:textSize="11.5dp"
+                            android:textColor="@color/dark_blue"
+                            android:gravity="center"
+                            fontPath="fonts/NunitoSans-Bold.ttf"/>
+
+                </LinearLayout>
+
+
+            </FrameLayout>
+
+            <View android:layout_width="14.4dp" android:layout_height="match_parent"/>
+
+            <FrameLayout
+                    android:id="@+id/activity_main_fl_immunization_card"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="0.5"
+                    android:background="@drawable/button_gray_gray_stroke_selector"
+                    android:padding="12.5dp"
+            >
+                <LinearLayout android:layout_width="match_parent"
+                              android:layout_height="match_parent"
+                              android:orientation="vertical"
+                              android:gravity="center">
+
+                    <ImageView android:layout_width="wrap_content"
+                               android:layout_height="wrap_content"
+                               android:src="@drawable/ic_immunisation_card"
+                               android:layout_marginBottom="5dp"
+                    />
+
+                    <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="@string/immunization_card"
+                            android:textSize="11.5dp"
+                            android:textColor="@color/dark_blue"
+                            android:gravity="center"
+                            fontPath="fonts/NunitoSans-Bold.ttf"/>
+
+                </LinearLayout>
+
+
+            </FrameLayout>
+
+
+        </LinearLayout>
+
+        <View android:layout_width="match_parent" android:layout_height="14.4dp"/>
+
+        <LinearLayout android:layout_width="match_parent" android:layout_height="126.7dp">
+
+            <FrameLayout
+                    android:id="@+id/activity_main_fl_monthly_workplan"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="0.5"
+                    android:background="@drawable/button_gray_gray_stroke_selector"
+                    android:padding="12.5dp"
+            >
+
+                <LinearLayout android:layout_width="match_parent"
+                              android:layout_height="match_parent"
+                              android:orientation="vertical"
+                              android:gravity="center">
+
+                    <ImageView android:layout_width="wrap_content"
+                               android:layout_height="wrap_content"
+                               android:src="@drawable/ic_workplan"
+                               android:tint="@color/dark_blue"
+                               android:layout_marginBottom="5dp"
+                    />
+
+                    <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="@string/monthly_workplan"
+                            android:textSize="11.5dp"
+                            android:textColor="@color/dark_blue"
+                            android:gravity="center"
+                            fontPath="fonts/NunitoSans-Bold.ttf"/>
+
+                </LinearLayout>
+
+
+            </FrameLayout>
+
+            <View android:layout_width="14.4dp" android:layout_height="match_parent"/>
+
+            <FrameLayout
+                    android:id="@+id/activity_main_fl_survey"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="0.5"
+                    android:background="@drawable/button_gray_gray_stroke_selector"
+                    android:padding="12.5dp"
+            >
+                <LinearLayout android:layout_width="match_parent"
+                              android:layout_height="match_parent"
+                              android:orientation="vertical"
+                              android:gravity="center">
+
+                    <ImageView android:layout_width="wrap_content"
+                               android:layout_height="wrap_content"
+                               android:src="@drawable/ic_survey"
+                               android:tint="@color/dark_blue"
+                               android:layout_marginBottom="5dp"
+                    />
+
+                    <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="@string/survey"
+                            android:textSize="11.5dp"
+                            android:textColor="@color/dark_blue"
+                            android:gravity="center"
+                            fontPath="fonts/NunitoSans-Bold.ttf"/>
+
+                </LinearLayout>
+
+
+            </FrameLayout>
+
+
+        </LinearLayout>
+
+        <View android:layout_width="match_parent" android:layout_height="14.4dp"/>
+
+        <LinearLayout android:layout_width="match_parent" android:layout_height="126.7dp">
+
+            <FrameLayout
+                    android:id="@+id/activity_main_fl_aefi"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="0.5"
+                    android:background="@drawable/button_gray_gray_stroke_selector"
+                    android:paddingTop="10.6dp"
+                    android:paddingBottom="10.6dp"
+            >
+
+                <LinearLayout android:layout_width="match_parent"
+                              android:layout_height="match_parent"
+                              android:orientation="vertical"
+                              android:gravity="center">
+
+                    <ImageView android:layout_width="wrap_content"
+                               android:layout_height="wrap_content"
+                               android:src="@drawable/ic_aefi"
+                               android:tint="@color/dark_blue"
+                               android:layout_marginBottom="5dp"
+                    />
+
+                    <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="@string/aefi"
+                            android:textSize="11.5dp"
+                            android:textColor="@color/dark_blue"
+                            android:gravity="center"
+                            fontPath="fonts/NunitoSans-Bold.ttf"/>
+
+                </LinearLayout>
+
+            </FrameLayout>
+
+            <View android:layout_width="14.4dp" android:layout_height="match_parent"/>
+
+            <FrameLayout
+                    android:id="@+id/activity_main_fl_iec_bcc"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="0.5"
+                    android:background="@drawable/button_gray_gray_stroke_selector"
+                    android:padding="12.5dp"
+            >
+
+                <LinearLayout android:layout_width="match_parent"
+                              android:layout_height="match_parent"
+                              android:orientation="vertical"
+                              android:gravity="center">
+
+                    <ImageView android:layout_width="wrap_content"
+                               android:layout_height="wrap_content"
+                               android:src="@drawable/ic_vaccine"
+                               android:tint="@color/dark_blue"
+                               android:layout_marginBottom="5dp"
+                    />
+
+                    <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="@string/iec_bcc"
+                            android:textSize="11.5dp"
+                            android:textColor="@color/dark_blue"
+                            android:gravity="center"
+                            fontPath="fonts/NunitoSans-Bold.ttf"/>
+
+                </LinearLayout>
+
+
+            </FrameLayout>
+
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+</RelativeLayout>

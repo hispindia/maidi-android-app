@@ -1,6 +1,7 @@
 package com.app.maidi.domains.base
 
 import android.app.Activity
+import android.app.ActivityOptions
 import android.app.Dialog
 import android.content.Context
 import android.content.Intent
@@ -30,6 +31,7 @@ abstract class BaseActivity<V : MvpView, P : MvpPresenter<V>> : MvpActivity<V, P
 
     fun transformFragment(container: Int, V : Fragment){
         supportFragmentManager.beginTransaction()
+            .setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_left, R.anim.slide_out_right)
             .replace(container, V)
             .addToBackStack(null)
             .commit()
@@ -39,7 +41,7 @@ abstract class BaseActivity<V : MvpView, P : MvpPresenter<V>> : MvpActivity<V, P
         var intent = Intent(activity, nextActivity)
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
 
-        startActivity(intent)
+        startActivity(intent, ActivityOptions.makeSceneTransitionAnimation(this).toBundle())
 
         if(isFinish)
             activity.finish()

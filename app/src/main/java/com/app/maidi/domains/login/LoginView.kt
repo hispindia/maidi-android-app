@@ -6,6 +6,7 @@ import java.lang.Exception
 
 interface LoginView : BaseView{
 
+    fun signInWithVerifyCodeSuccess()
     fun getAccountInfo(user: User)
     fun getApiFailed(exception: Exception?)
 }

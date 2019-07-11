@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:orientation="vertical"
+              android:layout_width="match_parent"
+              android:layout_height="42dp"
+              android:background="@color/dark_blue">
+    
+    <ImageView
+            android:id="@+id/layout_actionbar_iv_action"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:src="@drawable/ic_arrow_left"
+            android:tint="@android:color/white"
+            android:paddingLeft="19.2dp"
+            android:paddingRight="19.2dp"/>
+
+    <TextView
+            android:id="@+id/layout_actionbar_tv_title"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:text="Child Registration"
+            android:textSize="15.4dp"
+            android:textColor="@android:color/white"
+            android:gravity="center"
+            fontPath="fonts/NunitoSans-Bold.ttf"/>
+
+</RelativeLayout>

@@ -17,6 +17,7 @@ import com.app.maidi.models.database.User
 import com.google.firebase.FirebaseApp
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException
+import com.google.gson.Gson
 import com.squareup.otto.Subscribe
 import org.hisp.dhis.android.sdk.controllers.DhisController
 import org.hisp.dhis.android.sdk.controllers.DhisService
@@ -25,10 +26,13 @@ import org.hisp.dhis.android.sdk.events.LoadingMessageEvent
 import org.hisp.dhis.android.sdk.events.UiEvent
 import org.hisp.dhis.android.sdk.job.NetworkJob
 import org.hisp.dhis.android.sdk.network.APIException
+import org.hisp.dhis.android.sdk.network.Credentials
 import org.hisp.dhis.android.sdk.persistence.Dhis2Application
 import org.hisp.dhis.android.sdk.persistence.preferences.AppPreferences
 import org.hisp.dhis.android.sdk.persistence.preferences.ResourceType
 import org.hisp.dhis.android.sdk.services.StartPeriodicSynchronizerService
+import org.hisp.dhis.android.sdk.utils.Utils
+import org.json.JSONObject
 import javax.inject.Inject
 import kotlin.Exception
 
@@ -109,6 +113,8 @@ class LoginActivity : BaseActivity<LoginView, LoginPresenter>(), LoginView{
                 LoadingController.enableLoading(this, ResourceType.RELATIONSHIPTYPES)
                 LoadingController.enableLoading(this, ResourceType.EVENTS)
                 LoadingController.enableLoading(this, ResourceType.USERROLES)
+                LoadingController.enableLoading(this, ResourceType.ORGANISATIONUNIT)
+                LoadingController.enableLoading(this, ResourceType.TRACKEDENTITYINSTANCE)
                 isPulling = true
                 DhisService.loadInitialData(this)
             } else {
@@ -148,6 +154,13 @@ class LoginActivity : BaseActivity<LoginView, LoginPresenter>(), LoginView{
 
     override fun hideLoading() {
         hideHUD()
+    }
+
+    override fun signInWithVerifyCodeSuccess() {
+        var jsonInfoString = Utils.getDataFromAssetFile(assets, "info.json")
+        var credentials = Gson().fromJson<Credentials>(jsonInfoString, Credentials::class.java)
+        var decryptPassword = Utils.decryptStrAndFromBase64(credentials.password)
+        loginPresenter.login(credentials.username, decryptPassword)
     }
 
     override fun getAccountInfo(user: User) {

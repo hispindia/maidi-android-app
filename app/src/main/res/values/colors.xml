@@ -4,11 +4,16 @@
     <color name="colorPrimaryDark">#10344a</color>
     <color name="colorAccent">#D81B60</color>
     <color name="light_gray">#CCCCCC</color>
+    <color name="lighter_gray">#4de8e8e8</color>
     <color name="purple">#7200b2</color>
 
     <color name="dark_blue">#266BC9</color>
     <color name="light_blue">#80266BC9</color>
+    <color name="litle_light_blue">#dfedff</color>
+
     <color name="red">#eb5a52</color>
+    <color name="dark_gray">#93a2a6</color>
+    <color name="gray_icon">#bdc5c7</color>
 
     <!-- Main Activity -->
     <color name="button_gray_color">#f4f6f6</color>
