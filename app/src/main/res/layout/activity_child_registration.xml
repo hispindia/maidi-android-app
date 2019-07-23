@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
               xmlns:app="http://schemas.android.com/apk/res-auto"
+              android:id="@+id/activity_child_registration_ll_content"
               android:orientation="vertical"
               android:layout_width="match_parent"
               android:layout_height="match_parent"
@@ -113,20 +114,44 @@
 
             <View android:layout_width="match_parent" android:layout_height="14.4dp"/>
 
-            <com.google.android.material.textfield.TextInputLayout
+            <FrameLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:paddingLeft="28.8dp"
                     android:paddingRight="28.8dp">
 
-                <AutoCompleteTextView
+                <Spinner
+                        android:id="@+id/activity_child_registration_sp_gender"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:dropDownSelector="@null"
+                        android:background="@null"
+                        android:overlapAnchor="false"
+                />
+
+                <com.google.android.material.textfield.TextInputLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:drawableEnd="@drawable/ic_gray_arrow_down"
-                        android:text="Female"
-                        android:hint="@string/gender"/>
+                        android:background="@android:color/white">
 
-            </com.google.android.material.textfield.TextInputLayout>
+                    <EditText
+                            android:id="@+id/activity_child_registration_et_gender"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:drawableEnd="@drawable/ic_gray_arrow_down"
+                            android:hint="@string/gender"
+                            android:editable="false"
+                            android:clickable="false"/>
+
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <View
+                        android:id="@+id/activity_child_registration_v_gender"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                />
+
+            </FrameLayout>
 
             <View android:layout_width="match_parent" android:layout_height="14.4dp"/>
 
@@ -137,6 +162,7 @@
                     android:paddingRight="28.8dp">
 
                 <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/activity_child_registration_et_mother_name"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:textSize="15.4dp"
@@ -157,24 +183,27 @@
 
                 <com.google.android.material.textfield.TextInputLayout
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content">
+                        android:layout_height="wrap_content"
+                        android:background="@android:color/white">
 
-                    <AutoCompleteTextView
-                            android:id="@+id/activity_child_registration_actv_state"
+                    <EditText
+                            android:id="@+id/activity_child_registration_et_state"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:drawableEnd="@drawable/ic_gray_arrow_down"
                             android:editable="false"
-                            android:dropDownAnchor="@+id/activity_child_registration_actv_state"
-                            android:dropDownHeight="100dp"
                             android:hint="@string/state"/>
 
                 </com.google.android.material.textfield.TextInputLayout>
 
-                <View
-                        android:id="@+id/activity_child_registration_v_state"
+                <Spinner
+                        android:id="@+id/activity_child_registration_sp_state"
                         android:layout_width="match_parent"
-                        android:layout_height="match_parent"/>
+                        android:layout_height="match_parent"
+                        android:dropDownSelector="@null"
+                        android:background="@null"
+                        android:overlapAnchor="false"
+                />
 
             </FrameLayout>
 
@@ -186,12 +215,15 @@
                     android:paddingLeft="28.8dp"
                     android:paddingRight="28.8dp">
 
+
+
                 <com.google.android.material.textfield.TextInputLayout
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content">
+                        android:layout_height="wrap_content"
+                        android:background="@android:color/white">
 
-                    <AutoCompleteTextView
-                            android:id="@+id/activity_child_registration_actv_district"
+                    <EditText
+                            android:id="@+id/activity_child_registration_et_district"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:drawableEnd="@drawable/ic_gray_arrow_down"
@@ -199,10 +231,14 @@
 
                 </com.google.android.material.textfield.TextInputLayout>
 
-                <View
-                        android:id="@+id/activity_child_registration_v_district"
+                <Spinner
+                        android:id="@+id/activity_child_registration_sp_district"
                         android:layout_width="match_parent"
-                        android:layout_height="match_parent"/>
+                        android:layout_height="match_parent"
+                        android:dropDownSelector="@null"
+                        android:background="@null"
+                        android:overlapAnchor="false"
+                />
 
             </FrameLayout>
 
@@ -216,10 +252,11 @@
 
                 <com.google.android.material.textfield.TextInputLayout
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content">
+                        android:layout_height="wrap_content"
+                        android:background="@android:color/white">
 
-                    <AutoCompleteTextView
-                            android:id="@+id/activity_child_registration_actv_block"
+                    <EditText
+                            android:id="@+id/activity_child_registration_et_block"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:drawableEnd="@drawable/ic_gray_arrow_down"
@@ -227,10 +264,14 @@
 
                 </com.google.android.material.textfield.TextInputLayout>
 
-                <View
-                        android:id="@+id/activity_child_registration_v_block"
+                <Spinner
+                        android:id="@+id/activity_child_registration_sp_block"
                         android:layout_width="match_parent"
-                        android:layout_height="match_parent"/>
+                        android:layout_height="match_parent"
+                        android:dropDownSelector="@null"
+                        android:background="@null"
+                        android:overlapAnchor="false"
+                />
 
             </FrameLayout>
 
@@ -243,6 +284,7 @@
                     android:paddingRight="28.8dp">
 
                 <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/activity_child_registration_et_village"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:textSize="15.4dp"
@@ -256,7 +298,7 @@
             <View android:layout_width="match_parent" android:layout_height="48dp"/>
 
             <androidx.cardview.widget.CardView
-                    android:id="@+id/fragment_login_input_otp_btn_submit"
+                    android:id="@+id/activity_child_registration_btn_submit"
                     android:layout_width="match_parent"
                     android:layout_height="44dp"
                     app:cardCornerRadius="4dp"

@@ -1,35 +1,62 @@
 package com.app.maidi.domains.my_registration.immunisation_detail
 
 import android.content.Context
+import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.CheckBox
+import android.widget.LinearLayout
+import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
+import com.app.maidi.R
+import com.app.maidi.models.Vaccine
+import com.app.maidi.utils.Utils
+import kotlinx.android.synthetic.main.item_immunisation_detail.view.*
 
 class ImmunisationDetailAdapter : RecyclerView.Adapter<ImmunisationDetailAdapter.ImmunisationDetailHolder>{
 
-    lateinit var context: Context
+    var context: Context
+    var dataValues: ArrayList<Vaccine>
     //lateinit var immunisationList: ArrayList<>
 
-    constructor(){
-
+    constructor(context: Context, dataValues: ArrayList<Vaccine>) {
+        this.context = context
+        this.dataValues = dataValues
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ImmunisationDetailHolder {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        var viewGroup = LayoutInflater.from(context).inflate(R.layout.item_immunisation_detail, parent, false)
+        return ImmunisationDetailHolder(viewGroup)
     }
 
     override fun getItemCount(): Int {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        return dataValues.size
     }
 
     override fun onBindViewHolder(holder: ImmunisationDetailHolder, position: Int) {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        if(position % 2 == 0){
+            holder.llContainer.setBackgroundColor(context.resources.getColor(R.color.gray_background_color))
+        }
+        var vaccine = dataValues.get(position)
+        holder.tvVaccineName.text = vaccine.dataElement.displayName
+        holder.tvVaccineDate.text = if(vaccine.dueDate != null && !vaccine.dueDate.isEmpty())
+                                        Utils.convertFromFullDateToSimpleDate(vaccine.dueDate)
+                                    else ""
+        holder.cbInjected.isChecked = vaccine.isInjected
     }
 
     class ImmunisationDetailHolder : RecyclerView.ViewHolder{
 
-        constructor(contentView: View) : super(contentView){
+        var llContainer: LinearLayout
+        var tvVaccineName: TextView
+        var tvVaccineDate: TextView
+        var cbInjected: CheckBox
 
+        constructor(contentView: View) : super(contentView){
+            llContainer = contentView.findViewById(R.id.item_immunisation_detail_ll_container)
+            tvVaccineName = contentView.findViewById(R.id.item_immunisation_detail_tv_vaccine_name)
+            tvVaccineDate = contentView.findViewById(R.id.item_immunisation_detail_tv_vaccine_date)
+            cbInjected = contentView.findViewById(R.id.item_immunisation_detail_cb_checker)
         }
 
     }

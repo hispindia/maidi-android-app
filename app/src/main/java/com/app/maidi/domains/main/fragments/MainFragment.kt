@@ -32,4 +32,9 @@ class MainFragment : BaseFragment() {
     fun onChildRegistrationModuleClicked(){
         mainActivity.transformActivity(mainActivity, ChildRegistrationActivity::class.java, false)
     }
+
+    @OnClick(R.id.activity_main_fl_immunization_card)
+    fun onMyImmunisationModuleClicked(){
+        mainActivity.transformFragment(R.id.activity_main_fl_content, MyRegistrationFragment())
+    }
 }

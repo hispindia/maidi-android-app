@@ -136,13 +136,14 @@ class LoginOTPFragment : BaseFragment(){
 
         var credential = PhoneAuthProvider.getCredential(verificationId, etOtp.text!!.toString())
 
-        loginPresenter.signInWithVerifyCode(credential)
+        loginPresenter.signInWithVerifyCode(credential, phoneNumber)
     }
 
     @OnClick(R.id.fragment_login_input_otp_btn_resend)
     fun onBtnResendClicked(){
         (activity as LoginActivity).showLoading()
-        loginPresenter.resendVerifyToken(activity as Activity, phoneNumber, verificationChangeListener, resendToken)
+        var phoneNumberWithPrefix = Constants.PHONE_NUMBER_PREFIX + phoneNumber
+        loginPresenter.resendVerifyToken(activity as Activity, phoneNumberWithPrefix, verificationChangeListener, resendToken)
     }
 
     @OnTextChanged(R.id.fragment_login_input_otp_et_otp)

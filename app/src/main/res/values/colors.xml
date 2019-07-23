@@ -14,6 +14,7 @@
     <color name="red">#eb5a52</color>
     <color name="dark_gray">#93a2a6</color>
     <color name="gray_icon">#bdc5c7</color>
+    <color name="gray_background_color">#f8f9fb</color>
 
     <!-- Main Activity -->
     <color name="button_gray_color">#f4f6f6</color>

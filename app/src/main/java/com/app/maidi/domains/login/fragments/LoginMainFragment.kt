@@ -39,7 +39,7 @@ class LoginMainFragment : BaseFragment() {
         var username = etUsername.text.toString()
         var password = etPassword.text.toString()
 
-        loginPresenter.login(username, password)
+        loginPresenter.login(username, password, "", false)
     }
 
     @OnClick(R.id.fragment_login_main_btn_beneficiary_login)
