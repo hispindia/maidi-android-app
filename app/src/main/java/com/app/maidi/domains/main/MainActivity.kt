@@ -132,7 +132,7 @@ class MainActivity : BaseActivity<MainView, MainPresenter>(), View.OnClickListen
     override fun onClick(view: View?) {
         if(view!!.tag.equals("ll_restore")){
             showLoading()
-            DhisService.synchronize(this)
+            DhisService.forceSynchronize(this)
             resideMenu.closeMenu()
         }else if(view!!.tag.equals("ll_signout")){
             logout()

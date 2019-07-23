@@ -3,6 +3,7 @@ package com.app.maidi.domains.main.fragments
 import android.animation.Animator
 import android.animation.ValueAnimator
 import android.os.Bundle
+import android.os.Handler
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -55,7 +56,25 @@ class MyRegistrationFragment : BaseFragment(){
 
     @OnClick(R.id.fragment_my_registration_btn_search)
     fun onSearchButtonClicked(){
-        mainActivity.transformActivity(mainActivity, ListMyRegistrationActivity::class.java, false)
+
+        if(singleDateAndTimePicker.visibility == View.VISIBLE){
+            mainActivity.showHUD()
+            controlPicker(500)
+            Handler().postDelayed({
+                gotoListRegistrationScreen()
+                mainActivity.hideHUD()
+            }, 500)
+            return
+        }
+
+        gotoListRegistrationScreen()
+
+    }
+
+    fun gotoListRegistrationScreen(){
+        var bundle = Bundle()
+        bundle.putString(ListMyRegistrationActivity.SEARCH_DATE, Utils.convertLocalDateToServerDate(etDateOfBirth.text.toString()))
+        mainActivity.transformActivity(mainActivity, ListMyRegistrationActivity::class.java, false, bundle)
     }
 
     fun createPresenter() {

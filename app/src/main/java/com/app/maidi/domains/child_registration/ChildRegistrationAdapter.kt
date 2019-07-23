@@ -1,20 +1,24 @@
 package com.app.maidi.domains.child_registration
 
 import android.content.Context
+import android.graphics.Color
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
+import android.widget.BaseAdapter
+import android.widget.SpinnerAdapter
 import android.widget.TextView
+import com.app.maidi.R
 import org.hisp.dhis.android.sdk.persistence.models.OrganUnit
 
-class ChildRegistrationAdapter : ArrayAdapter<OrganUnit> {
+class ChildRegistrationAdapter : ArrayAdapter<OrganUnit>{
 
     var organUnits: List<OrganUnit>
     var layoutId: Int = -1
     var selectedPosition: Int = -1
 
-    constructor(context: Context, layoutId: Int, organUnits: List<OrganUnit>) : super(context, layoutId){
+    constructor(context: Context, layoutId: Int, organUnits: List<OrganUnit>) : super(context, layoutId, organUnits){
         this.layoutId = layoutId
         this.organUnits = organUnits
     }
@@ -31,14 +35,25 @@ class ChildRegistrationAdapter : ArrayAdapter<OrganUnit> {
         return position.toLong()
     }
 
+    override fun getDropDownView(position: Int, convertView: View?, parent: ViewGroup?): View {
+        var view = convertView
+        if(convertView == null){
+            view = LayoutInflater.from(context).inflate(layoutId, parent, false)
+        }
+        var organUnit = organUnits.get(position)
+        var tvTitle = view!!.findViewById<TextView>(R.id.item)
+        tvTitle.setText(organUnit.displayName)
+        return view
+    }
+
     override fun getView(position: Int, convertView: View?, parent: ViewGroup?): View {
         var view = convertView
         if(convertView == null){
             view = LayoutInflater.from(context).inflate(layoutId, parent, false)
         }
-        var organUnit = getItem(position)
-        var tvTitle = view!!.findViewById<TextView>(android.R.id.text1)
-        tvTitle.setText(organUnit.displayName)
+        var organUnit = organUnits.get(position)
+        var tvTitle = view!!.findViewById<TextView>(R.id.item)
+        tvTitle.setTextColor(Color.TRANSPARENT)
         return view
     }
 }

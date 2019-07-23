@@ -2,6 +2,7 @@ package com.app.maidi.domains.child_registration
 
 import android.animation.Animator
 import android.animation.ValueAnimator
+import android.graphics.Color
 import android.os.Bundle
 import android.util.Log
 import android.view.View
@@ -14,14 +15,18 @@ import com.app.maidi.MainApplication
 import com.app.maidi.R
 import com.app.maidi.domains.base.BaseActivity
 import com.app.maidi.infrastructures.ActivityModules
+import com.app.maidi.utils.Constants
 import com.app.maidi.utils.Utils
 import com.github.florent37.singledateandtimepicker.SingleDateAndTimePicker
 import com.google.android.material.textfield.TextInputEditText
 import org.hisp.dhis.android.sdk.controllers.metadata.MetaDataController
-import org.hisp.dhis.android.sdk.persistence.models.OrganUnit
+import org.hisp.dhis.android.sdk.controllers.tracker.TrackerController
+import org.hisp.dhis.android.sdk.persistence.models.*
+import org.joda.time.LocalDate
 import java.util.*
 import javax.inject.Inject
 import kotlin.collections.ArrayList
+import kotlin.collections.HashMap
 
 class ChildRegistrationActivity : BaseActivity<ChildRegistrationView, ChildRegistrationPresenter>(){
 
@@ -30,8 +35,23 @@ class ChildRegistrationActivity : BaseActivity<ChildRegistrationView, ChildRegis
 
     lateinit var application: MainApplication
 
+    @BindView(R.id.activity_child_registration_ll_content)
+    lateinit var llContent: LinearLayout
+
     @BindView(R.id.activity_child_registration_actionbar)
     lateinit var actionbar: RelativeLayout
+
+    @BindView(R.id.activity_child_registration_et_first_name)
+    lateinit var etFirstName: TextInputEditText
+
+    @BindView(R.id.activity_child_registration_et_last_name)
+    lateinit var etLastName: TextInputEditText
+
+    @BindView(R.id.activity_child_registration_et_gender)
+    lateinit var etGender: EditText
+
+    @BindView(R.id.activity_child_registration_et_mother_name)
+    lateinit var etMotherName: TextInputEditText
 
     @BindView(R.id.activity_child_registration_picker)
     lateinit var singleDateAndTimePicker: SingleDateAndTimePicker
@@ -39,20 +59,47 @@ class ChildRegistrationActivity : BaseActivity<ChildRegistrationView, ChildRegis
     @BindView(R.id.activity_child_registration_et_date_of_birth)
     lateinit var etDateOfBirth: TextInputEditText
 
-    @BindView(R.id.activity_child_registration_actv_state)
-    lateinit var actvState: AutoCompleteTextView
+    @BindView(R.id.activity_child_registration_et_state)
+    lateinit var etState: EditText
 
-    @BindView(R.id.activity_child_registration_actv_district)
-    lateinit var actvDistrict: AutoCompleteTextView
+    @BindView(R.id.activity_child_registration_et_district)
+    lateinit var etDistrict: EditText
 
-    @BindView(R.id.activity_child_registration_actv_block)
-    lateinit var actvBlock: AutoCompleteTextView
+    @BindView(R.id.activity_child_registration_et_block)
+    lateinit var etBlock: EditText
+
+    @BindView(R.id.activity_child_registration_et_village)
+    lateinit var etVillage: TextInputEditText
+
+    @BindView(R.id.activity_child_registration_sp_gender)
+    lateinit var spGender: Spinner
+
+    @BindView(R.id.activity_child_registration_sp_state)
+    lateinit var spState: Spinner
+
+    @BindView(R.id.activity_child_registration_sp_district)
+    lateinit var spDistrict: Spinner
+
+    @BindView(R.id.activity_child_registration_sp_block)
+    lateinit var spBlock: Spinner
+
+    val gender = listOf<String>("Female", "Male")
+    var isStateClicked = false
+    var isDistrictClicked = false
+    var isBlockClicked = false
+    var trackedEntityAttributeValueMap : Map<String, TrackedEntityAttributeValue> = HashMap<String, TrackedEntityAttributeValue>()
+
+    lateinit var trackedEntityInstance: TrackedEntityInstance
+    lateinit var enrollment: Enrollment
 
     lateinit var ivBack: ImageView
+    lateinit var currentProgram: Program
+    lateinit var topUnit: OrganisationUnit
     lateinit var stateUnits: List<OrganUnit>
     lateinit var districtUnits: MutableList<OrganUnit>
     lateinit var blockUnits: MutableList<OrganUnit>
 
+    lateinit var genderAdapter: ArrayAdapter<String>
     lateinit var stateAdapter: ChildRegistrationAdapter
     lateinit var districtAdapter: ChildRegistrationAdapter
     lateinit var blockAdapter: ChildRegistrationAdapter
@@ -62,33 +109,71 @@ class ChildRegistrationActivity : BaseActivity<ChildRegistrationView, ChildRegis
         setContentView(R.layout.activity_child_registration)
         ButterKnife.bind(this)
 
+        setupEditTextKeyboard(llContent, this)
+
+        topUnit = MetaDataController.getTopLevelOrganisationUnit()
+        currentProgram = MetaDataController.getProgramByName(Constants.BENEFICIARY_CHILD_REGISTRATION)
+
         ivBack = actionbar.findViewById(R.id.layout_actionbar_iv_action)
         ivBack.setOnClickListener({
             onBackPressed()
         })
 
         etDateOfBirth.setText(Utils.convertCalendarToString(Calendar.getInstance().time))
+        updateGenderDropdownData()
         updateStateDropdownData()
         updateDistrictDropdownData()
         updateBlockDropdownData()
     }
 
+    fun updateGenderDropdownData(){
+        genderAdapter = ArrayAdapter(this, R.layout.item_dropdown, R.id.item, gender)
+        spGender.setAdapter(genderAdapter)
+        spGender.onItemSelectedListener = object : AdapterView.OnItemSelectedListener{
+            override fun onItemSelected(adapterView: AdapterView<*>?, view: View?, pos: Int, p3: Long) {
+                etGender.setText(adapterView!!.getItemAtPosition(pos) as String)
+            }
+
+            override fun onNothingSelected(p0: AdapterView<*>?) {
+
+            }
+        }
+        etGender.setText(gender.get(0))
+    }
+
     fun updateStateDropdownData(){
         try {
+            val units = arrayListOf<OrganUnit>()
             stateUnits = MetaDataController.getOrganisationUnitsStateLevel()
-            stateAdapter = ChildRegistrationAdapter(this, android.R.layout.simple_list_item_1, stateUnits)
-            actvState.threshold = 1
-            actvState.setAdapter(stateAdapter)
-            actvState.setOnItemClickListener({ adapterView, view, i, l ->
-                actvState.setText((adapterView.getItemAtPosition(i) as OrganUnit).displayName)
-                stateAdapter.selectedPosition = i
-                updateDistrictDropdownData()
-                updateBlockDropdownData()
-            })
-            if (stateUnits != null && stateUnits.size > 0) {
-                actvState.setText(stateUnits.get(0).displayName)
-                stateAdapter.selectedPosition = 0
+            if(stateUnits != null && stateUnits.size > 0){
+                var blank = OrganUnit()
+                blank.level = -1
+                blank.displayName = resources.getString(R.string.blank_choose)
+                units.add(blank)
+                units.addAll(stateUnits)
             }
+            stateAdapter = ChildRegistrationAdapter(this, R.layout.item_dropdown, units)
+            spState.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+                override fun onItemSelected(adapterView: AdapterView<*>?, p1: View?, pos: Int, p3: Long) {
+                    var unit = adapterView!!.getItemAtPosition(pos) as OrganUnit
+                    if(unit.level != -1)
+                        etState.setText(unit.displayName)
+                    else
+                        etState.setText("")
+                    stateAdapter.selectedPosition = pos
+                    updateDistrictDropdownData()
+                    updateBlockDropdownData()
+                }
+
+                override fun onNothingSelected(p0: AdapterView<*>?) {
+
+                }
+            }
+            spState.setAdapter(stateAdapter)
+            /*if (stateUnits != null && stateUnits.size > 0) {
+                etState.setText(stateUnits.get(0).displayName)
+                stateAdapter.selectedPosition = 0
+            }*/
         }catch(ex: Exception){
             Log.e(this.localClassName + " Exception", ex.toString())
         }
@@ -96,109 +181,304 @@ class ChildRegistrationActivity : BaseActivity<ChildRegistrationView, ChildRegis
 
     fun updateDistrictDropdownData(){
 
+        var units = arrayListOf<OrganUnit>()
         districtUnits = arrayListOf<OrganUnit>()
 
         try{
-            var stateUnit = stateAdapter.getItem(stateAdapter.selectedPosition)
-            if(stateUnit.sChildren != null && !stateUnit.sChildren.isEmpty()){
-                var districtIds = stateUnit.sChildren.trim().split(" ")
+            if(stateAdapter.getItem(stateAdapter.selectedPosition) != null){
+                var stateUnit = stateAdapter.getItem(stateAdapter.selectedPosition)
+                if(stateUnit.sChildren != null && !stateUnit.sChildren.isEmpty()){
+                    var districtIds = stateUnit.sChildren.trim().split(" ")
 
-                if(districtIds != null && districtIds.size > 0){
+                    if(districtIds != null && districtIds.size > 0){
 
-                    for(districtId in districtIds){
-                        var districtUnit = MetaDataController.getOrganisationUnitsDistrictLevel(districtId)
-                        if(districtUnit != null){
-                            districtUnits.add(districtUnit)
+                        for(districtId in districtIds){
+                            var districtUnit = MetaDataController.getOrganisationUnitsDistrictLevel(districtId)
+                            if(districtUnit != null){
+                                districtUnits.add(districtUnit)
+                            }
                         }
+
+                        if(districtUnits != null && districtUnits.size > 0){
+                            var blank = OrganUnit()
+                            blank.level = -1
+                            blank.displayName = resources.getString(R.string.blank_choose)
+                            units.add(blank)
+                            units.addAll(districtUnits)
+                        }
+
+                        districtAdapter = ChildRegistrationAdapter(this, R.layout.item_dropdown, units)
+
+                        spDistrict.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+                            override fun onItemSelected(adapterView: AdapterView<*>?, p1: View?, pos: Int, p3: Long) {
+                                var unit = adapterView!!.getItemAtPosition(pos) as OrganUnit
+                                if(unit.level != -1)
+                                    etDistrict.setText(unit.displayName)
+                                else
+                                    etDistrict.setText("")
+                                districtAdapter.selectedPosition = pos
+                                updateBlockDropdownData()
+                            }
+
+                            override fun onNothingSelected(p0: AdapterView<*>?) {
+                                TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+                            }
+                        }
+
+                        spDistrict.setAdapter(districtAdapter)
+                        /*if(districtUnits != null && districtUnits.size > 0) {
+                            actvDistrict.setText(districtUnits.get(0).displayName)
+                            districtAdapter.selectedPosition = 0
+                        }*/
+
+                        return
                     }
 
-                    districtAdapter = ChildRegistrationAdapter(this, android.R.layout.simple_list_item_1, districtUnits)
-                    actvDistrict.threshold = 1
-                    actvDistrict.setAdapter(districtAdapter)
-                    actvDistrict.setOnItemClickListener({ adapterView, view, i, l ->
-                        actvDistrict.setText((adapterView.getItemAtPosition(i) as OrganUnit).displayName)
-                        districtAdapter.selectedPosition = i
-                        updateBlockDropdownData()
-                    })
-                    if(districtUnits != null && districtUnits.size > 0) {
-                        actvDistrict.setText(districtUnits.get(0).displayName)
-                        districtAdapter.selectedPosition = 0
-                    }
-
-                    return
                 }
-
             }
         }catch(ex : Exception){
             Log.e(this.localClassName + " Exception", ex.toString())
         }
 
-        actvDistrict.setText("")
-        districtAdapter = ChildRegistrationAdapter(this, android.R.layout.simple_list_item_1, districtUnits)
-        actvDistrict.setAdapter(districtAdapter)
+        etDistrict.setText("")
+        districtAdapter = ChildRegistrationAdapter(this, R.layout.item_dropdown, districtUnits)
+        spDistrict.setAdapter(districtAdapter)
     }
 
     fun updateBlockDropdownData(){
-
+        var units = arrayListOf<OrganUnit>()
         blockUnits = arrayListOf<OrganUnit>()
 
         try{
-            var districtUnit = districtAdapter.getItem(districtAdapter.selectedPosition)
-            if(districtUnit.sChildren != null && !districtUnit.sChildren.isEmpty()){
-                var blockIds = districtUnit.sChildren.trim().split(" ")
+            if(districtAdapter.getItem(districtAdapter.selectedPosition) != null){
+                var districtUnit = districtAdapter.getItem(districtAdapter.selectedPosition)
+                if(districtUnit.sChildren != null && !districtUnit.sChildren.isEmpty()){
+                    var blockIds = districtUnit.sChildren.trim().split(" ")
 
-                if(blockIds != null && blockIds.size > 0){
+                    if(blockIds != null && blockIds.size > 0){
 
-                    for(blockId in blockIds){
-                        var blockUnit = MetaDataController.getOrganisationUnitsBlockLevel(blockId)
-                        if(blockUnit != null){
-                            blockUnits.add(blockUnit)
+                        for(blockId in blockIds){
+                            var blockUnit = MetaDataController.getOrganisationUnitsBlockLevel(blockId)
+                            if(blockUnit != null){
+                                blockUnits.add(blockUnit)
+                            }
                         }
+
+                        if(blockUnits != null && blockUnits.size > 0){
+                            var blank = OrganUnit()
+                            blank.level = -1
+                            blank.displayName = resources.getString(R.string.blank_choose)
+                            units.add(blank)
+                            units.addAll(blockUnits)
+                        }
+
+                        blockAdapter = ChildRegistrationAdapter(this, R.layout.item_dropdown, units)
+
+                        spBlock.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+                            override fun onItemSelected(adapterView: AdapterView<*>?, p1: View?, pos: Int, p3: Long) {
+                                var unit = adapterView!!.getItemAtPosition(pos) as OrganUnit
+                                if(unit.level != -1)
+                                    etBlock.setText(unit.displayName)
+                                else
+                                    etBlock.setText("")
+                                blockAdapter.selectedPosition = pos
+                            }
+
+                            override fun onNothingSelected(p0: AdapterView<*>?) {
+
+                            }
+                        }
+
+                        spBlock.setAdapter(blockAdapter)
+                        /*if(blockUnits != null && blockUnits.size > 0) {
+                            actvBlock.setText(blockUnits.get(0).displayName)
+                            blockAdapter.selectedPosition = 0
+                        }*/
+
+                        return
                     }
 
-                    blockAdapter = ChildRegistrationAdapter(this, android.R.layout.simple_list_item_1, blockUnits)
-                    actvBlock.threshold = 1
-                    actvBlock.setAdapter(blockAdapter)
-                    actvBlock.setOnItemClickListener({ adapterView, view, i, l ->
-                        actvBlock.setText((adapterView.getItemAtPosition(i) as OrganUnit).displayName)
-                        blockAdapter.selectedPosition = i
-                    })
-                    if(blockUnits != null && blockUnits.size > 0) {
-                        actvBlock.setText(blockUnits.get(0).displayName)
-                        blockAdapter.selectedPosition = 0
-                    }
-
-                    return
                 }
-
             }
         }catch(ex : Exception){
             Log.e(this.localClassName + " Exception", ex.toString())
         }
 
-        actvBlock.setText("")
-        blockAdapter = ChildRegistrationAdapter(this, android.R.layout.simple_list_item_1, blockUnits)
-        actvBlock.setAdapter(blockAdapter)
+        etBlock.setText("")
+        blockAdapter = ChildRegistrationAdapter(this, R.layout.item_dropdown, blockUnits)
+        spBlock.setAdapter(blockAdapter)
     }
 
-    @OnClick(R.id.activity_child_registration_v_state)
-    fun onStateSpinnerClicked(){
-        actvState.showDropDown()
-    }
-
-    @OnClick(R.id.activity_child_registration_v_district)
-    fun onDistrictSpinnerClicked(){
-        actvDistrict.showDropDown()
-    }
-
-    @OnClick(R.id.activity_child_registration_v_block)
-    fun onBlockSpinnerClicked(){
-        actvBlock.showDropDown()
+    @OnClick(R.id.activity_child_registration_v_gender)
+    fun onGenderSpinnerClicked(){
+        spGender.performClick()
     }
 
     @OnClick(R.id.activity_child_registration_v_date_of_birth)
     fun onDateOfBirthClicked(){
         controlPicker(500)
+    }
+
+    @OnClick(R.id.activity_child_registration_btn_submit)
+    fun onSubmitButtonClicked(){
+        if(validate()){
+            confirmSave()
+        }
+    }
+
+    fun validate() : Boolean{
+        try {
+            /*if (isMapEmpty(trackedEntityAttributeValueMap)) {
+                Toast.makeText(this, resources.getString(R.string.form_is_empty), Toast.LENGTH_LONG).show()
+                return false
+            }*/
+
+            if (!TrackerController.validateUniqueValues(trackedEntityAttributeValueMap, topUnit.id)) {
+                var listUniqueInvalidFields =
+                    TrackerController.getNotValidatedUniqueValues(trackedEntityAttributeValueMap, topUnit.id)
+                var listInvalidAttributes = " "
+                for (value in listUniqueInvalidFields) {
+                    listInvalidAttributes += value + " "
+                }
+                Toast.makeText(
+                    this,
+                    String.format("Invalid unique value: %s", listInvalidAttributes),
+                    Toast.LENGTH_LONG
+                ).show()
+                return false
+            }
+
+            if (etFirstName.text!!.isEmpty()) {
+                Toast.makeText(this, "Please fill the first name of child", Toast.LENGTH_SHORT).show()
+                return false
+            }
+
+            if (etLastName.text!!.isEmpty()) {
+                Toast.makeText(this, "Please fill the last name of child", Toast.LENGTH_SHORT).show()
+                return false
+            }
+
+            if (etMotherName.text!!.isEmpty()) {
+                Toast.makeText(this, "Please fill the mother's name", Toast.LENGTH_SHORT).show()
+                return false
+            }
+        }catch(ex : Exception){
+            Log.d("Validate Exception", ex.toString())
+        }
+
+        return true
+    }
+
+    fun confirmSave() {
+        try {
+            showHUD()
+            var enrollmentDate = LocalDate.now()
+            var incidentDate = LocalDate.now()
+
+            trackedEntityInstance = TrackedEntityInstance(currentProgram, topUnit.id)
+            enrollment = Enrollment(
+                topUnit.id,
+                trackedEntityInstance.trackedEntityInstance,
+                currentProgram,
+                enrollmentDate.toString(Constants.SERVER_DATE_PATTERN),
+                incidentDate.toString(Constants.SERVER_DATE_PATTERN)
+            )
+
+            var trackedEntityAttributeValues =
+                childPresenter.getTrackedEntityAttributeValues(currentProgram, trackedEntityInstance)
+            enrollment.attributes = trackedEntityAttributeValues
+            setupTrackedEntityAttributeValues()
+            childPresenter.saveTrackedEntityOffline(trackedEntityInstance, enrollment, currentProgram)
+            hideHUD()
+            Toast.makeText(this, "Registration successful", Toast.LENGTH_LONG).show()
+            onBackPressed()
+        }catch(ex : Exception){
+            Log.d("Save Exception", ex.toString())
+            hideHUD()
+        }
+    }
+
+    fun setupTrackedEntityAttributeValues(){
+        var name = etFirstName.text.toString() + " " + etLastName.text.toString()
+        var gender = if(etGender.text.toString().equals("Female")) "F" else "M"
+        var dateOfBirth = Utils.convertLocalDateToServerDate(etDateOfBirth.text.toString())
+        var motherName = etMotherName.text.toString()
+        var mobileNumber = MetaDataController.getUserAccount().phoneNumber
+        var subUnit: OrganUnit? = null
+
+        if(!etState.text.isEmpty()){
+            subUnit = stateAdapter.getItem(stateAdapter.selectedPosition)
+        }
+
+        if(!etDistrict.text.isEmpty()){
+            subUnit = districtAdapter.getItem(districtAdapter.selectedPosition)
+        }
+
+        if(!etBlock.text.isEmpty()){
+            subUnit = blockAdapter.getItem(blockAdapter.selectedPosition)
+        }
+
+        var trackedEntityAttributeValues = enrollment.attributes
+        var programEntityAttributes = MetaDataController.getProgramTrackedEntityAttributes(currentProgram.uid)
+        for(programEntityAttribute in programEntityAttributes){
+            var trackedEntityAttribute = MetaDataController.getTrackedEntityAttribute(programEntityAttribute.trackedEntityAttributeId)
+            var trackedEntityAttributeValue = TrackedEntityAttributeValue()
+
+            if(trackedEntityAttribute.displayName.contains("Name")){
+                createNewTrackedValue(trackedEntityAttributeValues, trackedEntityAttributeValue, programEntityAttribute, name)
+            }
+
+            if(trackedEntityAttribute.displayName.contains("Gender")){
+                createNewTrackedValue(trackedEntityAttributeValues, trackedEntityAttributeValue, programEntityAttribute, gender)
+            }
+
+            if(trackedEntityAttribute.displayName.contains("Date of Birth")){
+                createNewTrackedValue(trackedEntityAttributeValues, trackedEntityAttributeValue, programEntityAttribute, dateOfBirth)
+            }
+
+            if(trackedEntityAttribute.displayName.contains("Mother")){
+                createNewTrackedValue(trackedEntityAttributeValues, trackedEntityAttributeValue, programEntityAttribute, motherName)
+            }
+
+            if(mobileNumber != null && !mobileNumber.isEmpty()){
+                if(trackedEntityAttribute.displayName.contains("Mobile")){
+                    createNewTrackedValue(trackedEntityAttributeValues, trackedEntityAttributeValue, programEntityAttribute, mobileNumber)
+                }
+            }
+
+            if(subUnit != null) {
+                if (trackedEntityAttribute.displayName.contains("Residential")) {
+                    createNewTrackedValue(
+                        trackedEntityAttributeValues,
+                        trackedEntityAttributeValue,
+                        programEntityAttribute,
+                        subUnit.uid
+                    )
+                }
+            }
+        }
+
+        enrollment.attributes = trackedEntityAttributeValues
+    }
+
+    private fun createNewTrackedValue(trackedEntityAttributeValues: MutableList<TrackedEntityAttributeValue>, trackedEntityAttributeValue : TrackedEntityAttributeValue, pea : ProgramTrackedEntityAttribute, value: String){
+        trackedEntityAttributeValue.trackedEntityAttributeId = pea.trackedEntityAttributeId
+        trackedEntityAttributeValue.trackedEntityInstanceId = trackedEntityInstance.getUid()
+        trackedEntityAttributeValue.value = value
+        trackedEntityAttributeValues.add(trackedEntityAttributeValue)
+    }
+
+    private fun isMapEmpty(
+        trackedEntityAttributeValueMap: Map<String, TrackedEntityAttributeValue>
+    ): Boolean {
+        var isEmpty = true
+        for (key in trackedEntityAttributeValueMap.keys) {
+            val value = trackedEntityAttributeValueMap[key]
+            if (value!!.getValue() != null && value!!.getValue() != "") {
+                isEmpty = false
+            }
+        }
+        return isEmpty
     }
 
     override fun createPresenter(): ChildRegistrationPresenter {
@@ -254,4 +534,6 @@ class ChildRegistrationActivity : BaseActivity<ChildRegistrationView, ChildRegis
         valueAnimator.duration = duration.toLong()
         valueAnimator.start()
     }
+
+
 }

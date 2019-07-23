@@ -47,6 +47,17 @@ abstract class BaseActivity<V : MvpView, P : MvpPresenter<V>> : MvpActivity<V, P
             activity.finish()
     }
 
+    fun <T>transformActivity(activity: AppCompatActivity, nextActivity: Class<T>, isFinish: Boolean, bundle : Bundle){
+        var intent = Intent(activity, nextActivity)
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
+        intent.putExtras(bundle)
+
+        startActivity(intent, ActivityOptions.makeSceneTransitionAnimation(this).toBundle())
+
+        if(isFinish)
+            activity.finish()
+    }
+
     override fun attachBaseContext(newBase: Context?) {
         super.attachBaseContext(CalligraphyContextWrapper.wrap(newBase))
     }
@@ -80,7 +91,7 @@ abstract class BaseActivity<V : MvpView, P : MvpPresenter<V>> : MvpActivity<V, P
         try {
             tvMessage!!.text = text
         }catch (exception : Exception){
-            Log.d("Null Exception", exception.message)
+            Log.d("Null Exception", exception.toString())
         }
     }
 

@@ -34,26 +34,12 @@ class LoginPresenter : BasePresenter<LoginView>{
         this.accountService = accountService
     }
 
-    fun login(username: String, password: String){
-        DhisService.logInUser(HttpUrl.parse(Constants.DHIS2_SERVER_URL), Credentials(username, password))
-        /*disposable?.let {
-            if(!it!!.isDisposed){
-                it!!.dispose()
-            }
+    fun login(username: String, password: String, phoneNumber: String, beneficiaryLogin : Boolean){
+        if(beneficiaryLogin){
+            DhisService.logInUserWithPhone(HttpUrl.parse(Constants.DHIS2_SERVER_URL), Credentials(username, password), phoneNumber)
+        }else{
+            DhisService.logInUser(HttpUrl.parse(Constants.DHIS2_SERVER_URL), Credentials(username, password))
         }
-
-        accountService?.let {
-            disposable = it.login(username, password)
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .doOnTerminate({})
-                .subscribe({
-                    view.getAccountInfo(it)
-                    AppPreferences.getInstance()!!.putUserAuthentication(username, password)
-                }, {
-                    view.getApiFailed(it)
-                })
-        }*/
     }
 
     fun sendVerifyRequest(activity: Activity, phoneNumber : String, callback: PhoneAuthProvider.OnVerificationStateChangedCallbacks){
@@ -81,11 +67,11 @@ class LoginPresenter : BasePresenter<LoginView>{
         )
     }
 
-    fun signInWithVerifyCode(credential: PhoneAuthCredential){
+    fun signInWithVerifyCode(credential: PhoneAuthCredential, phoneNumber: String){
         FirebaseAuth.getInstance().signInWithCredential(credential)
             .addOnCompleteListener { task ->
                 if(task.isSuccessful){
-                    view.signInWithVerifyCodeSuccess()
+                    view.signInWithVerifyCodeSuccess(phoneNumber)
                 }else{
                     view.getApiFailed(task.exception)
                 }

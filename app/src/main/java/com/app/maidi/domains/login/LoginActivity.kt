@@ -156,11 +156,11 @@ class LoginActivity : BaseActivity<LoginView, LoginPresenter>(), LoginView{
         hideHUD()
     }
 
-    override fun signInWithVerifyCodeSuccess() {
+    override fun signInWithVerifyCodeSuccess(phoneNumber : String) {
         var jsonInfoString = Utils.getDataFromAssetFile(assets, "info.json")
         var credentials = Gson().fromJson<Credentials>(jsonInfoString, Credentials::class.java)
         var decryptPassword = Utils.decryptStrAndFromBase64(credentials.password)
-        loginPresenter.login(credentials.username, decryptPassword)
+        loginPresenter.login(credentials.username, decryptPassword, phoneNumber, true)
     }
 
     override fun getAccountInfo(user: User) {

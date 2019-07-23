@@ -15,10 +15,12 @@
     <string name="enter_dob">Enter DOB</string>
     <string name="vaccine">Vaccine</string>
     <string name="date_due">Date due</string>
+    <string name="blank_choose">* Select *</string>
 
     <!-- *************** GLOBAL WARNING STRING ************* -->
     <string name="phone_number_invalid">The phone number is invalid. Please recheck and try again</string>
     <string name="phone_number_not_been_typed">You need to type your phone number to continue</string>
+    <string name="form_is_empty">Form is empty, please fill at least one</string>
 
     <!-- ************** LOGIN SCREEN ************ -->
     <string name="login_app_title">MAIDI APP</string>
