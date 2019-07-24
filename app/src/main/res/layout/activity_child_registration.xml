@@ -277,23 +277,36 @@
 
             <View android:layout_width="match_parent" android:layout_height="14.4dp"/>
 
-            <com.google.android.material.textfield.TextInputLayout
+            <FrameLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:paddingLeft="28.8dp"
                     android:paddingRight="28.8dp">
 
-                <com.google.android.material.textfield.TextInputEditText
-                        android:id="@+id/activity_child_registration_et_village"
+                <com.google.android.material.textfield.TextInputLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:textSize="15.4dp"
-                        android:textColor="@android:color/black"
-                        android:textColorHint="@color/dark_gray"
-                        android:hint="@string/village_ward"
+                        android:background="@android:color/white">
+
+                    <EditText
+                            android:id="@+id/activity_child_registration_et_village"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:drawableEnd="@drawable/ic_gray_arrow_down"
+                            android:hint="@string/village_ward"/>
+
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <Spinner
+                        android:id="@+id/activity_child_registration_sp_village"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:dropDownSelector="@null"
+                        android:background="@null"
+                        android:overlapAnchor="false"
                 />
 
-            </com.google.android.material.textfield.TextInputLayout>
+            </FrameLayout>
 
             <View android:layout_width="match_parent" android:layout_height="48dp"/>
 

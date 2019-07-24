@@ -4,6 +4,7 @@ import android.animation.Animator
 import android.animation.ValueAnimator
 import android.graphics.Color
 import android.os.Bundle
+import android.os.Handler
 import android.util.Log
 import android.view.View
 import android.view.animation.DecelerateInterpolator
@@ -69,7 +70,7 @@ class ChildRegistrationActivity : BaseActivity<ChildRegistrationView, ChildRegis
     lateinit var etBlock: EditText
 
     @BindView(R.id.activity_child_registration_et_village)
-    lateinit var etVillage: TextInputEditText
+    lateinit var etVillage: EditText
 
     @BindView(R.id.activity_child_registration_sp_gender)
     lateinit var spGender: Spinner
@@ -82,6 +83,9 @@ class ChildRegistrationActivity : BaseActivity<ChildRegistrationView, ChildRegis
 
     @BindView(R.id.activity_child_registration_sp_block)
     lateinit var spBlock: Spinner
+
+    @BindView(R.id.activity_child_registration_sp_village)
+    lateinit var spVillage: Spinner
 
     val gender = listOf<String>("Female", "Male")
     var isStateClicked = false
@@ -98,11 +102,13 @@ class ChildRegistrationActivity : BaseActivity<ChildRegistrationView, ChildRegis
     lateinit var stateUnits: List<OrganUnit>
     lateinit var districtUnits: MutableList<OrganUnit>
     lateinit var blockUnits: MutableList<OrganUnit>
+    lateinit var villageUnits: MutableList<OrganUnit>
 
     lateinit var genderAdapter: ArrayAdapter<String>
     lateinit var stateAdapter: ChildRegistrationAdapter
     lateinit var districtAdapter: ChildRegistrationAdapter
     lateinit var blockAdapter: ChildRegistrationAdapter
+    lateinit var villageAdapter: ChildRegistrationAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -124,6 +130,7 @@ class ChildRegistrationActivity : BaseActivity<ChildRegistrationView, ChildRegis
         updateStateDropdownData()
         updateDistrictDropdownData()
         updateBlockDropdownData()
+        updateVillageDropdownData()
     }
 
     fun updateGenderDropdownData(){
@@ -282,6 +289,7 @@ class ChildRegistrationActivity : BaseActivity<ChildRegistrationView, ChildRegis
                                 else
                                     etBlock.setText("")
                                 blockAdapter.selectedPosition = pos
+                                updateVillageDropdownData()
                             }
 
                             override fun onNothingSelected(p0: AdapterView<*>?) {
@@ -307,6 +315,70 @@ class ChildRegistrationActivity : BaseActivity<ChildRegistrationView, ChildRegis
         etBlock.setText("")
         blockAdapter = ChildRegistrationAdapter(this, R.layout.item_dropdown, blockUnits)
         spBlock.setAdapter(blockAdapter)
+    }
+
+    fun updateVillageDropdownData(){
+        var units = arrayListOf<OrganUnit>()
+        villageUnits = arrayListOf<OrganUnit>()
+
+        try{
+            if(blockAdapter.getItem(blockAdapter.selectedPosition) != null){
+                var blockUnit = blockAdapter.getItem(blockAdapter.selectedPosition)
+                if(blockUnit.sChildren != null && !blockUnit.sChildren.isEmpty()){
+                    var villageIds = blockUnit.sChildren.trim().split(" ")
+
+                    if(villageIds != null && villageIds.size > 0){
+
+                        for(villageId in villageIds){
+                            var villageUnit = MetaDataController.getOrganisationUnitsVillageLevel(villageId)
+                            if(villageUnit != null){
+                                villageUnits.add(villageUnit)
+                            }
+                        }
+
+                        if(villageUnits != null && villageUnits.size > 0){
+                            var blank = OrganUnit()
+                            blank.level = -1
+                            blank.displayName = resources.getString(R.string.blank_choose)
+                            units.add(blank)
+                            units.addAll(villageUnits)
+                        }
+
+                        villageAdapter = ChildRegistrationAdapter(this, R.layout.item_dropdown, units)
+
+                        spVillage.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+                            override fun onItemSelected(adapterView: AdapterView<*>?, p1: View?, pos: Int, p3: Long) {
+                                var unit = adapterView!!.getItemAtPosition(pos) as OrganUnit
+                                if(unit.level != -1)
+                                    etVillage.setText(unit.displayName)
+                                else
+                                    etVillage.setText("")
+                                villageAdapter.selectedPosition = pos
+                            }
+
+                            override fun onNothingSelected(p0: AdapterView<*>?) {
+
+                            }
+                        }
+
+                        spVillage.setAdapter(villageAdapter)
+                        /*if(blockUnits != null && blockUnits.size > 0) {
+                            actvBlock.setText(blockUnits.get(0).displayName)
+                            blockAdapter.selectedPosition = 0
+                        }*/
+
+                        return
+                    }
+
+                }
+            }
+        }catch(ex : Exception){
+            Log.e(this.localClassName + " Exception", ex.toString())
+        }
+
+        etVillage.setText("")
+        villageAdapter = ChildRegistrationAdapter(this, R.layout.item_dropdown, villageUnits)
+        spVillage.setAdapter(villageAdapter)
     }
 
     @OnClick(R.id.activity_child_registration_v_gender)
@@ -372,26 +444,32 @@ class ChildRegistrationActivity : BaseActivity<ChildRegistrationView, ChildRegis
     fun confirmSave() {
         try {
             showHUD()
-            var enrollmentDate = LocalDate.now()
-            var incidentDate = LocalDate.now()
+            if(singleDateAndTimePicker.visibility == View.VISIBLE){
+                controlPicker(500)
+            }
+            Handler().postDelayed({
 
-            trackedEntityInstance = TrackedEntityInstance(currentProgram, topUnit.id)
-            enrollment = Enrollment(
-                topUnit.id,
-                trackedEntityInstance.trackedEntityInstance,
-                currentProgram,
-                enrollmentDate.toString(Constants.SERVER_DATE_PATTERN),
-                incidentDate.toString(Constants.SERVER_DATE_PATTERN)
-            )
+                var enrollmentDate = LocalDate.now()
+                var incidentDate = LocalDate.now()
 
-            var trackedEntityAttributeValues =
-                childPresenter.getTrackedEntityAttributeValues(currentProgram, trackedEntityInstance)
-            enrollment.attributes = trackedEntityAttributeValues
-            setupTrackedEntityAttributeValues()
-            childPresenter.saveTrackedEntityOffline(trackedEntityInstance, enrollment, currentProgram)
-            hideHUD()
-            Toast.makeText(this, "Registration successful", Toast.LENGTH_LONG).show()
-            onBackPressed()
+                trackedEntityInstance = TrackedEntityInstance(currentProgram, topUnit.id)
+                enrollment = Enrollment(
+                    topUnit.id,
+                    trackedEntityInstance.trackedEntityInstance,
+                    currentProgram,
+                    enrollmentDate.toString(Constants.SERVER_DATE_PATTERN),
+                    incidentDate.toString(Constants.SERVER_DATE_PATTERN)
+                )
+
+                var trackedEntityAttributeValues =
+                    childPresenter.getTrackedEntityAttributeValues(currentProgram, trackedEntityInstance)
+                enrollment.attributes = trackedEntityAttributeValues
+                setupTrackedEntityAttributeValues()
+                childPresenter.saveTrackedEntityOffline(trackedEntityInstance, enrollment, currentProgram)
+                hideHUD()
+                Toast.makeText(this, "Registration successful", Toast.LENGTH_LONG).show()
+                onBackPressed()
+            }, 500)
         }catch(ex : Exception){
             Log.d("Save Exception", ex.toString())
             hideHUD()
@@ -416,6 +494,10 @@ class ChildRegistrationActivity : BaseActivity<ChildRegistrationView, ChildRegis
 
         if(!etBlock.text.isEmpty()){
             subUnit = blockAdapter.getItem(blockAdapter.selectedPosition)
+        }
+
+        if(!etVillage.text.isEmpty()){
+            subUnit = villageAdapter.getItem(villageAdapter.selectedPosition)
         }
 
         var trackedEntityAttributeValues = enrollment.attributes
