@@ -80,7 +80,7 @@ class ListMyRegistrationActivity : BaseActivity<ListMyRegistrationView, ListMyRe
         rcvList.addItemDecoration(dividerItemDecoration)
         rcvList.adapter = adapter
 
-        var orgUnit = MetaDataController.getTopLevelOrganisationUnit()
+        var orgUnit = MetaDataController.getTopAssignedOrganisationUnit()
         var program = MetaDataController.getProgramByName(Constants.BENEFICIARY_CHILD_REGISTRATION)
         var userAccount = MetaDataController.getUserAccount()
         var dateAttribute = MetaDataController.getDateOfBirthAttribute()

@@ -5,6 +5,7 @@ import android.content.res.ColorStateList
 import android.graphics.Color
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import android.view.ViewGroup
 import android.widget.*
@@ -18,7 +19,10 @@ import com.app.maidi.domains.login.LoginActivity
 import com.app.maidi.domains.child_registration.ChildRegistrationActivity
 import com.app.maidi.domains.main.fragments.MainBeneficiaryFragment
 import com.app.maidi.domains.main.fragments.MainFragment
+import com.app.maidi.domains.main.fragments.immunisation.immunisation_card.ImmunisationCardFragment
+import com.app.maidi.domains.main.fragments.immunisation.session_wise.SessionWiseDataListFragment
 import com.app.maidi.infrastructures.ActivityModules
+import com.app.maidi.models.ImmunisationCard
 import com.app.maidi.utils.Constants
 import com.special.ResideMenu.ResideMenu
 import com.squareup.otto.Subscribe
@@ -28,6 +32,7 @@ import org.hisp.dhis.android.sdk.controllers.PeriodicSynchronizerController
 import org.hisp.dhis.android.sdk.controllers.metadata.MetaDataController
 import org.hisp.dhis.android.sdk.events.LoadingMessageEvent
 import org.hisp.dhis.android.sdk.events.UiEvent
+import org.hisp.dhis.android.sdk.network.APIException
 import org.hisp.dhis.android.sdk.persistence.Dhis2Application
 import org.hisp.dhis.android.sdk.persistence.preferences.AppPreferences
 import org.hisp.dhis.android.sdk.utils.UiUtils
@@ -227,4 +232,31 @@ class MainActivity : BaseActivity<MainView, MainPresenter>(), View.OnClickListen
         return mainPresenter
     }
 
+    // ******************* Main View functions *****************
+
+    override fun getImmunisationCardListSuccess(immunisationList: List<ImmunisationCard>) {
+        runOnUiThread {
+            if(isCurrentFragment<ImmunisationCardFragment>(R.id.activity_main_fl_content)){
+                getCurrentFragment<ImmunisationCardFragment>(R.id.activity_main_fl_content).updateImmunisationCardList(immunisationList)
+            }
+            hideHUD()
+        }
+
+    }
+
+    override fun getSessionWiseDataListSuccess(sessionWiseList: List<ImmunisationCard>) {
+        runOnUiThread {
+            if(isCurrentFragment<SessionWiseDataListFragment>(R.id.activity_main_fl_content)){
+                getCurrentFragment<SessionWiseDataListFragment>(R.id.activity_main_fl_content).getSessionWiseDataList(sessionWiseList)
+            }
+            hideHUD()
+        }
+    }
+
+    override fun getApiFailed(exception: APIException) {
+        runOnUiThread {
+            Log.e(MainActivity::class.simpleName, exception.toString())
+            hideHUD()
+        }
+    }
 }

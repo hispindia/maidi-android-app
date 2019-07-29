@@ -9,7 +9,9 @@ import butterknife.OnClick
 import com.app.maidi.R
 import com.app.maidi.domains.base.BaseFragment
 import com.app.maidi.domains.child_registration.ChildRegistrationActivity
+import com.app.maidi.domains.child_registration.ChildRegistrationBeneficiaryActivity
 import com.app.maidi.domains.main.MainActivity
+import com.app.maidi.utils.Constants
 
 class MainBeneficiaryFragment : BaseFragment(){
 
@@ -29,7 +31,9 @@ class MainBeneficiaryFragment : BaseFragment(){
 
     @OnClick(R.id.activity_main_fl_child_registration)
     fun onChildRegistrationModuleClicked(){
-        mainActivity.transformActivity(mainActivity, ChildRegistrationActivity::class.java, false)
+        var extras = Bundle()
+        extras.putBoolean(Constants.GUEST_ROLE, true)
+        mainActivity.transformActivity(mainActivity, ChildRegistrationBeneficiaryActivity::class.java, false, extras)
     }
 
     @OnClick(R.id.activity_main_fl_my_immunisation)

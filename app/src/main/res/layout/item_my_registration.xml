@@ -59,12 +59,6 @@
 
         </LinearLayout>
 
-        <TextView
-                android:id="@+id/item_my_registration_tv_time"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="6:03 PM"/>
-
     </LinearLayout>
 
 </FrameLayout>

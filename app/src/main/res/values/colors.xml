@@ -15,6 +15,8 @@
     <color name="dark_gray">#93a2a6</color>
     <color name="gray_icon">#bdc5c7</color>
     <color name="gray_background_color">#f8f9fb</color>
+    <color name="light_gray_background_color">#f7f8f8</color>
+    <color name="lighter_gray_background_color">#b3f7f8f8</color>
 
     <!-- Main Activity -->
     <color name="button_gray_color">#f4f6f6</color>

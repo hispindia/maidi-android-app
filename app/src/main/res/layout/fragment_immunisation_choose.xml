@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:orientation="vertical"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent">
+
+    <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="126.7dp"
+            android:layout_marginTop="47.4dp"
+            android:layout_marginLeft="29dp"
+            android:layout_marginRight="29dp">
+
+        <FrameLayout
+                android:id="@+id/fragment_immunisation_choose_fl_immunisation_card"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="0.5"
+                android:background="@drawable/button_gray_gray_stroke_selector"
+                android:padding="12.5dp"
+        >
+
+            <LinearLayout android:layout_width="match_parent"
+                          android:layout_height="match_parent"
+                          android:orientation="vertical"
+                          android:gravity="center">
+
+                <ImageView android:layout_width="wrap_content"
+                           android:layout_height="wrap_content"
+                           android:src="@drawable/ic_immunisation_card"
+                           android:layout_marginBottom="5dp"
+                />
+
+                <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="@string/immunization_card"
+                        android:textSize="11.5dp"
+                        android:textColor="@color/dark_blue"
+                        android:gravity="center"
+                        fontPath="fonts/NunitoSans-Bold.ttf"/>
+
+            </LinearLayout>
+
+
+        </FrameLayout>
+
+        <View android:layout_width="14.4dp" android:layout_height="match_parent"/>
+
+        <FrameLayout
+                android:id="@+id/fragment_immunisation_choose_fl_session_wise"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="0.5"
+                android:background="@drawable/button_gray_gray_stroke_selector"
+                android:padding="12.5dp"
+        >
+
+            <LinearLayout android:layout_width="match_parent"
+                          android:layout_height="match_parent"
+                          android:orientation="vertical"
+                          android:gravity="center">
+
+                <ImageView android:layout_width="wrap_content"
+                           android:layout_height="wrap_content"
+                           android:src="@drawable/ic_vaccine"
+                           android:layout_marginBottom="5dp"
+                />
+
+                <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="@string/session_wise_vaccine_due"
+                        android:textSize="11.5dp"
+                        android:textColor="@color/dark_blue"
+                        android:gravity="center"
+                        fontPath="fonts/NunitoSans-Bold.ttf"/>
+
+            </LinearLayout>
+
+
+        </FrameLayout>
+
+
+    </LinearLayout>
+
+</LinearLayout>

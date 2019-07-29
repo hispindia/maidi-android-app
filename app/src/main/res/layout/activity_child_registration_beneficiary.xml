@@ -139,10 +139,10 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:drawableEnd="@drawable/ic_gray_arrow_down"
+                            android:textSize="15.4dp"
                             android:hint="@string/gender"
                             android:editable="false"
-                            android:clickable="false"
-                            android:textSize="15.4dp"/>
+                            android:clickable="false"/>
 
                 </com.google.android.material.textfield.TextInputLayout>
 
@@ -176,65 +176,38 @@
 
             <View android:layout_width="match_parent" android:layout_height="14.4dp"/>
 
-            <com.google.android.material.textfield.TextInputLayout
+            <FrameLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:paddingLeft="28.8dp"
                     android:paddingRight="28.8dp">
 
-                <com.google.android.material.textfield.TextInputEditText
-                        android:id="@+id/activity_child_registration_et_father_name"
+                <com.google.android.material.textfield.TextInputLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:textSize="15.4dp"
-                        android:textColor="@android:color/black"
-                        android:textColorHint="@color/dark_gray"
-                        android:hint="@string/father_name"
-                />
+                        android:background="@android:color/white">
 
-            </com.google.android.material.textfield.TextInputLayout>
+                    <EditText
+                            android:id="@+id/activity_child_registration_et_state"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:drawableEnd="@drawable/ic_gray_arrow_down"
+                            android:textSize="15.4dp"
+                            android:editable="false"
+                            android:hint="@string/state"/>
 
-            <View android:layout_width="match_parent" android:layout_height="14.4dp"/>
+                </com.google.android.material.textfield.TextInputLayout>
 
-            <com.google.android.material.textfield.TextInputLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:paddingLeft="28.8dp"
-                    android:paddingRight="28.8dp">
-
-                <com.google.android.material.textfield.TextInputEditText
-                        android:id="@+id/activity_child_registration_et_mobile_number"
+                <Spinner
+                        android:id="@+id/activity_child_registration_sp_state"
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:textSize="15.4dp"
-                        android:textColor="@android:color/black"
-                        android:textColorHint="@color/dark_gray"
-                        android:hint="@string/mobile_number"
-                        android:inputType="phone"
+                        android:layout_height="match_parent"
+                        android:dropDownSelector="@null"
+                        android:background="@null"
+                        android:overlapAnchor="false"
                 />
 
-            </com.google.android.material.textfield.TextInputLayout>
-
-            <View android:layout_width="match_parent" android:layout_height="14.4dp"/>
-
-            <com.google.android.material.textfield.TextInputLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:paddingLeft="28.8dp"
-                    android:paddingRight="28.8dp">
-
-                <com.google.android.material.textfield.TextInputEditText
-                        android:id="@+id/activity_child_registration_et_alternate_contact_number"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:textSize="15.4dp"
-                        android:textColor="@android:color/black"
-                        android:textColorHint="@color/dark_gray"
-                        android:hint="@string/alternate_contact_number"
-                        android:inputType="phone"
-                />
-
-            </com.google.android.material.textfield.TextInputLayout>
+            </FrameLayout>
 
             <View android:layout_width="match_parent" android:layout_height="14.4dp"/>
 
@@ -244,14 +217,7 @@
                     android:paddingLeft="28.8dp"
                     android:paddingRight="28.8dp">
 
-                <Spinner
-                        android:id="@+id/activity_child_registration_sp_social_category"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:dropDownSelector="@null"
-                        android:background="@null"
-                        android:overlapAnchor="false"
-                />
+
 
                 <com.google.android.material.textfield.TextInputLayout
                         android:layout_width="match_parent"
@@ -259,44 +225,93 @@
                         android:background="@android:color/white">
 
                     <EditText
-                            android:id="@+id/activity_child_registration_et_social_category"
+                            android:id="@+id/activity_child_registration_et_district"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:drawableEnd="@drawable/ic_gray_arrow_down"
-                            android:hint="@string/social_category"
-                            android:editable="false"
-                            android:clickable="false"
-                            android:textSize="15.4dp"/>
+                            android:textSize="15.4dp"
+                            android:hint="@string/district"/>
 
                 </com.google.android.material.textfield.TextInputLayout>
 
-                <View
-                        android:id="@+id/activity_child_registration_v_social_category"
+                <Spinner
+                        android:id="@+id/activity_child_registration_sp_district"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
+                        android:dropDownSelector="@null"
+                        android:background="@null"
+                        android:overlapAnchor="false"
                 />
 
             </FrameLayout>
 
             <View android:layout_width="match_parent" android:layout_height="14.4dp"/>
 
-            <com.google.android.material.textfield.TextInputLayout
+            <FrameLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:paddingLeft="28.8dp"
                     android:paddingRight="28.8dp">
 
-                <com.google.android.material.textfield.TextInputEditText
-                        android:id="@+id/activity_child_registration_et_address"
+                <com.google.android.material.textfield.TextInputLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:textSize="15.4dp"
-                        android:textColor="@android:color/black"
-                        android:textColorHint="@color/dark_gray"
-                        android:hint="@string/address"
+                        android:background="@android:color/white">
+
+                    <EditText
+                            android:id="@+id/activity_child_registration_et_block"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:drawableEnd="@drawable/ic_gray_arrow_down"
+                            android:textSize="15.4dp"
+                            android:hint="@string/block"/>
+
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <Spinner
+                        android:id="@+id/activity_child_registration_sp_block"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:dropDownSelector="@null"
+                        android:background="@null"
+                        android:overlapAnchor="false"
                 />
 
-            </com.google.android.material.textfield.TextInputLayout>
+            </FrameLayout>
+
+            <View android:layout_width="match_parent" android:layout_height="14.4dp"/>
+
+            <FrameLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingLeft="28.8dp"
+                    android:paddingRight="28.8dp">
+
+                <com.google.android.material.textfield.TextInputLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="@android:color/white">
+
+                    <EditText
+                            android:id="@+id/activity_child_registration_et_village"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:drawableEnd="@drawable/ic_gray_arrow_down"
+                            android:textSize="15.4dp"
+                            android:hint="@string/village_ward"/>
+
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <Spinner
+                        android:id="@+id/activity_child_registration_sp_village"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:dropDownSelector="@null"
+                        android:background="@null"
+                        android:overlapAnchor="false"
+                />
+
+            </FrameLayout>
 
             <View android:layout_width="match_parent" android:layout_height="48dp"/>
 

@@ -17,6 +17,7 @@
             tools:replace="android:allowBackup">
         <activity android:name=".domains.main.MainActivity"></activity>
         <activity android:name=".domains.child_registration.ChildRegistrationActivity"></activity>
+        <activity android:name=".domains.child_registration.ChildRegistrationBeneficiaryActivity"></activity>
         <activity android:name=".domains.my_registration.list_my_registration.ListMyRegistrationActivity"></activity>
         <activity android:name=".domains.my_registration.immunisation_detail.ImmunisationDetailActivity"></activity>
         <activity android:name=".domains.login.LoginActivity">

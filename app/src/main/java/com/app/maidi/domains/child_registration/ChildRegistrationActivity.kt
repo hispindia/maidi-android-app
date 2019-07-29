@@ -29,7 +29,7 @@ import javax.inject.Inject
 import kotlin.collections.ArrayList
 import kotlin.collections.HashMap
 
-class ChildRegistrationActivity : BaseActivity<ChildRegistrationView, ChildRegistrationPresenter>(){
+class ChildRegistrationActivity : BaseActivity<ChildRegistrationView, ChildRegistrationPresenter>() {
 
     @Inject
     lateinit var childPresenter: ChildRegistrationPresenter
@@ -51,6 +51,9 @@ class ChildRegistrationActivity : BaseActivity<ChildRegistrationView, ChildRegis
     @BindView(R.id.activity_child_registration_et_gender)
     lateinit var etGender: EditText
 
+    @BindView(R.id.activity_child_registration_et_social_category)
+    lateinit var etSocialCategory: EditText
+
     @BindView(R.id.activity_child_registration_et_mother_name)
     lateinit var etMotherName: TextInputEditText
 
@@ -60,38 +63,26 @@ class ChildRegistrationActivity : BaseActivity<ChildRegistrationView, ChildRegis
     @BindView(R.id.activity_child_registration_et_date_of_birth)
     lateinit var etDateOfBirth: TextInputEditText
 
-    @BindView(R.id.activity_child_registration_et_state)
-    lateinit var etState: EditText
+    @BindView(R.id.activity_child_registration_et_mobile_number)
+    lateinit var etMobileNumber: TextInputEditText
 
-    @BindView(R.id.activity_child_registration_et_district)
-    lateinit var etDistrict: EditText
+    @BindView(R.id.activity_child_registration_et_father_name)
+    lateinit var etFatherName: TextInputEditText
 
-    @BindView(R.id.activity_child_registration_et_block)
-    lateinit var etBlock: EditText
+    @BindView(R.id.activity_child_registration_et_alternate_contact_number)
+    lateinit var etAlternateContact: TextInputEditText
 
-    @BindView(R.id.activity_child_registration_et_village)
-    lateinit var etVillage: EditText
+    @BindView(R.id.activity_child_registration_et_address)
+    lateinit var etAddress: TextInputEditText
 
     @BindView(R.id.activity_child_registration_sp_gender)
     lateinit var spGender: Spinner
 
-    @BindView(R.id.activity_child_registration_sp_state)
-    lateinit var spState: Spinner
+    @BindView(R.id.activity_child_registration_sp_social_category)
+    lateinit var spCategory: Spinner
 
-    @BindView(R.id.activity_child_registration_sp_district)
-    lateinit var spDistrict: Spinner
-
-    @BindView(R.id.activity_child_registration_sp_block)
-    lateinit var spBlock: Spinner
-
-    @BindView(R.id.activity_child_registration_sp_village)
-    lateinit var spVillage: Spinner
-
-    val gender = listOf<String>("Female", "Male")
-    var isStateClicked = false
-    var isDistrictClicked = false
-    var isBlockClicked = false
-    var trackedEntityAttributeValueMap : Map<String, TrackedEntityAttributeValue> = HashMap<String, TrackedEntityAttributeValue>()
+    var trackedEntityAttributeValueMap: Map<String, TrackedEntityAttributeValue> =
+        HashMap<String, TrackedEntityAttributeValue>()
 
     lateinit var trackedEntityInstance: TrackedEntityInstance
     lateinit var enrollment: Enrollment
@@ -99,26 +90,26 @@ class ChildRegistrationActivity : BaseActivity<ChildRegistrationView, ChildRegis
     lateinit var ivBack: ImageView
     lateinit var currentProgram: Program
     lateinit var topUnit: OrganisationUnit
-    lateinit var stateUnits: List<OrganUnit>
-    lateinit var districtUnits: MutableList<OrganUnit>
-    lateinit var blockUnits: MutableList<OrganUnit>
-    lateinit var villageUnits: MutableList<OrganUnit>
+    lateinit var genderAttribute: TrackedEntityAttribute
+    lateinit var socialAttribute: TrackedEntityAttribute
+    lateinit var genderOptions: List<Option>
+    lateinit var socialOptions: List<Option>
+    lateinit var socialList: ArrayList<Option>
 
-    lateinit var genderAdapter: ArrayAdapter<String>
-    lateinit var stateAdapter: ChildRegistrationAdapter
-    lateinit var districtAdapter: ChildRegistrationAdapter
-    lateinit var blockAdapter: ChildRegistrationAdapter
-    lateinit var villageAdapter: ChildRegistrationAdapter
+    lateinit var genderAdapter: OptionAdapter
+    lateinit var socialAdapter: OptionAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_child_registration)
+
+        topUnit = MetaDataController.getTopAssignedOrganisationUnit()
+        currentProgram = MetaDataController.getProgramByName(Constants.IMMUNISATION)
+        socialList = arrayListOf()
+
         ButterKnife.bind(this)
 
         setupEditTextKeyboard(llContent, this)
-
-        topUnit = MetaDataController.getTopLevelOrganisationUnit()
-        currentProgram = MetaDataController.getProgramByName(Constants.BENEFICIARY_CHILD_REGISTRATION)
 
         ivBack = actionbar.findViewById(R.id.layout_actionbar_iv_action)
         ivBack.setOnClickListener({
@@ -126,284 +117,77 @@ class ChildRegistrationActivity : BaseActivity<ChildRegistrationView, ChildRegis
         })
 
         etDateOfBirth.setText(Utils.convertCalendarToString(Calendar.getInstance().time))
+
+        genderAttribute = MetaDataController.getGenderAttribute()
+        socialAttribute = MetaDataController.getSocialAttribute()
+        genderOptions = MetaDataController.getOptionsFollowOptionSet(genderAttribute.optionSet)
+        socialOptions = MetaDataController.getOptionsFollowOptionSet(genderAttribute.optionSet)
+        if(socialOptions != null && socialOptions.size > 0){
+            var blank = Option()
+            blank.sortIndex = -1
+            blank.displayName = resources.getString(R.string.blank_choose)
+            socialList.add(blank)
+            socialList.addAll(socialOptions)
+        }
+
         updateGenderDropdownData()
-        updateStateDropdownData()
-        updateDistrictDropdownData()
-        updateBlockDropdownData()
-        updateVillageDropdownData()
+        updateSocialDropdownData()
     }
 
-    fun updateGenderDropdownData(){
-        genderAdapter = ArrayAdapter(this, R.layout.item_dropdown, R.id.item, gender)
+    fun updateGenderDropdownData() {
+        genderAdapter = OptionAdapter(this, R.layout.item_dropdown, genderOptions)
         spGender.setAdapter(genderAdapter)
-        spGender.onItemSelectedListener = object : AdapterView.OnItemSelectedListener{
+        spGender.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
             override fun onItemSelected(adapterView: AdapterView<*>?, view: View?, pos: Int, p3: Long) {
-                etGender.setText(adapterView!!.getItemAtPosition(pos) as String)
+                var option = adapterView!!.getItemAtPosition(pos) as Option
+                etGender.setText(option.displayName)
             }
 
             override fun onNothingSelected(p0: AdapterView<*>?) {
 
             }
         }
-        etGender.setText(gender.get(0))
+        etGender.setText(genderOptions.get(0).displayName)
     }
 
-    fun updateStateDropdownData(){
-        try {
-            val units = arrayListOf<OrganUnit>()
-            stateUnits = MetaDataController.getOrganisationUnitsStateLevel()
-            if(stateUnits != null && stateUnits.size > 0){
-                var blank = OrganUnit()
-                blank.level = -1
-                blank.displayName = resources.getString(R.string.blank_choose)
-                units.add(blank)
-                units.addAll(stateUnits)
+    fun updateSocialDropdownData() {
+        socialAdapter = OptionAdapter(this, R.layout.item_dropdown, socialList)
+        spCategory.setAdapter(socialAdapter)
+        spCategory.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+            override fun onItemSelected(adapterView: AdapterView<*>?, view: View?, pos: Int, p3: Long) {
+                var option = adapterView!!.getItemAtPosition(pos) as Option
+                if(option.sortIndex != -1)
+                    etSocialCategory.setText(option.displayName)
+                else
+                    etSocialCategory.setText("")
             }
-            stateAdapter = ChildRegistrationAdapter(this, R.layout.item_dropdown, units)
-            spState.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
-                override fun onItemSelected(adapterView: AdapterView<*>?, p1: View?, pos: Int, p3: Long) {
-                    var unit = adapterView!!.getItemAtPosition(pos) as OrganUnit
-                    if(unit.level != -1)
-                        etState.setText(unit.displayName)
-                    else
-                        etState.setText("")
-                    stateAdapter.selectedPosition = pos
-                    updateDistrictDropdownData()
-                    updateBlockDropdownData()
-                }
 
-                override fun onNothingSelected(p0: AdapterView<*>?) {
+            override fun onNothingSelected(p0: AdapterView<*>?) {
 
-                }
             }
-            spState.setAdapter(stateAdapter)
-            /*if (stateUnits != null && stateUnits.size > 0) {
-                etState.setText(stateUnits.get(0).displayName)
-                stateAdapter.selectedPosition = 0
-            }*/
-        }catch(ex: Exception){
-            Log.e(this.localClassName + " Exception", ex.toString())
-        }
-    }
-
-    fun updateDistrictDropdownData(){
-
-        var units = arrayListOf<OrganUnit>()
-        districtUnits = arrayListOf<OrganUnit>()
-
-        try{
-            if(stateAdapter.getItem(stateAdapter.selectedPosition) != null){
-                var stateUnit = stateAdapter.getItem(stateAdapter.selectedPosition)
-                if(stateUnit.sChildren != null && !stateUnit.sChildren.isEmpty()){
-                    var districtIds = stateUnit.sChildren.trim().split(" ")
-
-                    if(districtIds != null && districtIds.size > 0){
-
-                        for(districtId in districtIds){
-                            var districtUnit = MetaDataController.getOrganisationUnitsDistrictLevel(districtId)
-                            if(districtUnit != null){
-                                districtUnits.add(districtUnit)
-                            }
-                        }
-
-                        if(districtUnits != null && districtUnits.size > 0){
-                            var blank = OrganUnit()
-                            blank.level = -1
-                            blank.displayName = resources.getString(R.string.blank_choose)
-                            units.add(blank)
-                            units.addAll(districtUnits)
-                        }
-
-                        districtAdapter = ChildRegistrationAdapter(this, R.layout.item_dropdown, units)
-
-                        spDistrict.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
-                            override fun onItemSelected(adapterView: AdapterView<*>?, p1: View?, pos: Int, p3: Long) {
-                                var unit = adapterView!!.getItemAtPosition(pos) as OrganUnit
-                                if(unit.level != -1)
-                                    etDistrict.setText(unit.displayName)
-                                else
-                                    etDistrict.setText("")
-                                districtAdapter.selectedPosition = pos
-                                updateBlockDropdownData()
-                            }
-
-                            override fun onNothingSelected(p0: AdapterView<*>?) {
-                                TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
-                            }
-                        }
-
-                        spDistrict.setAdapter(districtAdapter)
-                        /*if(districtUnits != null && districtUnits.size > 0) {
-                            actvDistrict.setText(districtUnits.get(0).displayName)
-                            districtAdapter.selectedPosition = 0
-                        }*/
-
-                        return
-                    }
-
-                }
-            }
-        }catch(ex : Exception){
-            Log.e(this.localClassName + " Exception", ex.toString())
         }
 
-        etDistrict.setText("")
-        districtAdapter = ChildRegistrationAdapter(this, R.layout.item_dropdown, districtUnits)
-        spDistrict.setAdapter(districtAdapter)
-    }
-
-    fun updateBlockDropdownData(){
-        var units = arrayListOf<OrganUnit>()
-        blockUnits = arrayListOf<OrganUnit>()
-
-        try{
-            if(districtAdapter.getItem(districtAdapter.selectedPosition) != null){
-                var districtUnit = districtAdapter.getItem(districtAdapter.selectedPosition)
-                if(districtUnit.sChildren != null && !districtUnit.sChildren.isEmpty()){
-                    var blockIds = districtUnit.sChildren.trim().split(" ")
-
-                    if(blockIds != null && blockIds.size > 0){
-
-                        for(blockId in blockIds){
-                            var blockUnit = MetaDataController.getOrganisationUnitsBlockLevel(blockId)
-                            if(blockUnit != null){
-                                blockUnits.add(blockUnit)
-                            }
-                        }
-
-                        if(blockUnits != null && blockUnits.size > 0){
-                            var blank = OrganUnit()
-                            blank.level = -1
-                            blank.displayName = resources.getString(R.string.blank_choose)
-                            units.add(blank)
-                            units.addAll(blockUnits)
-                        }
-
-                        blockAdapter = ChildRegistrationAdapter(this, R.layout.item_dropdown, units)
-
-                        spBlock.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
-                            override fun onItemSelected(adapterView: AdapterView<*>?, p1: View?, pos: Int, p3: Long) {
-                                var unit = adapterView!!.getItemAtPosition(pos) as OrganUnit
-                                if(unit.level != -1)
-                                    etBlock.setText(unit.displayName)
-                                else
-                                    etBlock.setText("")
-                                blockAdapter.selectedPosition = pos
-                                updateVillageDropdownData()
-                            }
-
-                            override fun onNothingSelected(p0: AdapterView<*>?) {
-
-                            }
-                        }
-
-                        spBlock.setAdapter(blockAdapter)
-                        /*if(blockUnits != null && blockUnits.size > 0) {
-                            actvBlock.setText(blockUnits.get(0).displayName)
-                            blockAdapter.selectedPosition = 0
-                        }*/
-
-                        return
-                    }
-
-                }
-            }
-        }catch(ex : Exception){
-            Log.e(this.localClassName + " Exception", ex.toString())
-        }
-
-        etBlock.setText("")
-        blockAdapter = ChildRegistrationAdapter(this, R.layout.item_dropdown, blockUnits)
-        spBlock.setAdapter(blockAdapter)
-    }
-
-    fun updateVillageDropdownData(){
-        var units = arrayListOf<OrganUnit>()
-        villageUnits = arrayListOf<OrganUnit>()
-
-        try{
-            if(blockAdapter.getItem(blockAdapter.selectedPosition) != null){
-                var blockUnit = blockAdapter.getItem(blockAdapter.selectedPosition)
-                if(blockUnit.sChildren != null && !blockUnit.sChildren.isEmpty()){
-                    var villageIds = blockUnit.sChildren.trim().split(" ")
-
-                    if(villageIds != null && villageIds.size > 0){
-
-                        for(villageId in villageIds){
-                            var villageUnit = MetaDataController.getOrganisationUnitsVillageLevel(villageId)
-                            if(villageUnit != null){
-                                villageUnits.add(villageUnit)
-                            }
-                        }
-
-                        if(villageUnits != null && villageUnits.size > 0){
-                            var blank = OrganUnit()
-                            blank.level = -1
-                            blank.displayName = resources.getString(R.string.blank_choose)
-                            units.add(blank)
-                            units.addAll(villageUnits)
-                        }
-
-                        villageAdapter = ChildRegistrationAdapter(this, R.layout.item_dropdown, units)
-
-                        spVillage.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
-                            override fun onItemSelected(adapterView: AdapterView<*>?, p1: View?, pos: Int, p3: Long) {
-                                var unit = adapterView!!.getItemAtPosition(pos) as OrganUnit
-                                if(unit.level != -1)
-                                    etVillage.setText(unit.displayName)
-                                else
-                                    etVillage.setText("")
-                                villageAdapter.selectedPosition = pos
-                            }
-
-                            override fun onNothingSelected(p0: AdapterView<*>?) {
-
-                            }
-                        }
-
-                        spVillage.setAdapter(villageAdapter)
-                        /*if(blockUnits != null && blockUnits.size > 0) {
-                            actvBlock.setText(blockUnits.get(0).displayName)
-                            blockAdapter.selectedPosition = 0
-                        }*/
-
-                        return
-                    }
-
-                }
-            }
-        }catch(ex : Exception){
-            Log.e(this.localClassName + " Exception", ex.toString())
-        }
-
-        etVillage.setText("")
-        villageAdapter = ChildRegistrationAdapter(this, R.layout.item_dropdown, villageUnits)
-        spVillage.setAdapter(villageAdapter)
     }
 
     @OnClick(R.id.activity_child_registration_v_gender)
-    fun onGenderSpinnerClicked(){
+    fun onGenderSpinnerClicked() {
         spGender.performClick()
     }
 
     @OnClick(R.id.activity_child_registration_v_date_of_birth)
-    fun onDateOfBirthClicked(){
+    fun onDateOfBirthClicked() {
         controlPicker(500)
     }
 
     @OnClick(R.id.activity_child_registration_btn_submit)
-    fun onSubmitButtonClicked(){
-        if(validate()){
+    fun onSubmitButtonClicked() {
+        if (validate()) {
             confirmSave()
         }
     }
 
-    fun validate() : Boolean{
+    fun validate(): Boolean {
         try {
-            /*if (isMapEmpty(trackedEntityAttributeValueMap)) {
-                Toast.makeText(this, resources.getString(R.string.form_is_empty), Toast.LENGTH_LONG).show()
-                return false
-            }*/
 
             if (!TrackerController.validateUniqueValues(trackedEntityAttributeValueMap, topUnit.id)) {
                 var listUniqueInvalidFields =
@@ -434,7 +218,12 @@ class ChildRegistrationActivity : BaseActivity<ChildRegistrationView, ChildRegis
                 Toast.makeText(this, "Please fill the mother's name", Toast.LENGTH_SHORT).show()
                 return false
             }
-        }catch(ex : Exception){
+
+            if (etMobileNumber.text!!.isEmpty()) {
+                Toast.makeText(this, "Please fill the mobile number", Toast.LENGTH_SHORT).show()
+                return false
+            }
+        } catch (ex: Exception) {
             Log.d("Validate Exception", ex.toString())
         }
 
@@ -444,7 +233,7 @@ class ChildRegistrationActivity : BaseActivity<ChildRegistrationView, ChildRegis
     fun confirmSave() {
         try {
             showHUD()
-            if(singleDateAndTimePicker.visibility == View.VISIBLE){
+            if (singleDateAndTimePicker.visibility == View.VISIBLE) {
                 controlPicker(500)
             }
             Handler().postDelayed({
@@ -470,80 +259,132 @@ class ChildRegistrationActivity : BaseActivity<ChildRegistrationView, ChildRegis
                 Toast.makeText(this, "Registration successful", Toast.LENGTH_LONG).show()
                 onBackPressed()
             }, 500)
-        }catch(ex : Exception){
+        } catch (ex: Exception) {
             Log.d("Save Exception", ex.toString())
             hideHUD()
         }
     }
 
-    fun setupTrackedEntityAttributeValues(){
+    fun setupTrackedEntityAttributeValues() {
         var name = etFirstName.text.toString() + " " + etLastName.text.toString()
-        var gender = if(etGender.text.toString().equals("Female")) "F" else "M"
         var dateOfBirth = Utils.convertLocalDateToServerDate(etDateOfBirth.text.toString())
         var motherName = etMotherName.text.toString()
-        var mobileNumber = MetaDataController.getUserAccount().phoneNumber
-        var subUnit: OrganUnit? = null
+        var mobileNumber = etMobileNumber.text.toString()
+        var fatherName = etFatherName.text.toString()
+        var alternateContact = etAlternateContact.text.toString()
+        var address = etAddress.text.toString()
+        var socialCategory: Option? = null
+        var gender : Option? = null
 
-        if(!etState.text.isEmpty()){
-            subUnit = stateAdapter.getItem(stateAdapter.selectedPosition)
+        if (!etGender.text.isEmpty()) {
+            gender = spGender.selectedItem as Option
         }
 
-        if(!etDistrict.text.isEmpty()){
-            subUnit = districtAdapter.getItem(districtAdapter.selectedPosition)
-        }
-
-        if(!etBlock.text.isEmpty()){
-            subUnit = blockAdapter.getItem(blockAdapter.selectedPosition)
-        }
-
-        if(!etVillage.text.isEmpty()){
-            subUnit = villageAdapter.getItem(villageAdapter.selectedPosition)
+        if (!etSocialCategory.text.isEmpty()) {
+            socialCategory = spCategory.selectedItem as Option
         }
 
         var trackedEntityAttributeValues = enrollment.attributes
         var programEntityAttributes = MetaDataController.getProgramTrackedEntityAttributes(currentProgram.uid)
-        for(programEntityAttribute in programEntityAttributes){
-            var trackedEntityAttribute = MetaDataController.getTrackedEntityAttribute(programEntityAttribute.trackedEntityAttributeId)
+        for (programEntityAttribute in programEntityAttributes) {
+            var trackedEntityAttribute =
+                MetaDataController.getTrackedEntityAttribute(programEntityAttribute.trackedEntityAttributeId)
             var trackedEntityAttributeValue = TrackedEntityAttributeValue()
 
-            if(trackedEntityAttribute.displayName.contains("Name")){
-                createNewTrackedValue(trackedEntityAttributeValues, trackedEntityAttributeValue, programEntityAttribute, name)
+            if (trackedEntityAttribute.displayName.contains("Name")) {
+                createNewTrackedValue(
+                    trackedEntityAttributeValues,
+                    trackedEntityAttributeValue,
+                    programEntityAttribute,
+                    name
+                )
             }
 
-            if(trackedEntityAttribute.displayName.contains("Gender")){
-                createNewTrackedValue(trackedEntityAttributeValues, trackedEntityAttributeValue, programEntityAttribute, gender)
+            if (trackedEntityAttribute.displayName.contains("Gender")) {
+                createNewTrackedValue(
+                    trackedEntityAttributeValues,
+                    trackedEntityAttributeValue,
+                    programEntityAttribute,
+                    gender!!.code
+                )
             }
 
-            if(trackedEntityAttribute.displayName.contains("Date of Birth")){
-                createNewTrackedValue(trackedEntityAttributeValues, trackedEntityAttributeValue, programEntityAttribute, dateOfBirth)
-            }
-
-            if(trackedEntityAttribute.displayName.contains("Mother")){
-                createNewTrackedValue(trackedEntityAttributeValues, trackedEntityAttributeValue, programEntityAttribute, motherName)
-            }
-
-            if(mobileNumber != null && !mobileNumber.isEmpty()){
-                if(trackedEntityAttribute.displayName.contains("Mobile")){
-                    createNewTrackedValue(trackedEntityAttributeValues, trackedEntityAttributeValue, programEntityAttribute, mobileNumber)
-                }
-            }
-
-            if(subUnit != null) {
-                if (trackedEntityAttribute.displayName.contains("Residential")) {
+            if(socialCategory != null) {
+                if (trackedEntityAttribute.displayName.contains("Social")) {
                     createNewTrackedValue(
                         trackedEntityAttributeValues,
                         trackedEntityAttributeValue,
                         programEntityAttribute,
-                        subUnit.uid
+                        socialCategory!!.code
                     )
                 }
             }
+
+            if (trackedEntityAttribute.displayName.contains("Date of Birth")) {
+                createNewTrackedValue(
+                    trackedEntityAttributeValues,
+                    trackedEntityAttributeValue,
+                    programEntityAttribute,
+                    dateOfBirth
+                )
+            }
+
+            if (trackedEntityAttribute.displayName.contains("Mother")) {
+                createNewTrackedValue(
+                    trackedEntityAttributeValues,
+                    trackedEntityAttributeValue,
+                    programEntityAttribute,
+                    motherName
+                )
+            }
+
+            if (trackedEntityAttribute.displayName.contains("Mobile")) {
+                createNewTrackedValue(
+                    trackedEntityAttributeValues,
+                    trackedEntityAttributeValue,
+                    programEntityAttribute,
+                    mobileNumber
+                )
+            }
+
+            if (trackedEntityAttribute.displayName.contains("Father")) {
+                createNewTrackedValue(
+                    trackedEntityAttributeValues,
+                    trackedEntityAttributeValue,
+                    programEntityAttribute,
+                    fatherName
+                )
+            }
+
+            if (trackedEntityAttribute.displayName.contains("Alternate")) {
+                createNewTrackedValue(
+                    trackedEntityAttributeValues,
+                    trackedEntityAttributeValue,
+                    programEntityAttribute,
+                    alternateContact
+                )
+            }
+
+            if (trackedEntityAttribute.displayName.contains("Address")) {
+                createNewTrackedValue(
+                    trackedEntityAttributeValues,
+                    trackedEntityAttributeValue,
+                    programEntityAttribute,
+                    address
+                )
+            }
+
         }
 
         enrollment.attributes = trackedEntityAttributeValues
     }
 
-    private fun createNewTrackedValue(trackedEntityAttributeValues: MutableList<TrackedEntityAttributeValue>, trackedEntityAttributeValue : TrackedEntityAttributeValue, pea : ProgramTrackedEntityAttribute, value: String){
+    private fun createNewTrackedValue(
+        trackedEntityAttributeValues: MutableList<TrackedEntityAttributeValue>,
+        trackedEntityAttributeValue: TrackedEntityAttributeValue,
+        pea: ProgramTrackedEntityAttribute,
+        value: String
+    ) {
         trackedEntityAttributeValue.trackedEntityAttributeId = pea.trackedEntityAttributeId
         trackedEntityAttributeValue.trackedEntityInstanceId = trackedEntityInstance.getUid()
         trackedEntityAttributeValue.value = value
@@ -589,7 +430,7 @@ class ChildRegistrationActivity : BaseActivity<ChildRegistrationView, ChildRegis
             singleDateAndTimePicker.requestLayout()
         }
 
-        valueAnimator.addListener(object : Animator.AnimatorListener{
+        valueAnimator.addListener(object : Animator.AnimatorListener {
             override fun onAnimationRepeat(p0: Animator?) {
 
             }

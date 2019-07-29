@@ -1,9 +1,15 @@
 package com.app.maidi.utils
 
+import android.animation.Animator
+import android.animation.ValueAnimator
 import android.content.res.AssetManager
 import android.util.Base64
 import android.util.Log
 import android.util.Patterns
+import android.view.View
+import android.view.animation.DecelerateInterpolator
+import com.github.florent37.singledateandtimepicker.SingleDateAndTimePicker
+import com.google.android.material.textfield.TextInputEditText
 import org.joda.time.LocalDate
 import org.joda.time.format.DateTimeFormat
 import org.joda.time.format.DateTimeFormatter
@@ -80,6 +86,92 @@ class Utils {
             } catch (e: ParseException) {
                 return false
             }
+        }
+
+        fun showHideContainer(containerView: View, duration: Int){
+            val expand = containerView.visibility != View.VISIBLE
+            val prevHeight = containerView.height
+            var height = 0
+            if (expand) {
+                val measureSpecParams = View.MeasureSpec.getSize(View.MeasureSpec.UNSPECIFIED)
+                containerView.measure(measureSpecParams, measureSpecParams)
+                height = containerView.measuredHeight
+            }
+
+            val valueAnimator = ValueAnimator.ofInt(prevHeight, height)
+            valueAnimator.addUpdateListener { animation ->
+                containerView.layoutParams.height = animation.animatedValue as Int
+                containerView.requestLayout()
+            }
+
+            valueAnimator.addListener(object : Animator.AnimatorListener{
+                override fun onAnimationRepeat(p0: Animator?) {
+
+                }
+
+                override fun onAnimationEnd(p0: Animator?) {
+                    if (!expand) {
+                        containerView.visibility = View.INVISIBLE
+                    }
+                }
+
+                override fun onAnimationCancel(p0: Animator?) {
+
+                }
+
+                override fun onAnimationStart(p0: Animator?) {
+                    if (expand) {
+                        containerView.visibility = View.VISIBLE
+                    }
+                }
+            })
+            valueAnimator.interpolator = DecelerateInterpolator()
+            valueAnimator.duration = duration.toLong()
+            valueAnimator.start()
+        }
+
+        fun showHideDateContainer(etDateOfBirth: TextInputEditText, datePicker: SingleDateAndTimePicker, duration: Int){
+            val expand = datePicker.visibility != View.VISIBLE
+            val prevHeight = datePicker.height
+            var height = 0
+            if (expand) {
+                val measureSpecParams = View.MeasureSpec.getSize(View.MeasureSpec.UNSPECIFIED)
+                datePicker.measure(measureSpecParams, measureSpecParams)
+                height = datePicker.measuredHeight
+            }
+
+            val valueAnimator = ValueAnimator.ofInt(prevHeight, height)
+            valueAnimator.addUpdateListener { animation ->
+                datePicker.layoutParams.height = animation.animatedValue as Int
+                datePicker.requestLayout()
+            }
+
+            valueAnimator.addListener(object : Animator.AnimatorListener{
+                override fun onAnimationRepeat(p0: Animator?) {
+
+                }
+
+                override fun onAnimationEnd(p0: Animator?) {
+                    if (!expand) {
+                        datePicker.visibility = View.INVISIBLE
+                        etDateOfBirth.setText(convertCalendarToString(datePicker.date))
+                    }
+                }
+
+                override fun onAnimationCancel(p0: Animator?) {
+
+                }
+
+                override fun onAnimationStart(p0: Animator?) {
+                    if (expand) {
+                        datePicker.visibility = View.VISIBLE
+                        datePicker.selectDate(convertStringToCalendar(etDateOfBirth.text.toString()))
+                    }
+                }
+            })
+            valueAnimator.interpolator = DecelerateInterpolator()
+            valueAnimator.duration = duration.toLong()
+            valueAnimator.start()
         }
     }
 

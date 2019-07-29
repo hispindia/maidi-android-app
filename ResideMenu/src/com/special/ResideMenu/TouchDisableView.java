@@ -4,6 +4,7 @@ package com.special.ResideMenu;
 
 import android.content.Context;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
@@ -52,9 +53,13 @@ class TouchDisableView extends ViewGroup {
 
     @Override
     protected void onLayout(boolean changed, int l, int t, int r, int b) {
-        final int width = r - l;
-        final int height = b - t;
-        mContent.layout(0, 0, width, height);
+        try {
+            final int width = r - l;
+            final int height = b - t;
+            mContent.layout(0, 0, width, height);
+        }catch(Exception ex){
+            Log.d("Exception", ex.toString());
+        }
     }
 
     @Override

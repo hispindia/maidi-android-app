@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              xmlns:app="http://schemas.android.com/apk/res-auto"
+              android:orientation="vertical"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:fitsSystemWindows="true">
+
+    <HorizontalScrollView
+            android:layout_width="wrap_content"
+          android:layout_height="wrap_content">
+
+        <LinearLayout android:layout_width="wrap_content"
+                      android:layout_height="wrap_content"
+                        android:orientation="vertical">
+
+            <androidx.cardview.widget.CardView android:layout_width="wrap_content"
+                                               android:layout_height="wrap_content"
+                                               app:cardElevation="6dp"
+                                               app:cardBackgroundColor="@android:color/transparent"
+                                               app:contentPaddingBottom="6dp">
+
+                <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="61.4dp"
+                        android:background="@android:color/white"
+                >
+
+                    <TextView
+                            android:layout_width="70dp"
+                            android:layout_height="match_parent"
+                            android:text="#"
+                            android:textAllCaps="true"
+                            android:textSize="15.4dp"
+                            android:textColor="@color/dark_gray"
+                            android:gravity="center"/>
+
+                    <TextView
+                            android:layout_width="154dp"
+                            android:layout_height="match_parent"
+                            android:text="@string/name"
+                            android:textAllCaps="true"
+                            android:textSize="15.4dp"
+                            android:textColor="@color/dark_gray"
+                            android:gravity="center_vertical"/>
+
+                    <TextView
+                            android:layout_width="115dp"
+                            android:layout_height="match_parent"
+                            android:text="@string/dob"
+                            android:textAllCaps="true"
+                            android:textSize="15.4dp"
+                            android:textColor="@color/dark_gray"
+                            android:gravity="center_vertical"/>
+
+                    <TextView
+                            android:layout_width="104dp"
+                            android:layout_height="match_parent"
+                            android:text="@string/reg_id"
+                            android:textAllCaps="true"
+                            android:textSize="15.4dp"
+                            android:textColor="@color/dark_gray"
+                            android:gravity="center_vertical"/>
+
+                    <LinearLayout
+                            android:id="@+id/fragment_session_wise_data_list_ll_vaccine"
+                            android:layout_width="wrap_content"
+                            android:layout_height="match_parent"
+                            android:orientation="horizontal">
+
+                    </LinearLayout>
+
+                </LinearLayout>
+
+            </androidx.cardview.widget.CardView>
+
+            <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/fragment_session_wise_data_list_rcv_child_list"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"/>
+
+        </LinearLayout>
+
+    </HorizontalScrollView>
+
+</LinearLayout>

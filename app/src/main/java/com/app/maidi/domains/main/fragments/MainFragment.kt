@@ -10,7 +10,8 @@ import com.app.maidi.R
 import com.app.maidi.domains.base.BaseFragment
 import com.app.maidi.domains.child_registration.ChildRegistrationActivity
 import com.app.maidi.domains.main.MainActivity
-import org.hisp.dhis.android.sdk.ui.activities.LoginActivity
+import com.app.maidi.domains.main.fragments.immunisation.immunisation_card.ImmunisationChooseFragment
+import com.app.maidi.utils.Constants
 
 class MainFragment : BaseFragment() {
 
@@ -30,11 +31,15 @@ class MainFragment : BaseFragment() {
 
     @OnClick(R.id.activity_main_fl_child_registration)
     fun onChildRegistrationModuleClicked(){
-        mainActivity.transformActivity(mainActivity, ChildRegistrationActivity::class.java, false)
+        var extras = Bundle()
+        extras.putBoolean(Constants.GUEST_ROLE, false)
+        mainActivity.transformActivity(mainActivity, ChildRegistrationActivity::class.java, false, extras)
     }
 
     @OnClick(R.id.activity_main_fl_immunization_card)
     fun onMyImmunisationModuleClicked(){
-        mainActivity.transformFragment(R.id.activity_main_fl_content, MyRegistrationFragment())
+        /*mainActivity.transformFragment(R.id.activity_main_fl_content,
+            ImmunisationChooseFragment()
+        )*/
     }
 }
