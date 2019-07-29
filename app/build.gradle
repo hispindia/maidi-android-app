@@ -117,7 +117,7 @@ dependencies {
     debugImplementation 'com.amitshekhar.android:debug-db:1.0.6'
 
     implementation project(path: ':caf')
-    implementation project(path: ':core')
     implementation project(path: ':ResideMenu')
     implementation project(path: ':singledateandtimepicker')
+    implementation project(path: ':core')
 }

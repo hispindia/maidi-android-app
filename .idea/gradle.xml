@@ -11,7 +11,7 @@
             <option value="$PROJECT_DIR$/ResideMenu" />
             <option value="$PROJECT_DIR$/android_caf/caf" />
             <option value="$PROJECT_DIR$/app" />
-            <option value="$PROJECT_DIR$/dhis2-sdk/core" />
+            <option value="$PROJECT_DIR$/core" />
             <option value="$PROJECT_DIR$/singledateandtimepicker" />
           </set>
         </option>
