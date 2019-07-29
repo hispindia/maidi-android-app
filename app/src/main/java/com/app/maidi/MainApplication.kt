@@ -28,7 +28,9 @@ class MainApplication : Dhis2Application() {
         super.onCreate()
         AppPreferences.init(this)
 
-        DebugDB.getAddressLog()
+        if(BuildConfig.DEBUG) {
+            DebugDB.getAddressLog()
+        }
         CalligraphyConfig.initDefault(CalligraphyConfig.Builder()
             .setDefaultFontPath("fonts/NunitoSans-Regular.ttf")
             .setFontAttrId(R.attr.fontPath)
