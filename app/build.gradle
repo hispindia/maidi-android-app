@@ -22,13 +22,21 @@ android {
         versionName "1.0"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
+    signingConfigs {
+        release {
+            storeFile file('release.keystore')
+            storePassword 'maidi.android'
+            keyAlias = 'maidi'
+            keyPassword 'maidi.android'
+        }
+    }
     buildTypes {
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+            signingConfig signingConfigs.release
         }
     }
-
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
@@ -114,7 +122,7 @@ dependencies {
     implementation "com.thoughtbot:expandablerecyclerview:${lib.expandable_recycleview_version}"
 
     //DebugDB
-    debugImplementation 'com.amitshekhar.android:debug-db:1.0.6'
+    implementation 'com.amitshekhar.android:debug-db:1.0.6'
 
     implementation project(path: ':caf')
     implementation project(path: ':ResideMenu')
