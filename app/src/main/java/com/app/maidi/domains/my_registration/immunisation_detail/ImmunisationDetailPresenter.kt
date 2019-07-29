@@ -41,7 +41,9 @@ class ImmunisationDetailPresenter : BasePresenter<ImmunisationDetailView> {
                             var dataElements = TrackerController.getProgramStageDataElements(stage.uid)
                             for(dataElement in dataElements){
                                 var element = TrackerController.getDataElement(dataElement.dataelement)
-                                vaccineList.add(Vaccine(element, "", false))
+                                if(!element.displayName.contains("Birth")) {
+                                    vaccineList.add(Vaccine(element, "", false))
+                                }
                             }
                         }
 
@@ -50,8 +52,8 @@ class ImmunisationDetailPresenter : BasePresenter<ImmunisationDetailView> {
 
                             for(dataValue in dataValues){
                                 var dataElement = TrackerController.getDataElement(dataValue.dataElement)
-                                for(vaccine in vaccineList){
-                                    if(vaccine.dataElement.uid.equals(dataElement.uid)){
+                                for (vaccine in vaccineList) {
+                                    if (vaccine.dataElement.uid.equals(dataElement.uid)) {
                                         vaccine.isInjected = true
                                         vaccine.dueDate = event.dueDate
                                     }
@@ -84,7 +86,9 @@ class ImmunisationDetailPresenter : BasePresenter<ImmunisationDetailView> {
             var dataElements = TrackerController.getProgramStageDataElements(stage.uid)
             for(dataElement in dataElements){
                 var element = TrackerController.getDataElement(dataElement.dataelement)
-                immunisationInfos.add(Vaccine(element, "", false))
+                if(!element.displayName.contains("Birth")) {
+                    immunisationInfos.add(Vaccine(element, "", false))
+                }
             }
         }
 

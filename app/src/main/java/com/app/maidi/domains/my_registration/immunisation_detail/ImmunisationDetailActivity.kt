@@ -57,7 +57,7 @@ class ImmunisationDetailActivity : BaseActivity<ImmunisationDetailView, Immunisa
             onBackPressed()
         }
 
-        var organUnit = MetaDataController.getTopLevelOrganisationUnit()
+        var organUnit = MetaDataController.getTopAssignedOrganisationUnit()
         var program = MetaDataController.getProgramByName(Constants.BENEFICIARY_CHILD_REGISTRATION)
 
         rcvList.layoutManager = LinearLayoutManager(this)

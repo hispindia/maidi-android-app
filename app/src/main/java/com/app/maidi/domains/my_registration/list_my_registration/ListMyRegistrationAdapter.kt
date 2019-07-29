@@ -83,7 +83,6 @@ class ListMyRegistrationAdapter : RecyclerView.Adapter<ListMyRegistrationAdapter
         var civAvatar: CircleImageView
         var tvName: TextView
         var tvDescription: TextView
-        var tvTime: TextView
 
         constructor(contentView: View, listener: OnItemClickListener) : super(contentView) {
             flContent = contentView.findViewById(R.id.item_my_registration_fl_content)
@@ -91,7 +90,6 @@ class ListMyRegistrationAdapter : RecyclerView.Adapter<ListMyRegistrationAdapter
             civAvatar = contentView.findViewById(R.id.item_my_registration_civ_avatar)
             tvName = contentView.findViewById(R.id.item_my_registration_tv_name)
             tvDescription = contentView.findViewById(R.id.item_my_registration_tv_description)
-            tvTime = contentView.findViewById(R.id.item_my_registration_tv_time)
 
             flContent.setOnClickListener({
                 listener.onItemClicked(layoutPosition)

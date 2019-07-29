@@ -84,7 +84,8 @@ ext{
             threeten_version : '1.2.0',
             timber_version : '4.7.1',
             firebase_version : '18.0.0',
-            circular_imageview : "3.0.0"
+            circular_imageview : "3.0.0",
+            expandable_recycleview_version: "1.3"
     ]
 }
 

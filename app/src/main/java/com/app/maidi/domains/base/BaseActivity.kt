@@ -127,4 +127,14 @@ abstract class BaseActivity<V : MvpView, P : MvpPresenter<V>> : MvpActivity<V, P
             }
         }
     }
+
+    inline fun <reified T> isCurrentFragment(containerId: Int) : Boolean {
+        var fragment = supportFragmentManager.findFragmentById(containerId)
+        return fragment is T
+    }
+
+    inline fun <reified T> getCurrentFragment(containerId: Int) : T{
+        var fragment = supportFragmentManager.findFragmentById(containerId)
+        return fragment as T
+    }
 }

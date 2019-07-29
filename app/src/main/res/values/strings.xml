@@ -16,6 +16,13 @@
     <string name="vaccine">Vaccine</string>
     <string name="date_due">Date due</string>
     <string name="blank_choose">* Select *</string>
+    <string name="name">Name</string>
+    <string name="dob">DoB</string>
+    <string name="download">Download</string>
+    <string name="update">Update</string>
+    <string name="ok">OK</string>
+    <string name="cancel">Cancel</string>
+    <string name="reg_id">Reg ID</string>
 
     <!-- *************** GLOBAL WARNING STRING ************* -->
     <string name="phone_number_invalid">The phone number is invalid. Please recheck and try again</string>
@@ -27,8 +34,6 @@
     <string name="login_username_instruction">
         Enter username for health workers. If you\'re not please enter mobile number instead
     </string>
-    <string name="login_input_username_hint">Username</string>
-    <string name="login_input_password_hint">Password</string>
     <string name="login_forgot_username">Forget username</string>
     <string name="login_forgot_password">Forget password</string>
     <string name="login_contact_help">Get help! Contact +9347472983</string>
@@ -42,6 +47,7 @@
     <string name="aefi">Adverse Event Following Immunization (AEFI)</string>
     <string name="iec_bcc">IEC/BCC</string>
     <string name="my_immunisation">My Immunisation</string>
+    <string name="session_wise_vaccine_due">Session wise vaccine due</string>
 
     <!-- *************** Beneficiary Login ************ -->
     <string name="enter_phone_number">Enter your mobile number to get started!</string>
@@ -54,14 +60,26 @@
     <string name="last_name">Last Name</string>
     <string name="date_of_birth">Date of Birth</string>
     <string name="gender">Gender</string>
-    <string name="mother_name">Mothers\'s Name</string>
+    <string name="social_category">Social Category</string>
+    <string name="mobile_number">Mobile number</string>
+    <string name="alternate_contact_number">Alternate contact number</string>
+    <string name="mother_name">Mother \/ Caregiver name</string>
+    <string name="father_name">Father name</string>
+    <string name="address">Address</string>
     <string name="state">State</string>
     <string name="district">District</string>
     <string name="block">Block</string>
     <string name="village_ward">Village/Ward</string>
 
-    <!--- *************** My Immunisation ************* -->
+    <!--- **************** Hints ************* -->
+    <string name="login_input_username_hint">Username</string>
+    <string name="login_input_password_hint">Password</string>
+    <string name="session_wise_vaccination_due_hint">Select session date to proceed</string>
+
+    <!--- *************** Fragments of Main Screen's titles ************* -->
     <string name="my_immunisation_title">My Immunisation</string>
+    <string name="immunisation_card_title">Immunisation Card</string>
+    <string name="session_wise_vaccination_due">Session wise Vaccination due</string>
 
 
 </resources>

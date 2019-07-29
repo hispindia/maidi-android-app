@@ -13,9 +13,10 @@ class Constants{
 
         val DHIS2_SERVER_URL =
             if(BuildConfig.FLAVOR.equals("staging")) "https://maidi.icmr.org.in/dhis/"
-            else if(BuildConfig.FLAVOR.equals("production")) "http://0030ccea.ngrok.io/dhis/"
+            else if(BuildConfig.FLAVOR.equals("production")) "http://32eec65c.ngrok.io/dhis/"
             else "http://192.168.0.105:8080/dhis/"
         val BENEFICIARY_CHILD_REGISTRATION = "Child registration"
+        val IMMUNISATION = "Immunisation"
         val GUEST_ROLE = "Guest role"
         val PHONE_NUMBER = "PHONE_NUMBER"
         val VERIFICATION_ID = "VERIFICATION_ID"
