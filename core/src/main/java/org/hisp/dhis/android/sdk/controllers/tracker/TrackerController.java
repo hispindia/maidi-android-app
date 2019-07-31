@@ -284,6 +284,12 @@ public final class TrackerController extends ResourceController {
                 .queryList();
     }
 
+    public static List<DataValue> getDataValuesFollowElement(String dataElementId) {
+        return new Select().from(DataValue.class)
+                .where(Condition.column(DataValue$Table.DATAELEMENT).is(dataElementId))
+                .queryList();
+    }
+
     public static DataElement getDataElement(String element){
         return new Select().from(DataElement.class)
                 .where(Condition.column(DataElement$Table.ID).is(element))

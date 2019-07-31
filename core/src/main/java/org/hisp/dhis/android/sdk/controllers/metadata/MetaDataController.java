@@ -160,7 +160,7 @@ public final class MetaDataController extends ResourceController {
     }*/
 
     public static Program getProgramByName(String name){
-        return new Select().from(Program.class).where(Condition.column(Program$Table.DISPLAYNAME).is(name)).querySingle();
+        return new Select().from(Program.class).where(Condition.column(Program$Table.DISPLAYNAME).like("%"+ name +"%")).querySingle();
     }
 
     public static TrackedEntityAttribute getGenderAttribute(){

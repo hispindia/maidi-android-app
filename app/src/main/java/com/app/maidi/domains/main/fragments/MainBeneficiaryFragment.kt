@@ -31,9 +31,7 @@ class MainBeneficiaryFragment : BaseFragment(){
 
     @OnClick(R.id.activity_main_fl_child_registration)
     fun onChildRegistrationModuleClicked(){
-        var extras = Bundle()
-        extras.putBoolean(Constants.GUEST_ROLE, true)
-        mainActivity.transformActivity(mainActivity, ChildRegistrationBeneficiaryActivity::class.java, false, extras)
+        mainActivity.transformActivity(mainActivity, ChildRegistrationBeneficiaryActivity::class.java, false)
     }
 
     @OnClick(R.id.activity_main_fl_my_immunisation)

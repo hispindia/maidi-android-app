@@ -2,6 +2,7 @@ package com.app.maidi.domains.main
 
 import android.util.Log
 import com.app.maidi.domains.base.BasePresenter
+import com.app.maidi.models.Dose
 import com.app.maidi.models.ImmunisationCard
 import com.app.maidi.models.Vaccine
 import com.app.maidi.networks.NetworkProvider
@@ -31,6 +32,45 @@ class MainPresenter : BasePresenter<MainView> {
     constructor(networkProvider: NetworkProvider, accountService: AccountService){
         this.networkProvider = networkProvider
         this.accountService = accountService
+    }
+
+    fun getRemoteAefiTrackedEntityInstances(orgUnitId: String, programId: String){
+        if(isViewAttached){
+            view.showLoading()
+        }
+
+        try{
+            JobExecutor.enqueueJob<ResponseHolder<Any>>(object : NetworkJob<Any>(1, null) {
+
+                @Throws(APIException::class)
+                override fun execute(): Any {
+
+                    var trackedEntityInstances = listOf<TrackedEntityInstance>()
+
+                    trackedEntityInstances = TrackerController.queryTrackedEntityInstancesDataFromServer(
+                        DhisController.getInstance().dhisApi,
+                        orgUnitId,
+                        programId, ""
+                    )
+
+                    for(trackedEntityInstance in trackedEntityInstances){
+
+                        TrackerController.getEnrollmentDataFromServer(
+                            DhisController.getInstance().dhisApi,
+                            trackedEntityInstance,
+                            null)
+                    }
+
+                    if(isViewAttached)
+                        view.getAefiTrackedEntityInstances(trackedEntityInstances)
+
+                    return Any()
+                }
+            })
+        }catch(exception : APIException){
+            if(isViewAttached)
+                view.getApiFailed(exception)
+        }
     }
 
     fun getRemoteTrackedEntityInstances(orgUnitId: String, programId: String){
@@ -125,6 +165,45 @@ class MainPresenter : BasePresenter<MainView> {
 
     }
 
+    fun getSessionWiseDatas(orgUnitId: String, programId: String){
+        if(isViewAttached){
+            view.showLoading()
+        }
+
+        try{
+            JobExecutor.enqueueJob<ResponseHolder<Any>>(object : NetworkJob<Any>(1, null) {
+
+                @Throws(APIException::class)
+                override fun execute(): Any {
+
+                    var dataElements = getProgramDataElement(programId)
+                    if(isViewAttached)
+                        view.getProgramDataElements(dataElements)
+
+                    var immunisationCardList = getSessionWiseDataList(orgUnitId, programId)
+                    if(isViewAttached)
+                        view.getSessionWiseDataListSuccess(immunisationCardList)
+
+                    var doseList = arrayListOf<Dose>()
+                    for(element in dataElements){
+                        var total = getTotalDosesForVaccine(element)
+                        doseList.add(Dose(element.uid, total))
+                    }
+
+                    if(isViewAttached) {
+                        view.getTotalDoseList(doseList)
+                        view.hideLoading()
+                    }
+
+                    return Any()
+                }
+            })
+        }catch(exception : APIException){
+            if(isViewAttached)
+                view.getApiFailed(exception)
+        }
+    }
+
     fun getProgramDataElement(programId: String) : List<DataElement>{
         var programStage = TrackerController.getProgramStageByName(programId, Constants.IMMUNISATION)
         var programDataElements = TrackerController.getProgramStageDataElements(programStage.uid)
@@ -142,85 +221,75 @@ class MainPresenter : BasePresenter<MainView> {
         return assignedDataElements
     }
 
-    fun getSessionWiseDataList(orgUnitId: String, programId: String){
-        if(isViewAttached){
-            view.showLoading()
-        }
+    fun getSessionWiseDataList(orgUnitId: String, programId: String) : List<ImmunisationCard>{
 
-        try{
-            JobExecutor.enqueueJob<ResponseHolder<Any>>(object : NetworkJob<Any>(1, null) {
+        var immunisationCardList = arrayListOf<ImmunisationCard>()
+        var trackedEntityInstances = listOf<TrackedEntityInstance>()
 
-                @Throws(APIException::class)
-                override fun execute(): Any {
-
-                    var immunisationCardList = arrayListOf<ImmunisationCard>()
-                    var trackedEntityInstances = listOf<TrackedEntityInstance>()
-
-                    trackedEntityInstances = TrackerController.queryTrackedEntityInstancesDataFromServer(
-                        DhisController.getInstance().dhisApi,
-                        orgUnitId,
-                        programId, ""
-                    )
+        trackedEntityInstances = TrackerController.queryTrackedEntityInstancesDataFromServer(
+            DhisController.getInstance().dhisApi,
+            orgUnitId,
+            programId, ""
+        )
 
 
-                    var assignedDataElements = getProgramDataElement(programId)
+        var assignedDataElements = getProgramDataElement(programId)
 
-                    for(trackedEntityInstance in trackedEntityInstances){
+        for(trackedEntityInstance in trackedEntityInstances){
 
-                        var immunisationCard = ImmunisationCard()
-                        var vaccineList = arrayListOf<Vaccine>()
+            var immunisationCard = ImmunisationCard()
+            var vaccineList = arrayListOf<Vaccine>()
 
-                        for(dataElement in assignedDataElements){
-                            vaccineList.add(Vaccine(dataElement, "", false))
-                        }
+            for(dataElement in assignedDataElements){
+                vaccineList.add(Vaccine(dataElement, "", false))
+            }
 
-                        var enrollments = TrackerController.getEnrollmentDataFromServer(
-                            DhisController.getInstance().dhisApi,
-                            trackedEntityInstance,
-                            null)
+            var enrollments = TrackerController.getEnrollmentDataFromServer(
+                DhisController.getInstance().dhisApi,
+                trackedEntityInstance,
+                null)
 
-                        for(enrollment in enrollments){
-                            if(enrollment.trackedEntityInstance.equals(trackedEntityInstance.uid)){
-                                var events = enrollment.getEvents(true)
-                                if(events != null){
-                                    for(event in events){
-                                        var dataValues = event.dataValues
-                                        if(dataValues != null){
-                                            for(dataValue in dataValues){
-                                                for(vaccine in vaccineList){
-                                                    if(dataValue.dataElement.equals(vaccine.dataElement.uid)){
-                                                        vaccine.dueDate = event.dueDate
-                                                        vaccine.isInjected = true
-                                                        break
-                                                    }
-                                                }
-
-                                            }
+            for(enrollment in enrollments){
+                if(enrollment.trackedEntityInstance.equals(trackedEntityInstance.uid)){
+                    var events = enrollment.getEvents(true)
+                    if(events != null){
+                        for(event in events){
+                            var dataValues = event.dataValues
+                            if(dataValues != null){
+                                for(dataValue in dataValues){
+                                    for(vaccine in vaccineList){
+                                        if(dataValue.dataElement.equals(vaccine.dataElement.uid)){
+                                            vaccine.dueDate = event.dueDate
+                                            vaccine.isInjected = true
+                                            break
                                         }
                                     }
+
                                 }
-
-                                immunisationCard.enrollment = enrollment
                             }
-
                         }
-
-                        immunisationCard.trackedEntityInstance = trackedEntityInstance
-                        immunisationCard.vaccineList = vaccineList
-
-                        immunisationCardList.add(immunisationCard)
-
                     }
 
-                    if(isViewAttached)
-                        view.getImmunisationCardListSuccess(immunisationCardList)
-
-                    return Any()
+                    immunisationCard.enrollment = enrollment
                 }
-            })
-        }catch(exception : APIException){
-            if(isViewAttached)
-                view.getApiFailed(exception)
+
+            }
+
+            immunisationCard.trackedEntityInstance = trackedEntityInstance
+            immunisationCard.vaccineList = vaccineList
+
+            immunisationCardList.add(immunisationCard)
+
         }
+
+        return immunisationCardList
+    }
+
+    fun getTotalDosesForVaccine(dataElement: DataElement) : Int{
+        var doseLists = TrackerController.getDataValuesFollowElement(dataElement.uid)
+        if(doseLists != null)
+            return doseLists.size
+
+        return 0
     }
 }

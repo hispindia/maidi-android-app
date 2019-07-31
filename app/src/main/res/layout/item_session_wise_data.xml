@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:id="@+id/item_session_wise_data_ll_container"
+              android:orientation="horizontal"
+              android:layout_width="wrap_content"
+              android:layout_height="61.4dp">
+
+    <TextView
+            android:id="@+id/item_session_wise_data_tv_counter"
+            android:layout_width="70dp"
+            android:layout_height="match_parent"
+            android:textSize="15.4dp"
+            android:textColor="@android:color/black"
+            android:gravity="center"
+            android:paddingLeft="5dp"
+            android:paddingRight="5dp"
+            android:singleLine="true"/>
+
+    <TextView
+            android:id="@+id/item_session_wise_data_tv_child_name"
+            android:layout_width="154dp"
+            android:layout_height="match_parent"
+            android:textSize="15.4dp"
+            android:textColor="@android:color/black"
+            android:gravity="center_vertical"
+            android:paddingLeft="5dp"
+            android:paddingRight="5dp"
+            android:singleLine="true"
+            fontPath="fonts/NunitoSans-Bold.ttf"/>
+
+    <TextView
+            android:id="@+id/item_session_wise_data_tv_date_of_birth"
+            android:layout_width="115dp"
+            android:layout_height="match_parent"
+            android:textSize="15.4dp"
+            android:textColor="@android:color/black"
+            android:gravity="center_vertical"
+            android:paddingLeft="5dp"
+            android:paddingRight="5dp"
+            android:singleLine="true"/>
+
+    <TextView
+            android:id="@+id/item_session_wise_data_tv_reg_id"
+            android:layout_width="104dp"
+            android:layout_height="match_parent"
+            android:textSize="15.4dp"
+            android:textColor="@android:color/black"
+            android:gravity="center_vertical"
+            android:paddingLeft="5dp"
+            android:paddingRight="5dp"
+            android:singleLine="true"/>
+
+    <LinearLayout
+            android:id="@+id/item_session_wise_data_ll_vaccine"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:orientation="horizontal">
+
+    </LinearLayout>
+
+</LinearLayout>

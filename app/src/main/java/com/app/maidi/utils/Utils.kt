@@ -81,8 +81,7 @@ class Utils {
 
         fun isValidDateFollowPattern(regex: String, date: String) : Boolean{
             try {
-                SimpleDateFormat(regex).parse(date)
-                return true
+                return Pattern.matches(Constants.SERVER_DATE_PATTERN, date)
             } catch (e: ParseException) {
                 return false
             }
