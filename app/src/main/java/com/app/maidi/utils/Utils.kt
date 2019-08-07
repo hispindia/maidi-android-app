@@ -48,7 +48,7 @@ class Utils {
 
         fun convertLocalDateToServerDate(localDateString: String) : String{
             var localDate = simpleLocalDateFormat.parse(localDateString)
-            val serverDateString = serverDateFormat.format(localDate)
+            val serverDateString = simpleServerDateFormat.format(localDate)
             return serverDateString
         }
 
