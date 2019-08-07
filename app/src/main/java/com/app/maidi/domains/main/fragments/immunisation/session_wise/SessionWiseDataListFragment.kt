@@ -1,12 +1,11 @@
 package com.app.maidi.domains.main.fragments.immunisation.session_wise
 
 import android.content.pm.ActivityInfo
+import android.graphics.Color
 import android.os.Bundle
 import android.util.TypedValue
-import android.view.Gravity
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
+import android.widget.CheckBox
 import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -18,6 +17,7 @@ import com.app.maidi.domains.base.BaseFragment
 import com.app.maidi.domains.main.MainActivity
 import com.app.maidi.domains.main.MainPresenter
 import com.app.maidi.domains.main.fragments.immunisation.immunisation_card.ImmunisationCardAdapter
+import com.app.maidi.models.Dose
 import com.app.maidi.models.ImmunisationCard
 import com.app.maidi.utils.Constants
 import org.hisp.dhis.android.sdk.controllers.metadata.MetaDataController
@@ -30,14 +30,17 @@ class SessionWiseDataListFragment : BaseFragment(){
     lateinit var mainActivity: MainActivity
     lateinit var mainPresenter: MainPresenter
 
+    lateinit var dataElements : List<DataElement>
+
     lateinit var currentUnit: OrganisationUnit
     lateinit var currentProgram: Program
-
-    lateinit var dataElements: List<DataElement>
-    lateinit var adapter: ImmunisationCardAdapter
+    lateinit var adapter: SessionWiseDataAdapter
 
     @BindView(R.id.fragment_session_wise_data_list_ll_vaccine)
     lateinit var llVaccine: LinearLayout
+
+    @BindView(R.id.fragment_session_wise_data_list_ll_total_dose)
+    lateinit var llTotalDose: LinearLayout
 
     @BindView(R.id.fragment_session_wise_data_list_rcv_child_list)
     lateinit var rcvChildList: RecyclerView
@@ -56,32 +59,46 @@ class SessionWiseDataListFragment : BaseFragment(){
 
         rcvChildList.layoutManager = LinearLayoutManager(mainActivity)
 
-        dataElements = mainPresenter.getProgramDataElement(currentProgram.uid)
-
-        for(dataElement in dataElements){
-            mainActivity.showHUD()
-            var tvElement = TextView(mainActivity)
-            tvElement.layoutParams = LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.MATCH_PARENT)
-            tvElement.isAllCaps = true
-            tvElement.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 15.4f)
-            tvElement.setTextColor(mainActivity.resources.getColor(R.color.dark_gray))
-            tvElement.gravity = Gravity.CENTER_VERTICAL
-            tvElement.setPadding(
-                resources.getDimensionPixelSize(R.dimen.text_padding), 0,
-                resources.getDimensionPixelSize(R.dimen.text_padding), 0)
-            tvElement.text = dataElement.displayName
-            llVaccine.addView(tvElement)
-            mainActivity.hideHUD()
-        }
-
-        mainPresenter.getSessionWiseDataList(currentUnit.id, currentProgram.uid)
+        mainPresenter.getSessionWiseDatas(currentUnit.id, currentProgram.uid)
 
         return viewGroup
     }
 
+    fun getProgramDataElements(dataElements : List<DataElement>){
+        this.dataElements = dataElements
+        for(dataElement in dataElements){
+            var itemView = LayoutInflater.from(context).inflate(R.layout.item_session_vaccine, null)
+            var tvVaccineName = itemView.findViewById<TextView>(R.id.item_session_vaccine_tv_vaccine_name)
+            tvVaccineName.text = dataElement.displayName
+            llVaccine.addView(itemView)
+        }
+    }
+
+    fun getTotalDoses(doseList: List<Dose>){
+        for(element in dataElements){
+
+            var itemView = LayoutInflater.from(context).inflate(R.layout.item_session_vaccine, null)
+            var tvVaccineName = itemView.findViewById<TextView>(R.id.item_session_vaccine_tv_vaccine_name)
+            var tvVaccineDose = itemView.findViewById<TextView>(R.id.item_session_vaccine_tv_vaccine_dose)
+            tvVaccineName.visibility = View.INVISIBLE
+            tvVaccineDose.visibility = View.VISIBLE
+            tvVaccineName.text = element.displayName
+            tvVaccineDose.text = "0"
+            for(dose in doseList){
+                if(dose.elementId.equals(element.uid)){
+                    tvVaccineDose.text = if(dose.dose == 0) "0" else String.format("%2d", dose.dose)
+                    break
+                }
+            }
+
+            llTotalDose.addView(itemView)
+        }
+    }
+
     fun getSessionWiseDataList(sessionWiseList: List<ImmunisationCard>){
-        adapter = ImmunisationCardAdapter(mainActivity, sessionWiseList)
+        adapter = SessionWiseDataAdapter(mainActivity, sessionWiseList)
         rcvChildList.adapter = adapter
+        mainActivity.hideHUD()
     }
 
     fun createPresenter() : MainPresenter{

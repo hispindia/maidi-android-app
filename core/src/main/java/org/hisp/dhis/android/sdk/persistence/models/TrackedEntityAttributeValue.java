@@ -65,8 +65,11 @@ public class TrackedEntityAttributeValue extends BaseValue implements Serializab
     @Column(name = "localTrackedEntityInstanceId")
     long localTrackedEntityInstanceId;
 
-    @JsonProperty("displayName")
+    @JsonIgnore
     String displayName;
+
+    @JsonIgnore
+    String isOrganisationValue = "false";
 
     public TrackedEntityAttributeValue() {
 
@@ -130,10 +133,22 @@ public class TrackedEntityAttributeValue extends BaseValue implements Serializab
     }
 
     public String getDisplayName() {
+        if(displayName == null){
+            TrackedEntityAttribute attribute = TrackerController.getTrackedEntityAttribute(trackedEntityAttributeId);
+            displayName = attribute.getDisplayName();
+        }
         return displayName;
     }
 
     public void setDisplayName(String displayName) {
         this.displayName = displayName;
+    }
+
+    public String getIsOrganisationValue() {
+        return isOrganisationValue;
+    }
+
+    public void setIsOrganisationValue(String isOrganisationValue) {
+        this.isOrganisationValue = isOrganisationValue;
     }
 }

@@ -49,8 +49,10 @@ import org.hisp.dhis.android.sdk.persistence.models.ProgramStageSection;
 import org.hisp.dhis.android.sdk.persistence.models.TrackedEntityAttributeValue;
 import org.hisp.dhis.android.sdk.persistence.models.TrackedEntityInstance;
 import org.hisp.dhis.android.sdk.ui.adapters.rows.dataentry.DataEntryRowFactory;
-import org.hisp.dhis.android.sdk.ui.adapters.rows.dataentry.EventDueDatePickerRow;
 import org.hisp.dhis.android.sdk.ui.adapters.rows.dataentry.Row;
+import org.hisp.dhis.android.sdk.ui.adapters.rows.dataentry.custom_row.EventDatePickerRow;
+import org.hisp.dhis.android.sdk.ui.adapters.rows.dataentry.custom_row.EventDueDatePickerRow;
+import org.hisp.dhis.android.sdk.ui.adapters.rows.dataentry.custom_row.StatusRow;
 import org.hisp.dhis.android.sdk.ui.fragments.dataentry.DataEntryFragmentSection;
 import org.hisp.dhis.android.sdk.utils.api.ValueType;
 import org.hisp.dhis.android.sdk.utils.services.ProgramIndicatorService;
@@ -61,10 +63,9 @@ import org.hisp.dhis.android.sdk.ui.adapters.rows.dataentry.CoordinatesRow;
 import org.hisp.dhis.android.sdk.ui.adapters.rows.dataentry.DataEntryRowTypes;
 import org.hisp.dhis.android.sdk.ui.adapters.rows.dataentry.DatePickerRow;
 import org.hisp.dhis.android.sdk.ui.adapters.rows.dataentry.EditTextRow;
-import org.hisp.dhis.android.sdk.ui.adapters.rows.dataentry.EventDatePickerRow;
 import org.hisp.dhis.android.sdk.ui.adapters.rows.dataentry.IndicatorRow;
 import org.hisp.dhis.android.sdk.ui.adapters.rows.dataentry.RadioButtonsRow;
-import org.hisp.dhis.android.sdk.ui.adapters.rows.dataentry.StatusRow;
+import org.joda.time.DateTime;
 import org.joda.time.LocalDate;
 
 import java.util.ArrayList;
@@ -80,6 +81,7 @@ class EventDataEntryFragmentQuery implements Query<EventDataEntryFragmentForm> {
 
     private static final String EMPTY_FIELD = "";
     private static final String DEFAULT_SECTION = "defaultSection";
+    private static final String DATE_FORMAT = "yyyy-MM-dd";
 
     private final String orgUnitId;
     private final String programId;
@@ -150,8 +152,8 @@ class EventDataEntryFragmentQuery implements Query<EventDataEntryFragmentForm> {
                 }
             }
             addEventDateRow(context, form, rows);
-            addCoordinateRow(form, rows);
-            populateDataEntryRows(form, stage.getProgramStageDataElements(), rows, username, context);
+            //addCoordinateRow(form, rows);
+            populateDataEntryRows(form, orgUnitId ,stage.getProgramStageDataElements(), rows, username, context);
             populateIndicatorRows(form, stage.getProgramIndicators(), rows);
             form.getSections().add(new DataEntryFragmentSection(DEFAULT_SECTION, null, rows));
         } else {
@@ -168,9 +170,9 @@ class EventDataEntryFragmentQuery implements Query<EventDataEntryFragmentForm> {
                         addDueDateRow(context, form, rows);
                     }
                     addEventDateRow(context, form, rows);
-                    addCoordinateRow(form, rows);
+                    //addCoordinateRow(form, rows);
                 }
-                populateDataEntryRows(form, section.getProgramStageDataElements(), rows, username, context);
+                populateDataEntryRows(form, orgUnitId, section.getProgramStageDataElements(), rows, username, context);
                 populateIndicatorRows(form, section.getProgramIndicators(), rows);
                 form.getSections().add(new DataEntryFragmentSection(section.getName(), section.getUid(), rows));
             }
@@ -221,7 +223,7 @@ class EventDataEntryFragmentQuery implements Query<EventDataEntryFragmentForm> {
         }
     }
 
-    private static void populateDataEntryRows(EventDataEntryFragmentForm form,
+    private static void populateDataEntryRows(EventDataEntryFragmentForm form, String mOrganUnitId,
                                               List<ProgramStageDataElement> dataElements,
                                               List<Row> rows, String username, Context context) {
         for (ProgramStageDataElement stageDataElement : dataElements) {
@@ -240,9 +242,15 @@ class EventDataEntryFragmentQuery implements Query<EventDataEntryFragmentForm> {
                 if(ValueType.COORDINATE.equals(stageDataElement.getDataElement().getValueType())) {
                     GpsController.activateGps(context);
                 }
-                Row row = DataEntryRowFactory.createDataEntryView(stageDataElement.getCompulsory(),
+                boolean isRadioButton = form.getStage().getProgram().getDataEntryMethod();
+                if(!isRadioButton){
+                    isRadioButton = stageDataElement.isRenderOptionsAsRadio();
+                }
+
+                Row row = DataEntryRowFactory.createDataEntryView(context, mOrganUnitId, stageDataElement.getCompulsory(),
                         stageDataElement.getAllowFutureDate(), dataElement.getOptionSet(),
-                        dataElementName, dataValue, dataElement.getValueType(), true, false);
+                        dataElementName, dataValue, dataElement.getValueType(), true, false,
+                        isRadioButton);
                 rows.add(row);
             }
         }
@@ -292,6 +300,10 @@ class EventDataEntryFragmentQuery implements Query<EventDataEntryFragmentForm> {
             if(event == null) {
                 getEvent(orgUnitId, programId, -1, enrollmentId, programStage, username); // if event is null, create a new one
             }
+        }
+
+        if(event != null){
+            event.setEventDate(DateTime.now().toString(DATE_FORMAT));
         }
 
         return event;

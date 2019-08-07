@@ -6,6 +6,9 @@ import android.database.sqlite.SQLiteDatabase
 import android.util.Log
 import com.amitshekhar.DebugDB
 import com.app.maidi.database.MaidiDatabase
+import com.app.maidi.domains.main.DaggerMainComponent
+import com.app.maidi.domains.main.MainComponent
+import com.app.maidi.infrastructures.ActivityModules
 import com.app.maidi.infrastructures.AppComponent
 import com.app.maidi.infrastructures.AppModules
 import com.app.maidi.infrastructures.DaggerAppComponent
@@ -23,6 +26,7 @@ import javax.inject.Inject
 class MainApplication : Dhis2Application() {
 
     private var applicationComponent: AppComponent? = null
+    private var mainComponent: MainComponent? = null
 
     override fun onCreate() {
         super.onCreate()
@@ -44,6 +48,12 @@ class MainApplication : Dhis2Application() {
             .build()
         )
 
+        setMainComponent(
+            DaggerMainComponent.builder()
+                .appComponent(getApplicationComponent())
+                .build()
+        )
+
         var encrypt = Utils.encryptStrAndToBase64("Maidi@123")
         Log.d("Encrypt String", encrypt)
         var decrypt = Utils.decryptStrAndFromBase64(encrypt)
@@ -55,6 +65,12 @@ class MainApplication : Dhis2Application() {
     fun setApplicationComponent(applicationComponent: AppComponent){
         this.applicationComponent = applicationComponent
     }
+
+    fun setMainComponent(mainComponent: MainComponent){
+        this.mainComponent = mainComponent
+    }
+
+    fun getMainComponent() = mainComponent
 
     override fun getMainActivity(): Class<out Activity> {
         TODO("not implemented") //To change body of created functions use File | Settings | File Templates.

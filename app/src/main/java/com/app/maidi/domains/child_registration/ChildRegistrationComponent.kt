@@ -9,5 +9,4 @@ import dagger.Component
 @Component(modules = [ActivityModules::class], dependencies = [AppComponent::class])
 interface ChildRegistrationComponent {
     fun inject(childRegistrationActivity: ChildRegistrationActivity)
-    fun inject(childRegistrationBeneficiaryActivity: ChildRegistrationBeneficiaryActivity)
 }

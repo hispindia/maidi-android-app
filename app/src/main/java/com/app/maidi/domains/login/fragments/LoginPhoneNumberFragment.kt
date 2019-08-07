@@ -17,6 +17,7 @@ import com.app.maidi.domains.login.LoginPresenter
 import com.app.maidi.domains.login.LoginView
 import com.app.maidi.utils.Constants
 import com.app.maidi.utils.Utils
+import com.app.maidi.utils.Utils.Companion.hideKeyBoard
 import com.google.android.material.textfield.TextInputEditText
 import com.google.firebase.FirebaseException
 import com.google.firebase.auth.PhoneAuthCredential
@@ -65,7 +66,7 @@ class LoginPhoneNumberFragment : BaseFragment(){
 
     @OnClick(R.id.fragment_login_input_phone_btn_next)
     fun onNext(){
-        loginActivity.hideKeyBoard(loginActivity)
+        hideKeyBoard(loginActivity)
         if(!etPhoneNumber.text!!.isEmpty()){
             if(Utils.isValidPhoneNumber(etPhoneNumber.text.toString())){
                 var phoneNumberWithPrefix = Constants.PHONE_NUMBER_PREFIX + etPhoneNumber.text.toString()

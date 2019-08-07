@@ -37,9 +37,16 @@
         android:id="@+id/datavalues_listview"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:divider="@android:color/transparent"
+        android:dividerHeight="14.4dp"
         android:clipToPadding="false"
         android:scrollbarStyle="outsideOverlay"
-        android:descendantFocusability="beforeDescendants"/>
+        android:descendantFocusability="beforeDescendants"
+        android:paddingLeft="28.8dp"
+        android:paddingRight="28.8dp"
+        android:paddingTop="18.4dp"
+        android:paddingBottom="18.4dp"
+        />
 
     <ProgressBar
         android:id="@+id/progress_bar"

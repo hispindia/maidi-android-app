@@ -45,13 +45,18 @@
     <string name="dialog_organisation_units">Organisation units</string>
     <string name="dialog_programs">Programs</string>
 
+
+    <string name="event_offline">Offline</string>
+    <string name="event_error">Error</string>
     <string name="please_enter">Please enter</string>
+    <string name="new_event">New event</string>
 
 
     <string name="description">ImageView description</string>
     <string name="specify_search_criteria">Please specify a search criteria</string>
     <string name="edit">Edit</string>
 
+    <string name="invalid_entry_type">Value-type not supported</string>
 
     <!-- Alert Dialogs -->
     <string name="ok_option">OK</string>
@@ -167,10 +172,6 @@
     <string name="synchronize_with_server">Synchronize with server</string>
     <string name="event_sent">Sent</string>
     <string name="find_option">Find Option</string>
-    <string name="new_event">New event</string>
-    <string name="event_offline">Offline</string>
-    <string name="event_error">Error</string>
-    <string name="upcoming_events">Upcoming Events</string>
 
     <string name="validation_error">Please complete the following compulsory fields</string>
     <string name="enter_date">Enter date</string>
@@ -255,5 +256,66 @@
     <string name="min_ago">m ago</string>
     <string name="hours">h</string>
     <string name="now">now</string>
+
+
+
+
+    <string name="unique_value_form_empty">Invalid unique value</string>
+    <string name="register_new_event">Register new event</string>
+    <string name="register_relationship">Register relationship</string>
+    <string name="enroll">Enroll</string>
+
+    <string name="is">is</string>
+
+    <string name="error_401_description">Username or password has changed. Please log out and sign in again. \nNote! Event will be lost</string>
+    <string name="error_408_description">Slow connection. Please, try to synchronize later</string>
+    <string name="error_series_400_description">40x application level error.</string>
+    <string name="error_series_500_description">50x server error. Please, try to synchronize later.</string>
+    <string name="unknown_error">Unknown error</string>
+
+    <string name="confirm_complete_enrollment">Are you sure you want to un-enroll the current
+        enrollment? No more editing will be possible.</string>
+    <string name="confirm_terminate_enrollment">Are you sure you want to cancel the current
+        enrollment? This cannot be undone.</string>
+    <string name="confirm_delete_relationship">Are you sure you want to delete this relationship?</string>
+    <string name="no_active_enrollment">No active enrollment</string>
+    <string name="select_relationship_type">Select relationship type</string>
+
+    <string name="http_error_400">Bad request</string>
+    <string name="http_error_401">Unauthorized</string>
+    <string name="http_error_403">Forbidden</string>
+    <string name="http_error_409">Conflict</string>
+    <string name="http_error_500">Internal server error</string>
+    <string name="http_error_501">Not implemented</string>
+    <string name="http_error_502">Bad gateway</string>
+    <string name="http_error_503">Service unavailable</string>
+    <string name="http_error_504">Gateway timed out</string>
+
+    <string name="search_results">Search results</string>
+    <string name="search_online">Did not find what you were looking for? Search online</string>
+    <string name="local_search">Local search</string>
+    <string name="search_error">Error. Please retry</string>
+
+    <string name="out_of_generated_ids">You are out of automatically generated IDs. Please synchronise to download new ones</string>
+    <string name="generic_error">Error. Please retry</string>
+    <string name="re_open">Re-open</string>
+
+    <string name="download_entities_title">Download entities</string>
+    <string name="enrollment_complete">Enrollment is complete</string>
+    <string name="enrollment_cancelled">Enrollment is cancelled</string>
+
+    <string name="profile_form_empty">Form is empty, please fill at least one</string>
+    <string name="invalid_unique_value_form_empty">Invalid unique value: %s</string>
+    <string name="events">EVENTS</string>
+    <string name="overdue_events">OVERDUE EVENTS</string>
+    <string name="active_events">ACTIVE EVENTS</string>
+    <string name="events_title">Timeline Data Entry</string>
+
+    <!-- ORGANISATION_UNIT -->
+    <string name="state">State</string>
+    <string name="district">District</string>
+    <string name="block">Block</string>
+    <string name="village_ward">Village/Ward</string>
+    <string name="blank_choose">* Select *</string>
 
 </resources>

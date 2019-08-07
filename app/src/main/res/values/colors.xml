@@ -21,4 +21,5 @@
     <!-- Main Activity -->
     <color name="button_gray_color">#f4f6f6</color>
     <color name="button_gray_stroke_color">#d9dddf</color>
+    <color name="dark_purple">#3f51b5</color>
 </resources>

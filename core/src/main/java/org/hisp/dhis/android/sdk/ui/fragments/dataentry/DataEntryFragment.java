@@ -32,31 +32,21 @@ package org.hisp.dhis.android.sdk.ui.fragments.dataentry;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.os.Parcelable;
-import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.AdapterView;
-import android.widget.ListView;
-import android.widget.ProgressBar;
-import android.widget.Toast;
-
+import android.view.*;
+import android.widget.*;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
+import androidx.cardview.widget.CardView;
 import androidx.loader.app.LoaderManager;
 import androidx.loader.content.Loader;
 import com.squareup.otto.Subscribe;
-
 import org.hisp.dhis.android.sdk.R;
+import org.hisp.dhis.android.sdk.controllers.ErrorType;
 import org.hisp.dhis.android.sdk.persistence.Dhis2Application;
 import org.hisp.dhis.android.sdk.persistence.models.BaseValue;
 import org.hisp.dhis.android.sdk.ui.activities.OnBackPressedListener;
 import org.hisp.dhis.android.sdk.ui.adapters.DataValueAdapter;
 import org.hisp.dhis.android.sdk.ui.adapters.SectionAdapter;
-import org.hisp.dhis.android.sdk.ui.adapters.rows.dataentry.CoordinatesRow;
 import org.hisp.dhis.android.sdk.ui.adapters.rows.dataentry.IndicatorRow;
 import org.hisp.dhis.android.sdk.ui.adapters.rows.dataentry.StatusRow;
 import org.hisp.dhis.android.sdk.ui.adapters.rows.events.OnDetailedInfoButtonClick;
@@ -66,6 +56,7 @@ import org.hisp.dhis.android.sdk.ui.fragments.eventdataentry.UpdateSectionsEvent
 import org.hisp.dhis.android.sdk.utils.UiUtils;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 public abstract class DataEntryFragment<D> extends AbsProgramRuleFragment<D>
         implements LoaderManager.LoaderCallbacks<D>, AdapterView.OnItemSelectedListener,
@@ -85,6 +76,7 @@ public abstract class DataEntryFragment<D> extends AbsProgramRuleFragment<D>
     protected RulesEvaluatorThread rulesEvaluatorThread;
     private Parcelable listViewState;
     private Parcelable listViewAdapterState;
+    protected boolean isShowSubmitButton = false;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -123,7 +115,8 @@ public abstract class DataEntryFragment<D> extends AbsProgramRuleFragment<D>
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
         return inflater.inflate(R.layout.fragment_data_entry, container, false);
     }
 
@@ -137,12 +130,27 @@ public abstract class DataEntryFragment<D> extends AbsProgramRuleFragment<D>
         progressBar.setVisibility(View.GONE);
 
         listView = (ListView) view.findViewById(R.id.datavalues_listview);
-        /*View upButton = getLayoutInflater(savedInstanceState)
-                .inflate(R.layout.up_button_layout, listView, false);
+        listView.setRecyclerListener(new AbsListView.RecyclerListener() {
+            @Override
+            public void onMovedToScrapHeap(View view) {
+                if (view.hasFocus()) {
+                    view.clearFocus();
+                    ViewParent parent = view.getParent();
+                    if (parent != null) {
+                        parent.clearChildFocus(view);
+                    }
+                }
+            }
+        });
+        View submitLayout = getLayoutInflater(savedInstanceState)
+                .inflate(R.layout.submit_button_layout, listView, false);
+        CardView submitButton = submitLayout.findViewById(R.id.submit_button_layout_sb_submit);
         listViewAdapter = new DataValueAdapter(getChildFragmentManager(),
-                getLayoutInflater(savedInstanceState));*/
+                getLayoutInflater(savedInstanceState), listView, getContext());
 
-        //listView.addFooterView(upButton);
+        if(isShowSubmitButton) {
+            listView.addFooterView(submitLayout);
+        }
         listView.setVisibility(View.VISIBLE);
         listView.setAdapter(listViewAdapter);
 
@@ -150,12 +158,13 @@ public abstract class DataEntryFragment<D> extends AbsProgramRuleFragment<D>
             listView.onRestoreInstanceState(listViewState);
         }
 
-       /* upButton.setOnClickListener(new View.OnClickListener() {
+        submitButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                listView.smoothScrollToPosition(INITIAL_POSITION);
+                proceed();
+                //listView.smoothScrollToPosition(INITIAL_POSITION);
             }
-        });*/
+        });
     }
 
     @Override
@@ -165,6 +174,7 @@ public abstract class DataEntryFragment<D> extends AbsProgramRuleFragment<D>
             return true;
         } else if (menuItem.getItemId() == R.id.action_new_event) {
             proceed();
+            return true;
         }
         return super.onOptionsItemSelected(menuItem);
     }
@@ -186,10 +196,13 @@ public abstract class DataEntryFragment<D> extends AbsProgramRuleFragment<D>
     public void onNothingSelected(AdapterView<?> parent) {
     }
 
-    public static void resetHidingAndWarnings(DataValueAdapter dataValueAdapter, SectionAdapter sectionAdapter) {
+    public static void resetHidingAndWarnings(DataValueAdapter dataValueAdapter,
+                                              SectionAdapter sectionAdapter) {
         if (dataValueAdapter != null) {
             dataValueAdapter.resetHiding();
+            dataValueAdapter.resetDisabled();
             dataValueAdapter.resetWarnings();
+            dataValueAdapter.resetMandatory();
             dataValueAdapter.resetErrors();
         }
         if (sectionAdapter != null) {
@@ -214,11 +227,11 @@ public abstract class DataEntryFragment<D> extends AbsProgramRuleFragment<D>
     }
 
     protected void showLoadingDialog() {
-        //UiUtils.showLoadingDialog(getChildFragmentManager(), R.string.please_wait);
+        UiUtils.showLoadingDialog(getChildFragmentManager(), R.string.please_wait);
     }
 
     public void hideLoadingDialog() {
-        //UiUtils.hideLoadingDialog(getChildFragmentManager());
+        UiUtils.hideLoadingDialog(getChildFragmentManager());
     }
 
     public static void refreshListView() {
@@ -234,24 +247,39 @@ public abstract class DataEntryFragment<D> extends AbsProgramRuleFragment<D>
         }
     }
 
-    protected void showValidationErrorDialog(ArrayList<String> mandatoryFieldsMissingErrors, ArrayList<String> programRulesErrors) {
-        ArrayList<String> errors = new ArrayList<>();
-        if (mandatoryFieldsMissingErrors != null) {
-            for (String mandatoryFieldsError : mandatoryFieldsMissingErrors) {
-                errors.add(getActivity().getString(R.string.missing_mandatory_field) + ": " + mandatoryFieldsError);
-            }
-        }
-        if (programRulesErrors != null) {
-            for (String programRulesError : programRulesErrors) {
-                errors.add(getActivity().getString(R.string.error_message) + ": " + programRulesError);
-            }
-        }
+    private void showErrorsDialog(ArrayList<String> errors) {
         if (!errors.isEmpty()) {
             validationErrorDialog = ValidationErrorDialog
-                    .newInstance(getActivity().getString(R.string.unable_to_complete_registration) + " " + getActivity().getString(R.string.review_errors), errors);
+                    .newInstance(
+                            getActivity().getString(R.string.unable_to_complete_registration) + " "
+                                    + getActivity().getString(R.string.review_errors), errors);
             validationErrorDialog.show(getChildFragmentManager());
         } else {
-            Toast.makeText(getContext(), R.string.unable_to_complete_registration, Toast.LENGTH_LONG).show();
+            Toast.makeText(getContext(), R.string.unable_to_complete_registration,
+                    Toast.LENGTH_LONG).show();
+
+        }
+    }
+
+    protected void showValidationErrorDialog(HashMap<ErrorType, ArrayList<String>> errorsMap) {
+        ArrayList<String> errors = new ArrayList<>();
+        addErrors(errorsMap.get(ErrorType.MANDATORY), errors,
+                getActivity().getString(R.string.missing_mandatory_field));
+        addErrors(errorsMap.get(ErrorType.UNIQUE), errors,
+                getActivity().getString(R.string.unique_value_form_empty));
+        addErrors(errorsMap.get(ErrorType.PROGRAM_RULE), errors,
+                getActivity().getString(R.string.error_message));
+        addErrors(errorsMap.get(ErrorType.INVALID_FIELD), errors,
+                getActivity().getString(R.string.error_message));
+        showErrorsDialog(errors);
+    }
+
+    private void addErrors(ArrayList<String> programRulesErrors,
+                           ArrayList<String> errors, String errorMessage) {
+        if (programRulesErrors != null) {
+            for (String programRulesError : programRulesErrors) {
+                errors.add(errorMessage + ": " + programRulesError);
+            }
         }
     }
 
@@ -262,6 +290,14 @@ public abstract class DataEntryFragment<D> extends AbsProgramRuleFragment<D>
     protected Toolbar getActionBarToolbar() {
         if (isAdded() && getActivity() != null) {
             return (Toolbar) getActivity().findViewById(R.id.toolbar);
+        } else {
+            throw new IllegalArgumentException("Fragment should be attached to MainActivity");
+        }
+    }
+
+    protected androidx.appcompat.widget.Toolbar getAndroidXActionBarToolbar() {
+        if (isAdded() && getActivity() != null) {
+            return (androidx.appcompat.widget.Toolbar) getActivity().findViewById(R.id.toolbar);
         } else {
             throw new IllegalArgumentException("Fragment should be attached to MainActivity");
         }
@@ -298,18 +334,23 @@ public abstract class DataEntryFragment<D> extends AbsProgramRuleFragment<D>
     }
 
     @Subscribe
-    public void onShowDetailedInfo(OnDetailedInfoButtonClick eventClick) // may inherit code from DataEntryFragment
+    public void onShowDetailedInfo(
+            OnDetailedInfoButtonClick eventClick) // may inherit code from DataEntryFragment
     {
         String message = "";
 
-        if (eventClick.getRow() instanceof CoordinatesRow)
+        /*if (eventClick.getRow() instanceof EventCoordinatesRow
+                || eventClick.getRow() instanceof QuestionCoordinatesRow) {
             message = getResources().getString(R.string.detailed_info_coordinate_row);
-        else if (eventClick.getRow() instanceof StatusRow)
+        } else if (eventClick.getRow() instanceof StatusRow) {
             message = getResources().getString(R.string.detailed_info_status_row);
-        else if (eventClick.getRow() instanceof IndicatorRow)
+        } else if (eventClick.getRow() instanceof IndicatorRow) {
             message = ""; // need to change ProgramIndicator to extend BaseValue for this to work
-        else         // rest of the rows can either be of data element or tracked entity instance attribute
+        } else         // rest of the rows can either be of data element or tracked entity instance
+        // attribute
+        {
             message = eventClick.getRow().getDescription();
+        }*/
 
         UiUtils.showConfirmDialog(getActivity(),
                 getResources().getString(R.string.detailed_info_dataelement),
@@ -329,7 +370,7 @@ public abstract class DataEntryFragment<D> extends AbsProgramRuleFragment<D>
 
     public abstract SectionAdapter getSpinnerAdapter();
 
-    protected abstract ArrayList<String> getValidationErrors();
+    protected abstract HashMap<ErrorType, ArrayList<String>> getValidationErrors();
 
     protected abstract boolean isValid();
 

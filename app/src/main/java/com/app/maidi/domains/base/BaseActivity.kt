@@ -95,39 +95,6 @@ abstract class BaseActivity<V : MvpView, P : MvpPresenter<V>> : MvpActivity<V, P
         }
     }
 
-    fun hideKeyBoard(activity: Activity) {
-        try {
-            val inputMethodManager = activity
-                .getSystemService(Activity.INPUT_METHOD_SERVICE) as InputMethodManager
-            inputMethodManager.hideSoftInputFromWindow(
-                activity.currentFocus!!
-                    .windowToken, 0
-            )
-            onWindowFocusChanged(true)
-        } catch (e: Exception) {
-            Log.d("HideKeyboard", e.toString())
-        }
-
-    }
-
-    fun setupEditTextKeyboard(view: View, activity: AppCompatActivity) {
-        //Set up touch listener for non-text box views to hide keyboard.
-        if (view !is EditText) {
-            view.setOnTouchListener { v, event ->
-                hideKeyBoard(activity)
-                false
-            }
-        }
-
-        //If a layout container, iterate over children and seed recursion.
-        if (view is ViewGroup) {
-            for (i in 0 until view.childCount) {
-                val innerView = view.getChildAt(i)
-                setupEditTextKeyboard(innerView, activity)
-            }
-        }
-    }
-
     inline fun <reified T> isCurrentFragment(containerId: Int) : Boolean {
         var fragment = supportFragmentManager.findFragmentById(containerId)
         return fragment is T

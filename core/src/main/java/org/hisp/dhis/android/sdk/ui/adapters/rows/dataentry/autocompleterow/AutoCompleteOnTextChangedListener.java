@@ -61,7 +61,7 @@ public class AutoCompleteOnTextChangedListener extends AbsTextWatcher {
             optionNameCacher.cacheOptionName();
 
             Dhis2Application.getEventBus()
-                    .post(new RowValueChangedEvent(value, DataEntryRowTypes.AUTO_COMPLETE.toString()));
+                    .post(new RowValueChangedEvent(value, null));
         }
     }
 }

@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:orientation="horizontal"
+              android:layout_width="match_parent"
+              android:layout_height="wrap_content"
+                android:gravity="center_vertical">
+
+    <TextView
+            android:id="@+id/row_choose_picker_layout_tv_title"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"/>
+
+    <View android:layout_width="10dp" android:layout_height="match_parent"/>
+
+    <RadioGroup
+            android:id="@+id/row_choose_picker_layout_rg_chooser"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+        <RadioButton
+                android:id="@+id/row_choose_picker_rb_true"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/yes"
+                style="@android:style/Widget.CompoundButton.CheckBox"/>
+        
+        <View android:layout_width="19.3dp" android:layout_height="match_parent"/>
+
+        <RadioButton
+                android:id="@+id/row_choose_picker_rb_false"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/no"
+                style="@android:style/Widget.CompoundButton.CheckBox"/>
+
+    </RadioGroup>
+
+</LinearLayout>

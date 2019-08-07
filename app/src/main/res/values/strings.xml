@@ -23,6 +23,8 @@
     <string name="ok">OK</string>
     <string name="cancel">Cancel</string>
     <string name="reg_id">Reg ID</string>
+    <string name="reg_date">Reg Date</string>
+    <string name="total">Total</string>
 
     <!-- *************** GLOBAL WARNING STRING ************* -->
     <string name="phone_number_invalid">The phone number is invalid. Please recheck and try again</string>
@@ -80,6 +82,8 @@
     <string name="my_immunisation_title">My Immunisation</string>
     <string name="immunisation_card_title">Immunisation Card</string>
     <string name="session_wise_vaccination_due">Session wise Vaccination due</string>
+    <string name="registered_case">Registered Cases</string>
+    <string name="adverse_event_information">Adverse Event Information</string>
 
 
 </resources>
