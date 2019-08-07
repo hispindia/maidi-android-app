@@ -65,7 +65,8 @@ public enum ValueType
     FILE_RESOURCE( String.class ),
     COORDINATE( String.class),
     AGE( Date.class ),
-    IMAGE( String.class);
+    IMAGE( String.class),
+    SECTION(String.class);
 
     public static final Set<ValueType> INTEGER_TYPES = new HashSet<>(Arrays.asList(
         INTEGER, INTEGER_POSITIVE, INTEGER_NEGATIVE, INTEGER_ZERO_OR_POSITIVE ));

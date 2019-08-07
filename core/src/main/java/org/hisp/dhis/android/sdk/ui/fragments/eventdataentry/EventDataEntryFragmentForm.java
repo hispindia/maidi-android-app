@@ -35,7 +35,7 @@ import org.hisp.dhis.android.sdk.ui.adapters.rows.dataentry.IndicatorRow;
 import org.hisp.dhis.android.sdk.persistence.models.DataValue;
 import org.hisp.dhis.android.sdk.persistence.models.Event;
 import org.hisp.dhis.android.sdk.persistence.models.ProgramStage;
-import org.hisp.dhis.android.sdk.ui.adapters.rows.dataentry.StatusRow;
+import org.hisp.dhis.android.sdk.ui.adapters.rows.dataentry.custom_row.StatusRow;
 import org.hisp.dhis.android.sdk.ui.fragments.dataentry.DataEntryFragmentSection;
 
 import java.util.List;

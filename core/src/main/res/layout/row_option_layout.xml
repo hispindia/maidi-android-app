@@ -16,6 +16,7 @@
         />
 
         <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/row_option_layout_til_value"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="@android:color/white">
@@ -25,7 +26,6 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:drawableEnd="@drawable/ic_gray_arrow_down"
-                    android:hint="@string/gender"
                     android:editable="false"
                     android:clickable="false"
                     android:textSize="15.4dp"/>

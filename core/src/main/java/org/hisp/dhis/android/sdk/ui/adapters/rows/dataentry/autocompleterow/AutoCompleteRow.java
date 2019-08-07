@@ -142,7 +142,7 @@ public final class AutoCompleteRow extends Row implements OptionNameCacher {
 
     @Override
     public int getViewType() {
-        return DataEntryRowTypes.AUTO_COMPLETE.ordinal();
+        return DataEntryRowTypes.TEXT.ordinal();
     }
 
     public void cacheOptionName() {

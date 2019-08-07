@@ -106,7 +106,7 @@ public final class StatusRow extends Row {
 
     @Override
     public int getViewType() {
-        return DataEntryRowTypes.COORDINATES.ordinal();
+        return DataEntryRowTypes.QUESTION_COORDINATES.ordinal();
     }
 
 

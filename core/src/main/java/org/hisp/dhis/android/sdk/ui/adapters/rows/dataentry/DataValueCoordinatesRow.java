@@ -59,7 +59,7 @@ public final class DataValueCoordinatesRow extends Row {
         mValue = baseValue;
         mRowType = rowType;
 
-        if (!DataEntryRowTypes.DATAVALUECOORDINATES.equals(rowType)) {
+        if (!DataEntryRowTypes.TEXT.equals(rowType)) {
             throw new IllegalArgumentException("Unsupported row type");
         }
         checkNeedsForDescriptionButton();
@@ -143,7 +143,7 @@ public final class DataValueCoordinatesRow extends Row {
 
     @Override
     public int getViewType() {
-        return DataEntryRowTypes.COORDINATES.ordinal();
+        return DataEntryRowTypes.TEXT.ordinal();
     }
 
     private static class CoordinateViewHolder {
@@ -218,7 +218,7 @@ public final class DataValueCoordinatesRow extends Row {
 
                 if(!newValue.equals(value)) {
                     mBaseValue.setValue(newValue);
-                    Dhis2Application.getEventBus().post(new RowValueChangedEvent(mBaseValue, DataEntryRowTypes.DATAVALUECOORDINATES.toString()));
+                    Dhis2Application.getEventBus().post(new RowValueChangedEvent(mBaseValue, DataEntryRowTypes.TEXT.toString()));
                 }
             }
         }

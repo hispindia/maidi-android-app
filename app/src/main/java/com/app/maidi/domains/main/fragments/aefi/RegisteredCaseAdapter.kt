@@ -1,14 +1,20 @@
 package com.app.maidi.domains.main.fragments.aefi
 
+import android.app.Activity
+import android.app.ActivityOptions
 import android.content.Context
+import android.content.Intent
+import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.LinearLayout
 import android.widget.TextView
+import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.RecyclerView
 import com.app.maidi.R
+import com.app.maidi.domains.aefi.AdverseEventInformationActivity
 import com.app.maidi.utils.Constants
 import com.app.maidi.utils.Utils
 import org.hisp.dhis.android.sdk.controllers.metadata.MetaDataController
@@ -17,16 +23,16 @@ import org.hisp.dhis.android.sdk.persistence.models.TrackedEntityInstance
 
 class RegisteredCaseAdapter : RecyclerView.Adapter<RegisteredCaseAdapter.RegisteredCaseHolder>{
 
-    var context: Context
+    var activity: AppCompatActivity
     var trackedEntityInstances: List<TrackedEntityInstance>
 
-    constructor(context: Context, trackedEntityInstances: List<TrackedEntityInstance>){
-        this.context = context
+    constructor(activity: AppCompatActivity, trackedEntityInstances: List<TrackedEntityInstance>){
+        this.activity = activity
         this.trackedEntityInstances = trackedEntityInstances
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RegisteredCaseHolder {
-        var contentView = LayoutInflater.from(context).inflate(R.layout.item_registered_cases, parent, false)
+        var contentView = LayoutInflater.from(activity).inflate(R.layout.item_registered_cases, parent, false)
         return RegisteredCaseHolder(contentView)
     }
 
@@ -39,9 +45,9 @@ class RegisteredCaseAdapter : RecyclerView.Adapter<RegisteredCaseAdapter.Registe
             var trackedEntityInstance = trackedEntityInstances.get(position)
 
             if(position % 2 == 0)
-                holder.llHeader.setBackgroundColor(context.resources.getColor(R.color.lighter_gray_background_color))
+                holder.llHeader.setBackgroundColor(activity.resources.getColor(R.color.lighter_gray_background_color))
             else
-                holder.llHeader.setBackgroundColor(context.resources.getColor(android.R.color.white))
+                holder.llHeader.setBackgroundColor(activity.resources.getColor(android.R.color.white))
 
             holder.tvCounter.text = (position + 1).toString()
             holder.tvRegId.text = trackedEntityInstance.uid
@@ -78,8 +84,14 @@ class RegisteredCaseAdapter : RecyclerView.Adapter<RegisteredCaseAdapter.Registe
                 Utils.showHideContainer(holder.llChildInfo, 500)
             }
 
+            holder.llChildInfo.setOnClickListener {
+                var intent = Intent(activity, AdverseEventInformationActivity::class.java)
+                intent.putExtra(AdverseEventInformationActivity.TRACKED_ENTITY_INSTANCE_ID, trackedEntityInstance.uid)
+                activity.startActivity(intent)
+            }
+
         }catch(exception : Exception){
-            Log.e(RegisteredCaseAdapter::class.simpleName, exception.toString())
+            Log.e("RegisteredCaseAdapter", exception.toString())
         }
 
     }

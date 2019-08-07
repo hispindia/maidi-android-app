@@ -12,9 +12,16 @@
 
     <include android:id="@+id/activity_main_actionbar" layout="@layout/layout_actionbar"/>
 
-    <FrameLayout
-            android:id="@+id/activity_main_fl_content"
+    <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+            android:id="@+id/activity_main_srl_force_syncronize"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"/>
+            android:layout_height="match_parent">
+
+        <FrameLayout
+                android:id="@+id/activity_main_fl_content"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"/>
+
+    </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
 </LinearLayout>

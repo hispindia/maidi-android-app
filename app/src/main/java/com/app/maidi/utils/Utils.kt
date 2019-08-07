@@ -2,12 +2,17 @@ package com.app.maidi.utils
 
 import android.animation.Animator
 import android.animation.ValueAnimator
+import android.app.Activity
 import android.content.res.AssetManager
 import android.util.Base64
 import android.util.Log
 import android.util.Patterns
 import android.view.View
+import android.view.ViewGroup
 import android.view.animation.DecelerateInterpolator
+import android.view.inputmethod.InputMethodManager
+import android.widget.EditText
+import androidx.appcompat.app.AppCompatActivity
 import com.github.florent37.singledateandtimepicker.SingleDateAndTimePicker
 import com.google.android.material.textfield.TextInputEditText
 import org.joda.time.LocalDate
@@ -36,18 +41,19 @@ class Utils {
 
     companion object{
 
-        val simpleDateFormat = SimpleDateFormat(Constants.SIMPLE_DATE_PATTERN)
+        val simpleLocalDateFormat = SimpleDateFormat(Constants.SIMPLE_DATE_PATTERN)
+        val simpleServerDateFormat = SimpleDateFormat(Constants.SIMPLE_SERVER_DATE_PATTERN)
         val fullDateFormat = SimpleDateFormat(Constants.FULL_DATE_PATTERN)
         val serverDateFormat = SimpleDateFormat(Constants.SERVER_DATE_PATTERN)
 
         fun convertLocalDateToServerDate(localDateString: String) : String{
-            var localDate = simpleDateFormat.parse(localDateString)
+            var localDate = simpleLocalDateFormat.parse(localDateString)
             val serverDateString = serverDateFormat.format(localDate)
             return serverDateString
         }
 
         fun convertStringToCalendar(dateString: String) : Calendar{
-            var date = simpleDateFormat.parse(dateString)
+            var date = simpleLocalDateFormat.parse(dateString)
             var cal = Calendar.getInstance()
             cal.time = date
             return cal
@@ -58,7 +64,12 @@ class Utils {
         }
 
         fun convertCalendarToString(date: Date) : String{
-            var dateString = simpleDateFormat.format(date)
+            var dateString = simpleLocalDateFormat.format(date)
+            return dateString
+        }
+
+        fun convertCalendarToServerString(date: Date) : String {
+            var dateString = simpleServerDateFormat.format(date)
             return dateString
         }
 
@@ -70,7 +81,7 @@ class Utils {
             try {
                 if (!dateString.isEmpty()) {
                     var dDate = fullDateFormat.parse(dateString)
-                    var convertDate = simpleDateFormat.format(dDate)
+                    var convertDate = simpleLocalDateFormat.format(dDate)
                     return convertDate
                 }
             }catch(ex : Exception){
@@ -171,6 +182,39 @@ class Utils {
             valueAnimator.interpolator = DecelerateInterpolator()
             valueAnimator.duration = duration.toLong()
             valueAnimator.start()
+        }
+
+        fun hideKeyBoard(activity: Activity) {
+            try {
+                val inputMethodManager = activity
+                    .getSystemService(Activity.INPUT_METHOD_SERVICE) as InputMethodManager
+                inputMethodManager.hideSoftInputFromWindow(
+                    activity.currentFocus!!
+                        .windowToken, 0
+                )
+                activity.onWindowFocusChanged(true)
+            } catch (e: Exception) {
+                Log.d("HideKeyboard", e.toString())
+            }
+
+        }
+
+        fun setupEditTextKeyboard(view: View, activity: AppCompatActivity) {
+            //Set up touch listener for non-text box views to hide keyboard.
+            if (view !is EditText) {
+                view.setOnTouchListener { v, event ->
+                    hideKeyBoard(activity)
+                    false
+                }
+            }
+
+            //If a layout container, iterate over children and seed recursion.
+            if (view is ViewGroup) {
+                for (i in 0 until view.childCount) {
+                    val innerView = view.getChildAt(i)
+                    setupEditTextKeyboard(innerView, activity)
+                }
+            }
         }
     }
 

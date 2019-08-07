@@ -14,6 +14,7 @@ import com.app.maidi.domains.base.BaseActivity
 import com.app.maidi.domains.login.fragments.LoginMainFragment
 import com.app.maidi.infrastructures.ActivityModules
 import com.app.maidi.models.database.User
+import com.app.maidi.utils.Utils.Companion.setupEditTextKeyboard
 import com.google.firebase.FirebaseApp
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException

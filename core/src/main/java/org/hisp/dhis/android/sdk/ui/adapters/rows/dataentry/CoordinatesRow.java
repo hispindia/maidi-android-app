@@ -101,7 +101,7 @@ public final class CoordinatesRow extends Row {
 
     @Override
     public int getViewType() {
-        return DataEntryRowTypes.COORDINATES.ordinal();
+        return DataEntryRowTypes.TEXT.ordinal();
     }
 
     private static class CoordinateViewHolder {
@@ -189,7 +189,7 @@ public final class CoordinatesRow extends Row {
                     mEvent.setLatitude(Double.valueOf(newValue));
                     DataValue dataValue = new DataValue();
                     dataValue.setValue("" + newValue);
-                    Dhis2Application.getEventBus().post(new RowValueChangedEvent(dataValue, DataEntryRowTypes.COORDINATES.toString()));
+                    Dhis2Application.getEventBus().post(new RowValueChangedEvent(dataValue, DataEntryRowTypes.TEXT.toString()));
 
                 }
             }
@@ -218,7 +218,7 @@ public final class CoordinatesRow extends Row {
                     mEvent.setLongitude(Double.valueOf(newValue));
                     DataValue dataValue = new DataValue();
                     dataValue.setValue("" + newValue);
-                    Dhis2Application.getEventBus().post(new RowValueChangedEvent(dataValue, DataEntryRowTypes.COORDINATES.toString()));
+                    Dhis2Application.getEventBus().post(new RowValueChangedEvent(dataValue, DataEntryRowTypes.TEXT.toString()));
                 }
             }
         }

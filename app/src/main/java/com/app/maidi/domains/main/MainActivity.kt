@@ -13,6 +13,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.WindowManager
 import android.widget.*
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import butterknife.BindView
 import butterknife.ButterKnife
 import com.app.maidi.MainApplication
@@ -61,6 +62,9 @@ class MainActivity : BaseActivity<MainView, MainPresenter>(), View.OnClickListen
     lateinit var ivMenu: ImageView
     lateinit var tvTitle: TextView
 
+    @BindView(R.id.activity_main_srl_force_syncronize)
+    lateinit var srlForceSyncronize: SwipeRefreshLayout
+
     @BindView(R.id.activity_main_rl_content)
     lateinit var rlContent: LinearLayout
 
@@ -106,6 +110,11 @@ class MainActivity : BaseActivity<MainView, MainPresenter>(), View.OnClickListen
         tvTitle = actionbar.findViewById(R.id.layout_actionbar_tv_title)
 
         setupCloseMenu(rlContent, this)
+
+        srlForceSyncronize.setOnRefreshListener {
+            showLoading()
+            DhisService.forceSynchronize(this)
+        }
     }
 
     override fun onResume() {
@@ -123,6 +132,9 @@ class MainActivity : BaseActivity<MainView, MainPresenter>(), View.OnClickListen
         if(uiEvent.eventType.equals(UiEvent.UiEventType.SYNCING_END)){
             hideLoading()
             Toast.makeText(this, "Sync completed", Toast.LENGTH_SHORT).show()
+            if(srlForceSyncronize != null){
+                srlForceSyncronize.isRefreshing = false
+            }
         }
     }
 

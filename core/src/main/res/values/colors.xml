@@ -104,5 +104,8 @@
     <color name="button_teal_state_unpressed">#4DDBFF</color>
     <color name="button_teal_state_pressed">#66E0FF</color>
 
+    <color name="gray_icon">#bdc5c7</color>
+    <color name="dark_gray">#93a2a6</color>
+
 
 </resources>

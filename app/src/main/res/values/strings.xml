@@ -83,6 +83,7 @@
     <string name="immunisation_card_title">Immunisation Card</string>
     <string name="session_wise_vaccination_due">Session wise Vaccination due</string>
     <string name="registered_case">Registered Cases</string>
+    <string name="adverse_event_information">Adverse Event Information</string>
 
 
 </resources>

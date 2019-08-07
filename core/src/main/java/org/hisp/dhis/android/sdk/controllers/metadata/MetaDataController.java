@@ -187,6 +187,11 @@ public final class MetaDataController extends ResourceController {
         return new Select().from(OrganUnit.class).queryList();
     }
 
+    public static OrganUnit getOrganisationUnitById(String organId){
+        return new Select().from(OrganUnit.class)
+                .where(Condition.column(OrganUnit$Table.ID).is(organId)).querySingle();
+    }
+
     public static List<OrganUnit> getOrganisationUnitsStateLevel(OrganisationUnit currentUnit){
         if(currentUnit.getLevel() < 2) {
             return new Select()
@@ -208,9 +213,31 @@ public final class MetaDataController extends ResourceController {
                 .and(Condition.column(OrganUnit$Table.ID).is(id)).querySingle();
     }
 
-    public static OrganUnit getOrganisationUnitsVillageLevel(String id){
-        return new Select().from(OrganUnit.class).where(Condition.column(OrganUnit$Table.LEVEL).is(5))
-                .and(Condition.column(OrganUnit$Table.ID).is(id)).querySingle();
+    public static List<OrganUnit> getOrganisationUnitsVillageLevel(OrganUnit blockUnit){
+
+        List<OrganUnit> villageUnits = new ArrayList<OrganUnit>();
+
+        if(blockUnit.getSChildren() != null && !blockUnit.getSChildren().isEmpty()){
+            String[] phcIds = blockUnit.getSChildren().split(" ");
+            for(String phcId : phcIds){
+                OrganUnit phcUnit = MetaDataController.getOrganisationUnitById(phcId);
+                if(phcUnit.getSChildren() != null && !phcUnit.getSChildren().isEmpty()){
+                    String[] scIds = phcUnit.getSChildren().split(" ");
+                    for(String scId : scIds){
+                        OrganUnit scUnit = MetaDataController.getOrganisationUnitById(scId);
+                        if(scUnit.getSChildren() != null && !scUnit.getSChildren().isEmpty()){
+                            String[] villageIds = scUnit.getSChildren().split(" ");
+                            for(String villageId : villageIds) {
+                                OrganUnit villageUnit = MetaDataController.getOrganisationUnitById(villageId);
+                                villageUnits.add(villageUnit);
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        return villageUnits;
     }
 
     public static List<RelationshipType> getRelationshipTypes() {
@@ -272,8 +299,8 @@ public final class MetaDataController extends ResourceController {
     }
 
     /**
-     * Get all the AttributeValues that belongs to a given DataElement
-     *
+     * Get all the AttributeValues that bengs to a given DataElement
+     *lo
      * @param dataElement to get the Attributes from
      * @return List of AttributeValue objects that belongs to the given DataElement
      */
@@ -374,6 +401,12 @@ public final class MetaDataController extends ResourceController {
     public static ProgramStage getProgramStage(String programStageUid) {
         return new Select().from(ProgramStage.class).where(
                 Condition.column(ProgramStage$Table.ID).is(programStageUid)).querySingle();
+    }
+
+    public static ProgramStage getProgramStageByName(String programUid, String programStageName) {
+        return new Select().from(ProgramStage.class)
+                .where(Condition.column(ProgramStage$Table.PROGRAM).is(programUid))
+                .and(Condition.column(ProgramStage$Table.DISPLAYNAME).like("%" + programStageName + "%")).querySingle();
     }
 
     public static TrackedEntityAttribute getTrackedEntityAttribute(String trackedEntityAttributeId) {

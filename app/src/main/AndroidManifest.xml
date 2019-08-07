@@ -1,25 +1,28 @@
 <?xml version="1.0" encoding="utf-8"?>
-<manifest xmlns:android="http://schemas.android.com/apk/res/android" xmlns:tools="http://schemas.android.com/tools"
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+          xmlns:tools="http://schemas.android.com/tools"
           package="com.app.maidi">
 
     <uses-permission android:name="android.permission.INTERNET"/>
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
 
     <application
+            android:name=".MainApplication"
             android:allowBackup="false"
             android:icon="@mipmap/ic_launcher"
             android:label="@string/app_name"
             android:roundIcon="@mipmap/ic_launcher_round"
             android:supportsRtl="true"
-            android:usesCleartextTraffic="true"
             android:theme="@style/AppTheme"
-            android:name=".MainApplication"
+            android:usesCleartextTraffic="true"
             tools:replace="android:allowBackup">
-        <activity android:name=".domains.main.MainActivity" android:configChanges="orientation|screenSize"></activity>
-        <activity android:name=".domains.child_registration.ChildRegistrationActivity"></activity>
-        <activity android:name=".domains.child_registration.ChildRegistrationBeneficiaryActivity"></activity>
-        <activity android:name=".domains.my_registration.list_my_registration.ListMyRegistrationActivity"></activity>
-        <activity android:name=".domains.my_registration.immunisation_detail.ImmunisationDetailActivity"></activity>
+        <activity android:name=".domains.aefi.AdverseEventInformationActivity"/>
+        <activity
+                android:name=".domains.main.MainActivity"
+                android:configChanges="orientation|screenSize"/>
+        <activity android:name=".domains.child_registration.ChildRegistrationActivity"/>
+        <activity android:name=".domains.my_registration.list_my_registration.ListMyRegistrationActivity"/>
+        <activity android:name=".domains.my_registration.immunisation_detail.ImmunisationDetailActivity"/>
         <activity android:name=".domains.login.LoginActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
@@ -28,25 +31,24 @@
             </intent-filter>
         </activity>
 
-        <receiver android:name="org.hisp.dhis.android.sdk.services.PeriodicSynchronizer"></receiver>
+        <receiver android:name="org.hisp.dhis.android.sdk.services.PeriodicSynchronizer"/>
         <receiver android:name="org.hisp.dhis.android.sdk.services.PeriodicSynchronizerAutoStarter">
             <intent-filter>
-                <action android:name="android.intent.action.BOOT_COMPLETED" />
+                <action android:name="android.intent.action.BOOT_COMPLETED"/>
             </intent-filter>
         </receiver>
 
         <service
                 android:name="org.hisp.dhis.android.sdk.services.StartPeriodicSynchronizerService"
-                android:enabled="true" />
+                android:enabled="true"/>
         <service
                 android:name="org.hisp.dhis.android.trackercapture.export.TrackerExportService"
                 android:enabled="true"
                 android:exported="true">
             <intent-filter>
-                <action android:name="org.hisp.dhis.android.trackercapture.export.TrackerExportService.EXPORT" />
+                <action android:name="org.hisp.dhis.android.trackercapture.export.TrackerExportService.EXPORT"/>
             </intent-filter>
         </service>
-
     </application>
 
 </manifest>

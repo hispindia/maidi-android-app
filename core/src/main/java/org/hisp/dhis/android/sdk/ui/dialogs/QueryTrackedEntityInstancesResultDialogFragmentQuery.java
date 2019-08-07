@@ -90,9 +90,16 @@ public class QueryTrackedEntityInstancesResultDialogFragmentQuery implements Que
             if(ValueType.COORDINATE.equals(ptea.getTrackedEntityAttribute().getValueType())) {
                 GpsController.activateGps(context);
             }
-            Row row = DataEntryRowFactory.createDataEntryView(ptea.getMandatory(),
+            boolean isRadioButton = program.getDataEntryMethod();
+            if(!isRadioButton){
+                isRadioButton = ptea.isRenderOptionsAsRadio();
+            }
+            Row row = DataEntryRowFactory.createDataEntryView(context,
+                    orgUnit,
+                    ptea.getMandatory(),
                     ptea.getAllowFutureDate(), trackedEntityAttribute.getOptionSet(),
-                    trackedEntityAttribute.getName(), value, trackedEntityAttribute.getValueType(), true, false);
+                    trackedEntityAttribute.getName(), value, trackedEntityAttribute.getValueType(), true,
+                    false, isRadioButton);
             dataEntryRows.add(row);
         }
         form.setTrackedEntityAttributeValues(values);

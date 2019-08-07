@@ -38,7 +38,9 @@ class MainFragment : BaseFragment() {
 
     @OnClick(R.id.activity_main_fl_child_registration)
     fun onChildRegistrationModuleClicked(){
-        mainActivity.transformActivity(mainActivity, ChildRegistrationActivity::class.java, false)
+        var bundle = Bundle()
+        bundle.putString(ChildRegistrationActivity.ORGANISATION_UNIT, Constants.IMMUNISATION)
+        mainActivity.transformActivity(mainActivity, ChildRegistrationActivity::class.java, false, bundle)
     }
 
     @OnClick(R.id.activity_main_fl_immunization_card)
