@@ -63,7 +63,7 @@ class AdverseEventInformationActivity : AppCompatActivity() {
             programStage = MetaDataController.getProgramStageByName(currentProgram.uid, Constants.AEFI)
             enrollment = TrackerController.getEnrollmentByProgramAndTrackedEntityInstance(currentProgram.uid, trackedEntityInstanceId)
 
-            eventDataEntryFragment = EventDataEntryFragment.newInstanceWithEnrollment(topUnit.id, currentProgram.uid, programStage.uid, enrollment.localId)
+            eventDataEntryFragment = EventDataEntryFragment.newInstanceWithEnrollment(topUnit.id, currentProgram.uid, programStage.uid, enrollment.localId, false)
 
             supportFragmentManager.beginTransaction()
                 .replace(R.id.activity_adverse_event_information_container, eventDataEntryFragment)

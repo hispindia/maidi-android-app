@@ -57,6 +57,7 @@ class RegisteredCasesFragment : BaseFragment(){
     override fun onResume() {
         super.onResume()
         mainActivity.solidActionBar(resources.getString(R.string.registered_case))
+        mainActivity.isSwipeForceSyncronizeEnabled(false)
     }
 
     fun createPresenter() : MainPresenter{

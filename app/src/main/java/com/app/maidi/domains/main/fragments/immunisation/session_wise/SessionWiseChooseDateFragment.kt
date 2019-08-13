@@ -40,6 +40,7 @@ class SessionWiseChooseDateFragment : BaseFragment() {
     override fun onResume() {
         super.onResume()
         mainActivity.solidActionBar(resources.getString(R.string.session_wise_vaccination_due))
+        mainActivity.isSwipeForceSyncronizeEnabled(false)
     }
 
     @OnClick(R.id.fragment_session_wise_choose_date_v_date_of_birth)

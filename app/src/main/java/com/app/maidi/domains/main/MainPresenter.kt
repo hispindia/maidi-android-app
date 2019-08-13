@@ -146,7 +146,7 @@ class MainPresenter : BasePresenter<MainView> {
                         }
 
                         immunisationCard.trackedEntityInstance = trackedEntityInstance
-                        immunisationCard.vaccineList = vaccineList.subList(0, 6)
+                        immunisationCard.vaccineList = vaccineList//.subList(0, 6)
 
                         immunisationCardList.add(immunisationCard)
 

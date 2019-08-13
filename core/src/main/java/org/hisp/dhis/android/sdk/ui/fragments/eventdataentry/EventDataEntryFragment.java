@@ -107,6 +107,7 @@ public class EventDataEntryFragment extends DataEntryFragment<EventDataEntryFrag
     public static final String PROGRAM_STAGE_ID = "extra:ProgramStageId";
     public static final String EVENT_ID = "extra:EventId";
     public static final String ENROLLMENT_ID = "extra:EnrollmentId";
+    public static final String IS_EVENT_ON_ITEM = "extra:isEventOnItem";
     private ImageView previousSectionButton;
     private ImageView nextSectionButton;
     private View spinnerContainer;
@@ -144,13 +145,14 @@ public class EventDataEntryFragment extends DataEntryFragment<EventDataEntryFrag
     }
 
     public static EventDataEntryFragment newInstanceWithEnrollment(String unitId, String programId, String programStageId,
-                                                                   long enrollmentId) {
+                                                                   long enrollmentId, boolean isEventOnItem) {
         EventDataEntryFragment fragment = new EventDataEntryFragment();
         Bundle args = new Bundle();
         args.putString(ORG_UNIT_ID, unitId);
         args.putString(PROGRAM_ID, programId);
         args.putString(PROGRAM_STAGE_ID, programStageId);
         args.putLong(ENROLLMENT_ID, enrollmentId);
+        args.putBoolean(IS_EVENT_ON_ITEM, isEventOnItem);
         fragment.setArguments(args);
         return fragment;
     }
@@ -259,6 +261,16 @@ public class EventDataEntryFragment extends DataEntryFragment<EventDataEntryFrag
             // Hence, it would be more safe not to track any changes in any tables
             List<Class<? extends Model>> modelsToTrack = new ArrayList<>();
             Bundle fragmentArguments = args.getBundle(EXTRA_ARGUMENTS);
+            if(fragmentArguments.getBoolean(IS_EVENT_ON_ITEM)){
+                return new DbLoader<>(
+                        getActivity(), modelsToTrack, new ListEventDataEntryFragmentQuery(
+                        fragmentArguments.getString(ORG_UNIT_ID),
+                        fragmentArguments.getString(PROGRAM_ID),
+                        fragmentArguments.getString(PROGRAM_STAGE_ID),
+                        fragmentArguments.getLong(EVENT_ID, -1),
+                        fragmentArguments.getLong(ENROLLMENT_ID, -1)
+                ));
+            }
             return new DbLoader<>(
                     getActivity(), modelsToTrack, new EventDataEntryFragmentQuery(
                     fragmentArguments.getString(ORG_UNIT_ID),
@@ -266,8 +278,7 @@ public class EventDataEntryFragment extends DataEntryFragment<EventDataEntryFrag
                     fragmentArguments.getString(PROGRAM_STAGE_ID),
                     fragmentArguments.getLong(EVENT_ID, -1),
                     fragmentArguments.getLong(ENROLLMENT_ID, -1)
-            )
-            );
+            ));
         }
         return null;
     }

@@ -23,13 +23,10 @@ import com.app.maidi.utils.Constants
 import org.hisp.dhis.android.sdk.controllers.metadata.MetaDataController
 import org.hisp.dhis.android.sdk.controllers.tracker.TrackerController
 import org.hisp.dhis.android.sdk.network.APIException
-import org.hisp.dhis.android.sdk.persistence.models.Enrollment
-import org.hisp.dhis.android.sdk.persistence.models.TrackedEntityAttribute
-import org.hisp.dhis.android.sdk.persistence.models.TrackedEntityAttributeValue
-import org.hisp.dhis.android.sdk.persistence.models.TrackedEntityInstance
+import org.hisp.dhis.android.sdk.persistence.models.*
 import javax.inject.Inject
 
-class ListMyRegistrationActivity : BaseActivity<ListMyRegistrationView, ListMyRegistrationPresenter>(), ListMyRegistrationView, ListMyRegistrationAdapter.OnItemClickListener{
+class ListMyRegistrationActivity : BaseActivity<ListMyRegistrationView, ListMyRegistrationPresenter>(), ListMyRegistrationView, ListMyRegistrationAdapter.OnItemClickListener, SwipeRefreshLayout.OnRefreshListener{
 
     companion object{
         val TRACKED_ENTITY_INSTANCE = "TRACKED_INTITY_INSTANCE"
@@ -57,6 +54,11 @@ class ListMyRegistrationActivity : BaseActivity<ListMyRegistrationView, ListMyRe
     lateinit var adapter: ListMyRegistrationAdapter
     lateinit var dividerItemDecoration: DividerItemDecoration
     lateinit var trackedEntityInstances: List<TrackedEntityInstance>
+    lateinit var orgUnit : OrganisationUnit
+    lateinit var program :Program
+    lateinit var userAccount : UserAccount
+    lateinit var dateAttribute :TrackedEntityAttribute
+    lateinit var phoneNumberAttribute : TrackedEntityAttribute
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -73,6 +75,8 @@ class ListMyRegistrationActivity : BaseActivity<ListMyRegistrationView, ListMyRe
             onBackPressed()
         }
 
+        srlRefresh.setOnRefreshListener(this)
+
         dividerItemDecoration = DividerItemDecoration(this, DividerItemDecoration.VERTICAL)
         dividerItemDecoration.setDrawable(resources.getDrawable(R.drawable.bg_divider))
         adapter = ListMyRegistrationAdapter(this, arrayListOf(), this)
@@ -80,12 +84,16 @@ class ListMyRegistrationActivity : BaseActivity<ListMyRegistrationView, ListMyRe
         rcvList.addItemDecoration(dividerItemDecoration)
         rcvList.adapter = adapter
 
-        var orgUnit = MetaDataController.getTopAssignedOrganisationUnit()
-        var program = MetaDataController.getProgramByName(Constants.BENEFICIARY_CHILD_REGISTRATION)
-        var userAccount = MetaDataController.getUserAccount()
-        var dateAttribute = MetaDataController.getDateOfBirthAttribute()
-        var phoneNumberAttribute = MetaDataController.getPhoneNumberAttribute()
+        orgUnit = MetaDataController.getTopAssignedOrganisationUnit()
+        program = MetaDataController.getProgramByName(Constants.BENEFICIARY_CHILD_REGISTRATION)
+        userAccount = MetaDataController.getUserAccount()
+        dateAttribute = MetaDataController.getDateOfBirthAttribute()
+        phoneNumberAttribute = MetaDataController.getPhoneNumberAttribute()
 
+        queryListTrackedInstances()
+    }
+
+    fun queryListTrackedInstances(){
         var birthdayAttributeValue = TrackedEntityAttributeValue()
         var phoneAttributeValue = TrackedEntityAttributeValue()
 
@@ -96,7 +104,10 @@ class ListMyRegistrationActivity : BaseActivity<ListMyRegistrationView, ListMyRe
         phoneAttributeValue.value = userAccount.phoneNumber
 
         listMyRegistrationPresenter.queryListMyRegistration(orgUnit.id, program.uid, "", true,  birthdayAttributeValue, phoneAttributeValue)
-        //listMyRegistrationPresenter.queryListMyRegistration(orgUnit.id, program.uid, "", true,  TrackedEntityAttributeValue())
+    }
+
+    override fun onRefresh() {
+        queryListTrackedInstances()
     }
 
     override fun createPresenter(): ListMyRegistrationPresenter {
@@ -114,6 +125,8 @@ class ListMyRegistrationActivity : BaseActivity<ListMyRegistrationView, ListMyRe
             this.trackedEntityInstances = trackedEntityInstances
             adapter = ListMyRegistrationAdapter(this, this.trackedEntityInstances, this)
             rcvList.adapter = adapter
+            if(srlRefresh != null && srlRefresh.isRefreshing)
+                srlRefresh.isRefreshing = false
         }
     }
 

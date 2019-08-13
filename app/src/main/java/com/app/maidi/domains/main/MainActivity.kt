@@ -117,14 +117,10 @@ class MainActivity : BaseActivity<MainView, MainPresenter>(), View.OnClickListen
         }
     }
 
-    override fun onResume() {
-        super.onResume()
-        Dhis2Application.bus.register(this)
-    }
-
-    override fun onPause() {
-        super.onPause()
-        Dhis2Application.bus.unregister(this)
+    fun isSwipeForceSyncronizeEnabled(isEnabled : Boolean){
+        if(srlForceSyncronize != null){
+            srlForceSyncronize.isEnabled = isEnabled
+        }
     }
 
     @Subscribe
@@ -142,29 +138,6 @@ class MainActivity : BaseActivity<MainView, MainPresenter>(), View.OnClickListen
     fun loadingEvent(loadingMessageEvent: LoadingMessageEvent){
         updateText(loadingMessageEvent.message)
         //Toast.makeText(this, loadingMessageEvent.message , Toast.LENGTH_SHORT).show()
-    }
-
-    override fun showLoading() {
-        runOnUiThread {
-            showHUD()
-        }
-    }
-
-    override fun hideLoading() {
-        runOnUiThread {
-            hideHUD()
-        }
-    }
-
-    override fun onClick(view: View?) {
-        if(view!!.tag.equals("ll_restore")){
-            showLoading()
-            DhisService.forceSynchronize(this)
-            resideMenu.closeMenu()
-        }else if(view!!.tag.equals("ll_signout")){
-            logout()
-            resideMenu.closeMenu()
-        }
     }
 
     fun transparentActionBar(){
@@ -241,6 +214,39 @@ class MainActivity : BaseActivity<MainView, MainPresenter>(), View.OnClickListen
                 startActivity(intent)
                 finish()
             }
+        }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        Dhis2Application.bus.register(this)
+    }
+
+    override fun onPause() {
+        super.onPause()
+        Dhis2Application.bus.unregister(this)
+    }
+
+    override fun showLoading() {
+        runOnUiThread {
+            showHUD()
+        }
+    }
+
+    override fun hideLoading() {
+        runOnUiThread {
+            hideHUD()
+        }
+    }
+
+    override fun onClick(view: View?) {
+        if(view!!.tag.equals("ll_restore")){
+            showLoading()
+            DhisService.forceSynchronize(this)
+            resideMenu.closeMenu()
+        }else if(view!!.tag.equals("ll_signout")){
+            logout()
+            resideMenu.closeMenu()
         }
     }
 

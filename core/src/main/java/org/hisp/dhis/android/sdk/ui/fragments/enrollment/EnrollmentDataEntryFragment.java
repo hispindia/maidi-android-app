@@ -498,6 +498,7 @@ public class EnrollmentDataEntryFragment extends DataEntryFragment<EnrollmentDat
                     if(value.getIsOrganisationValue().equals("true")){
                         String[] ids = value.getValue().trim().split(",");
                         value.setValue(ids[ids.length - 1]);
+                        form.getEnrollment().setOrgUnit(ids[ids.length - 1]);
                     }
                 }
             }

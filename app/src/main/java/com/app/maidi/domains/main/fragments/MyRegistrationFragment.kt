@@ -47,6 +47,7 @@ class MyRegistrationFragment : BaseFragment(){
     override fun onResume() {
         super.onResume()
         mainActivity.solidActionBar(resources.getString(R.string.my_immunisation_title))
+        mainActivity.isSwipeForceSyncronizeEnabled(false)
     }
 
     @OnClick(R.id.fragment_my_registration_v_date_of_birth)
@@ -63,7 +64,7 @@ class MyRegistrationFragment : BaseFragment(){
             Handler().postDelayed({
                 gotoListRegistrationScreen()
                 mainActivity.hideHUD()
-            }, 500)
+            }, 600)
             return
         }
 

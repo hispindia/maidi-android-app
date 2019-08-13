@@ -25,7 +25,9 @@ public class OrganisationUnitAdapter extends ArrayAdapter<OrganUnit> {
     }
 
     public void resetData(){
-        organUnits.clear();
+        if(organUnits != null) {
+            organUnits.clear();
+        }
         notifyDataSetChanged();
     }
 

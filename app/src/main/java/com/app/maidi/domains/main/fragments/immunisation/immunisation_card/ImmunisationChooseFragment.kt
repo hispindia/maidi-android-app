@@ -44,6 +44,7 @@ class ImmunisationChooseFragment : BaseFragment() {
     override fun onResume() {
         super.onResume()
         mainActivity.solidActionBar(resources.getString(R.string.immunisation_card_title))
+        mainActivity.isSwipeForceSyncronizeEnabled(false)
     }
 
     fun createPresenter() : MainPresenter{

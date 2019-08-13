@@ -34,6 +34,7 @@ class MainFragment : BaseFragment() {
     override fun onResume() {
         super.onResume()
         mainActivity.transparentActionBar()
+        mainActivity.isSwipeForceSyncronizeEnabled(true)
     }
 
     @OnClick(R.id.activity_main_fl_child_registration)
