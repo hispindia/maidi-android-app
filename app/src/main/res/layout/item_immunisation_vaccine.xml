@@ -1,41 +1,55 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              android:orientation="horizontal"
+              android:id="@+id/item_immunisation_vaccine_ll_container"
+              android:orientation="vertical"
               android:layout_width="match_parent"
               android:layout_height="wrap_content"
-              android:gravity="center_vertical"
               android:paddingLeft="28.8dp"
               android:paddingRight="28.8dp"
               android:background="@color/light_gray_background_color">
 
-    <TextView
-            android:id="@+id/item_immunisation_vaccine_tv_vaccine_name"
-            android:layout_width="wrap_content"
+    <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Unknown"/>
-
-    <View android:layout_width="0dp" android:layout_height="match_parent" android:layout_weight="1"/>
-
-    <FrameLayout
-            android:layout_width="wrap_content"
-            android:layout_height="35dp">
+            android:gravity="center_vertical">
 
         <TextView
-                android:id="@+id/item_immunisation_vaccine_tv_vaccine_due_date"
+                android:id="@+id/item_immunisation_vaccine_tv_vaccine_name"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="08/05/2019"
-                android:textColor="@android:color/black"
-                android:layout_gravity="center_vertical"
-                android:visibility="gone"/>
+                android:text="Unknown"/>
 
-        <CheckBox
-                android:id="@+id/item_immunisation_vaccine_cb_injected"
+        <View android:layout_width="0dp" android:layout_height="match_parent" android:layout_weight="1"/>
+
+        <FrameLayout
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_vertical"
-                android:enabled="false"/>
+                android:layout_height="35dp">
 
-    </FrameLayout>
+            <TextView
+                    android:id="@+id/item_immunisation_vaccine_tv_vaccine_due_date"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="08/05/2019"
+                    android:textColor="@android:color/black"
+                    android:layout_gravity="center_vertical"
+                    android:visibility="gone"/>
+
+            <CheckBox
+                    android:id="@+id/item_immunisation_vaccine_cb_injected"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:enabled="false"/>
+
+        </FrameLayout>
+
+    </LinearLayout>
+
+    <EditText
+            android:id="@+id/item_immunisation_vaccine_et_explanation"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:enabled="false"
+            android:visibility="gone"/>
 
 </LinearLayout>

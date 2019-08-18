@@ -5,11 +5,14 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.CheckBox
+import android.widget.EditText
+import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.app.maidi.R
 import com.app.maidi.models.Vaccine
 import com.app.maidi.utils.Utils
+import org.hisp.dhis.android.sdk.utils.api.ValueType
 
 class ImmunisationVaccineAdapter : RecyclerView.Adapter<ImmunisationVaccineAdapter.ImmunisationVaccineHolder>{
 
@@ -27,12 +30,12 @@ class ImmunisationVaccineAdapter : RecyclerView.Adapter<ImmunisationVaccineAdapt
     }
 
     override fun getItemCount(): Int {
-        return 6
-        //return vaccineList.size
+        return vaccineList.size
     }
 
     override fun onBindViewHolder(holder: ImmunisationVaccineHolder, position: Int) {
         var vaccine = vaccineList.get(position)
+
         holder.tvVaccineName.text = vaccine.dataElement.displayName
 
         if(vaccine.dueDate != null && !vaccine.dueDate.isEmpty()){
@@ -43,19 +46,24 @@ class ImmunisationVaccineAdapter : RecyclerView.Adapter<ImmunisationVaccineAdapt
 
         if(vaccine.isInjected){
             holder.cbInjected.isChecked = true
+            holder.cbInjected.isEnabled = false
         }
     }
 
     class ImmunisationVaccineHolder : RecyclerView.ViewHolder{
 
+        var llContainer: LinearLayout
         var tvVaccineName: TextView
         var tvVaccineDueDate: TextView
         var cbInjected: CheckBox
+        var etExplanation: EditText
 
         constructor(contentView: View) : super(contentView){
+            llContainer = contentView.findViewById(R.id.item_immunisation_vaccine_ll_container)
             tvVaccineName = contentView.findViewById(R.id.item_immunisation_vaccine_tv_vaccine_name)
             tvVaccineDueDate = contentView.findViewById(R.id.item_immunisation_vaccine_tv_vaccine_due_date)
             cbInjected = contentView.findViewById(R.id.item_immunisation_vaccine_cb_injected)
+            etExplanation = contentView.findViewById(R.id.item_immunisation_vaccine_et_explanation)
         }
     }
 }

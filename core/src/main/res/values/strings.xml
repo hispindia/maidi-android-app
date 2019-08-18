@@ -318,4 +318,15 @@
     <string name="village_ward">Village/Ward</string>
     <string name="blank_choose">* Select *</string>
 
+    <!-- DATA ENTRY -->
+
+    <string name="no_event_present">No event present</string>
+    <string name="missing_ou">Missing Organisation Unit</string>
+    <string name="error_with_form">Error with form: </string>
+    <string name="please_retry">. Please retry.</string>
+    <string name="an_error_ocurred">An error occurred</string>
+    <string name="due_date_for"> Due date for </string>
+
+    <string name="validation_field_exit">Warning: There are invalid values and you\'re about to exit. If you proceed, invalid values will be deleted. Do you want to continue?</string>
+    <string name="validation_field_title">Warning: There are invalid values</string>
 </resources>

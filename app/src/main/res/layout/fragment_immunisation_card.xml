@@ -92,6 +92,7 @@
         <View android:layout_width="14.4dp" android:layout_height="match_parent"/>
 
         <androidx.cardview.widget.CardView
+                android:id="@+id/fragment_immunisation_card_cv_update"
                 android:layout_width="0dp"
                 android:layout_height="44dp"
                 android:layout_weight="0.5"

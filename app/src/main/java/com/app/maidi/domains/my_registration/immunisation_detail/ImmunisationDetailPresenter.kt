@@ -42,7 +42,7 @@ class ImmunisationDetailPresenter : BasePresenter<ImmunisationDetailView> {
                             for(dataElement in dataElements){
                                 var element = TrackerController.getDataElement(dataElement.dataelement)
                                 if(!element.displayName.contains("Birth")) {
-                                    vaccineList.add(Vaccine(element, "", false))
+                                    vaccineList.add(Vaccine(element, null, "", false))
                                 }
                             }
                         }
@@ -87,7 +87,7 @@ class ImmunisationDetailPresenter : BasePresenter<ImmunisationDetailView> {
             for(dataElement in dataElements){
                 var element = TrackerController.getDataElement(dataElement.dataelement)
                 if(!element.displayName.contains("Birth")) {
-                    immunisationInfos.add(Vaccine(element, "", false))
+                    immunisationInfos.add(Vaccine(element, null,"", false))
                 }
             }
         }

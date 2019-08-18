@@ -88,11 +88,13 @@ class MainPresenter : BasePresenter<MainView> {
                     var immunisationCardList = arrayListOf<ImmunisationCard>()
                     var trackedEntityInstances = listOf<TrackedEntityInstance>()
 
-                    trackedEntityInstances = TrackerController.queryTrackedEntityInstancesDataFromServer(
+                    trackedEntityInstances = TrackerController.queryLocalTrackedEntityInstances(orgUnitId, programId)
+
+                    /*trackedEntityInstances = TrackerController.queryTrackedEntityInstancesDataFromServer(
                         DhisController.getInstance().dhisApi,
                         orgUnitId,
                         programId, ""
-                    )
+                    )*/
 
                     var programStage = TrackerController.getProgramStageByName(programId, Constants.IMMUNISATION)
                     var programDataElements = TrackerController.getProgramStageDataElements(programStage.uid)
@@ -109,15 +111,18 @@ class MainPresenter : BasePresenter<MainView> {
 
                         var immunisationCard = ImmunisationCard()
                         var vaccineList = arrayListOf<Vaccine>()
+                        var injectedVaccineList = arrayListOf<Vaccine>()
 
                         for(dataElement in assignedDataElements){
-                            vaccineList.add(Vaccine(dataElement, "", false))
+                            vaccineList.add(Vaccine(dataElement, null,"", false))
                         }
 
-                        var enrollments = TrackerController.getEnrollmentDataFromServer(
+                        var enrollments = TrackerController.getEnrollments(trackedEntityInstance)
+
+                        /*var enrollments = TrackerController.getEnrollmentDataFromServer(
                             DhisController.getInstance().dhisApi,
                             trackedEntityInstance,
-                            null)
+                            null)*/
 
                         for(enrollment in enrollments){
                             if(enrollment.trackedEntityInstance.equals(trackedEntityInstance.uid)){
@@ -129,8 +134,18 @@ class MainPresenter : BasePresenter<MainView> {
                                             for(dataValue in dataValues){
                                                 for(vaccine in vaccineList){
                                                     if(dataValue.dataElement.equals(vaccine.dataElement.uid)){
-                                                        vaccine.dueDate = event.dueDate
-                                                        vaccine.isInjected = true
+                                                        if(!vaccine.dataElement.displayName.contains("Show")) {
+                                                            var item = Vaccine(
+                                                                vaccine.dataElement,
+                                                                dataValue,
+                                                                event.dueDate,
+                                                                true
+                                                            )
+                                                            injectedVaccineList.add(item)
+                                                        }
+                                                        /*vaccine.dueDate = event.dueDate
+                                                        vaccine.dataValue = dataValue
+                                                        vaccine.isInjected = true*/
                                                         break
                                                     }
                                                 }
@@ -146,7 +161,7 @@ class MainPresenter : BasePresenter<MainView> {
                         }
 
                         immunisationCard.trackedEntityInstance = trackedEntityInstance
-                        immunisationCard.vaccineList = vaccineList//.subList(0, 6)
+                        immunisationCard.vaccineList = injectedVaccineList//.subList(0, 6)
 
                         immunisationCardList.add(immunisationCard)
 
@@ -226,11 +241,13 @@ class MainPresenter : BasePresenter<MainView> {
         var immunisationCardList = arrayListOf<ImmunisationCard>()
         var trackedEntityInstances = listOf<TrackedEntityInstance>()
 
-        trackedEntityInstances = TrackerController.queryTrackedEntityInstancesDataFromServer(
+        trackedEntityInstances = TrackerController.queryLocalTrackedEntityInstances(orgUnitId, programId)
+
+        /*trackedEntityInstances = TrackerController.queryTrackedEntityInstancesDataFromServer(
             DhisController.getInstance().dhisApi,
             orgUnitId,
             programId, ""
-        )
+        )*/
 
 
         var assignedDataElements = getProgramDataElement(programId)
@@ -241,13 +258,15 @@ class MainPresenter : BasePresenter<MainView> {
             var vaccineList = arrayListOf<Vaccine>()
 
             for(dataElement in assignedDataElements){
-                vaccineList.add(Vaccine(dataElement, "", false))
+                vaccineList.add(Vaccine(dataElement, null,"", false))
             }
 
-            var enrollments = TrackerController.getEnrollmentDataFromServer(
+            var enrollments = TrackerController.getEnrollments(trackedEntityInstance)
+
+            /*var enrollments = TrackerController.getEnrollmentDataFromServer(
                 DhisController.getInstance().dhisApi,
                 trackedEntityInstance,
-                null)
+                null)*/
 
             for(enrollment in enrollments){
                 if(enrollment.trackedEntityInstance.equals(trackedEntityInstance.uid)){

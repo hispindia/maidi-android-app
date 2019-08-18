@@ -92,6 +92,7 @@ final class TrackerDataLoader extends ResourceController {
         }
         SystemInfo serverSystemInfo = dhisApi.getSystemInfo();
         DateTime serverDateTime = serverSystemInfo.getServerDate();
+        ResourceType resource = ResourceType.TRACKEDENTITYATTRIBUTEGENERATEDVALUES;
         List<OrganisationUnit> assignedOrganisationUnits = MetaDataController.getAssignedOrganisationUnits();
         Hashtable<String, List<Program>> programsForOrganisationUnits = new Hashtable<>();
 
@@ -101,12 +102,60 @@ final class TrackerDataLoader extends ResourceController {
                     serverDateTime);
         }*/
 
+        for (OrganisationUnit organisationUnit : assignedOrganisationUnits) {
+            if (organisationUnit.getId() == null || organisationUnit.getId().length() == Utils.randomUUID.length()) {
+                continue;
+            }
+
+            List<Program> programsForOrgUnit = new ArrayList<>();
+            List<Program> programsForOrgUnitSEWoR = MetaDataController.getProgramsForOrganisationUnit
+                    (organisationUnit.getId(), ProgramType.WITH_REGISTRATION,
+                            ProgramType.WITHOUT_REGISTRATION);
+            if (programsForOrgUnitSEWoR != null) {
+                programsForOrgUnit.addAll(programsForOrgUnitSEWoR);
+            }
+
+            programsForOrganisationUnits.put(organisationUnit.getId(), programsForOrgUnit);
+        }
+
+        for (final OrganisationUnit organisationUnit : assignedOrganisationUnits) {
+            if (organisationUnit.getId() == null || organisationUnit.getId().length() == Utils.randomUUID.length())
+                continue;
+
+            for (final Program program : programsForOrganisationUnits.get(organisationUnit.getId())) {
+                if (program.getUid() == null || program.getUid().length() == Utils.randomUUID.length())
+                    continue;
+
+                if (shouldLoad(serverDateTime, ResourceType.EVENTS, organisationUnit.getId() + program.getUid())) {
+                    UiUtils.postProgressMessage(context.getString(R.string.loading_events) + ": "
+                            + organisationUnit.getLabel() + ": " + program.getName());
+                    try {
+                        List<TrackedEntityInstance> trackedEntityInstances =
+                                queryTrackedEntityInstancesDataFromServer(dhisApi, organisationUnit.getId(), program.getUid(), "");
+                        getTrackedEntityInstancesDataFromServer(dhisApi, trackedEntityInstances, true);
+                        for(TrackedEntityInstance instance : trackedEntityInstances){
+                            TrackedEntityInstance localInstance = TrackerController.getTrackedEntityInstance(instance.getTrackedEntityInstance());
+                            for(TrackedEntityAttributeValue value : instance.getAttributes()){
+                                value.setTrackedEntityInstanceId(localInstance.getUid());
+                                value.setLocalTrackedEntityInstanceId(localInstance.getLocalId());
+                            }
+                            saveResourceDataFromServer(resource, null, instance.getAttributes(),
+                                    TrackerController.getTrackedEntityAttributeValues(instance.getUid()), serverDateTime);
+                        }
+                    } catch (APIException e) {
+                        e.printStackTrace();
+                        //todo: could probably do something prettier here. This catch is done to prevent
+                        // stopping loading of the following program/orgUnit as throwing and exception would exit the loop..
+                    }
+                }
+            }
+        }
 
         //check if events is updated on server
-        List<Enrollment> activeEnrollments = TrackerController.getActiveEnrollments();
+        //List<Enrollment> activeEnrollments = TrackerController.getActiveEnrollments();
 //        updateEventsForEnrollments(context, dhisApi, activeEnrollments, serverDateTime);
 
-        if (LoadingController.isLoadFlagEnabled(context, ResourceType.EVENTS)) {
+        /*if (LoadingController.isLoadFlagEnabled(context, ResourceType.EVENTS)) {
             for (OrganisationUnit organisationUnit : assignedOrganisationUnits) {
                 if (organisationUnit.getId() == null || organisationUnit.getId().length() == Utils.randomUUID.length()) {
                     continue;
@@ -144,7 +193,7 @@ final class TrackerDataLoader extends ResourceController {
                     }
                 }
             }
-        }
+        }*/
     }
 
     static void updateEventsForEnrollments(Context context, DhisApi dhisApi, List<Enrollment> enrollments, DateTime serverDateTime) {

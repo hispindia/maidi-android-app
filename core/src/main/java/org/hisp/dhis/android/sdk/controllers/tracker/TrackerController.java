@@ -229,6 +229,15 @@ public final class TrackerController extends ResourceController {
         return events;
     }
 
+    public static List<Event> getEventsThoughProgramStage(String organisationUnitId, String programId, String programStage, String trackedEntityInstance) {
+        List<Event> events = new Select().from(Event.class).where(
+                Condition.column(Event$Table.ORGANISATIONUNITID).is(organisationUnitId)).and(
+                Condition.column(Event$Table.PROGRAMID).is(programId)).and(
+                Condition.column(Event$Table.TRACKEDENTITYINSTANCE).is(trackedEntityInstance)).and(
+                Condition.column(Event$Table.PROGRAMSTAGEID).is(programStage)).orderBy(false, Event$Table.LASTUPDATED).queryList();
+        return events;
+    }
+
     /**
      * Returns a list of events for a given org unit and program and event has enrollment
      *
@@ -528,6 +537,20 @@ public final class TrackerController extends ResourceController {
         return instances;
     }
 
+    public static List<TrackedEntityInstance> queryLocalTrackedEntityInstances(String organUnitId, String programUid){
+
+        List<TrackedEntityInstance> instances = new ArrayList<>();
+
+        List<Enrollment> enrollments = TrackerController.getEnrollments(programUid, organUnitId);
+
+        for(Enrollment enrollment : enrollments){
+            TrackedEntityInstance instance = TrackerController.getLocalTrackedEntityInstanceThoughId(enrollment.getTrackedEntityInstance());
+            instances.add(instance);
+        }
+
+        return instances;
+    }
+
     public static TrackedEntityInstance getLocalTrackedEntityInstanceWithAttribute(String trackedEntityInstanceId){
         TrackedEntityInstance instance = TrackerController.getLocalTrackedEntityInstance(trackedEntityInstanceId);
         if(instance != null){
@@ -557,6 +580,12 @@ public final class TrackerController extends ResourceController {
         return new Select().from(TrackedEntityInstance.class)
                 .where(Condition.column(TrackedEntityInstance$Table.TRACKEDENTITYINSTANCE).is(trackedEntityInstanceId))
                 .and(Condition.column(TrackedEntityInstance$Table.FROMSERVER).is(false))
+                .querySingle();
+    }
+
+    public static TrackedEntityInstance getLocalTrackedEntityInstanceThoughId(String trackedEntityInstanceId){
+        return new Select().from(TrackedEntityInstance.class)
+                .where(Condition.column(TrackedEntityInstance$Table.TRACKEDENTITYINSTANCE).is(trackedEntityInstanceId))
                 .querySingle();
     }
 

@@ -308,13 +308,6 @@ class MainActivity : BaseActivity<MainView, MainPresenter>(), View.OnClickListen
         }
     }
 
-    override fun onBackPressed() {
-        /*if(isCurrentFragment<SessionWiseDataListFragment>(R.id.activity_main_fl_content)){
-            requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
-        }*/
-        super.onBackPressed()
-    }
-
     override fun onConfigurationChanged(newConfig: Configuration?) {
         super.onConfigurationChanged(newConfig)
         if (newConfig!!.orientation == Configuration.ORIENTATION_PORTRAIT) {

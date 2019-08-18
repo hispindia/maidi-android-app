@@ -29,6 +29,8 @@
 
 package org.hisp.dhis.android.sdk.ui.fragments.eventdataentry;
 
+import static org.apache.commons.lang3.StringUtils.isEmpty;
+
 import android.app.DatePickerDialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -38,14 +40,10 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
-import android.widget.DatePicker;
-import android.widget.ImageView;
-import android.widget.Spinner;
-import android.widget.Toast;
+import android.widget.*;
 
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBar;
-import androidx.appcompat.widget.Toolbar;
 import androidx.loader.content.Loader;
 import com.raizlabs.android.dbflow.structure.Model;
 import com.squareup.otto.Subscribe;
@@ -54,6 +52,7 @@ import org.hisp.dhis.android.sdk.R;
 import org.hisp.dhis.android.sdk.controllers.ErrorType;
 import org.hisp.dhis.android.sdk.controllers.GpsController;
 import org.hisp.dhis.android.sdk.controllers.metadata.MetaDataController;
+import org.hisp.dhis.android.sdk.controllers.tracker.TrackerController;
 import org.hisp.dhis.android.sdk.persistence.Dhis2Application;
 import org.hisp.dhis.android.sdk.persistence.loaders.DbLoader;
 import org.hisp.dhis.android.sdk.persistence.models.DataValue;
@@ -65,13 +64,12 @@ import org.hisp.dhis.android.sdk.persistence.models.ProgramIndicator;
 import org.hisp.dhis.android.sdk.persistence.models.ProgramRule;
 import org.hisp.dhis.android.sdk.persistence.models.ProgramStage;
 import org.hisp.dhis.android.sdk.persistence.models.ProgramStageDataElement;
+import org.hisp.dhis.android.sdk.persistence.models.TrackedEntityInstance;
 import org.hisp.dhis.android.sdk.ui.adapters.SectionAdapter;
 import org.hisp.dhis.android.sdk.ui.adapters.rows.dataentry.DataEntryRowTypes;
-import org.hisp.dhis.android.sdk.ui.adapters.rows.dataentry.EditTextRow;
 import org.hisp.dhis.android.sdk.ui.adapters.rows.dataentry.IndicatorRow;
 import org.hisp.dhis.android.sdk.ui.adapters.rows.dataentry.Row;
 import org.hisp.dhis.android.sdk.ui.adapters.rows.dataentry.RunProgramRulesEvent;
-import org.hisp.dhis.android.sdk.ui.adapters.rows.dataentry.custom_row.SectionRow;
 import org.hisp.dhis.android.sdk.ui.adapters.rows.events.OnCompleteEventClick;
 import org.hisp.dhis.android.sdk.ui.adapters.rows.events.OnDetailedInfoButtonClick;
 import org.hisp.dhis.android.sdk.ui.fragments.dataentry.DataEntryFragment;
@@ -91,8 +89,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import static org.apache.commons.lang3.StringUtils.isEmpty;
-
 public class EventDataEntryFragment extends DataEntryFragment<EventDataEntryFragmentForm> {
 
     public static final String TAG = EventDataEntryFragment.class.getSimpleName();
@@ -107,7 +103,6 @@ public class EventDataEntryFragment extends DataEntryFragment<EventDataEntryFrag
     public static final String PROGRAM_STAGE_ID = "extra:ProgramStageId";
     public static final String EVENT_ID = "extra:EventId";
     public static final String ENROLLMENT_ID = "extra:EnrollmentId";
-    public static final String IS_EVENT_ON_ITEM = "extra:isEventOnItem";
     private ImageView previousSectionButton;
     private ImageView nextSectionButton;
     private View spinnerContainer;
@@ -115,8 +110,6 @@ public class EventDataEntryFragment extends DataEntryFragment<EventDataEntryFrag
     private SectionAdapter spinnerAdapter;
     private EventDataEntryFragmentForm form;
     private DateTime scheduledDueDate;
-
-    private List<Row> eventDataEntryRows;
 
     public EventDataEntryFragment() {
         setProgramRuleFragmentHelper(new EventDataEntryRuleHelper(this));
@@ -145,14 +138,13 @@ public class EventDataEntryFragment extends DataEntryFragment<EventDataEntryFrag
     }
 
     public static EventDataEntryFragment newInstanceWithEnrollment(String unitId, String programId, String programStageId,
-                                                                   long enrollmentId, boolean isEventOnItem) {
+                                                                   long enrollmentId) {
         EventDataEntryFragment fragment = new EventDataEntryFragment();
         Bundle args = new Bundle();
         args.putString(ORG_UNIT_ID, unitId);
         args.putString(PROGRAM_ID, programId);
         args.putString(PROGRAM_STAGE_ID, programStageId);
         args.putLong(ENROLLMENT_ID, enrollmentId);
-        args.putBoolean(IS_EVENT_ON_ITEM, isEventOnItem);
         fragment.setArguments(args);
         return fragment;
     }
@@ -261,16 +253,6 @@ public class EventDataEntryFragment extends DataEntryFragment<EventDataEntryFrag
             // Hence, it would be more safe not to track any changes in any tables
             List<Class<? extends Model>> modelsToTrack = new ArrayList<>();
             Bundle fragmentArguments = args.getBundle(EXTRA_ARGUMENTS);
-            if(fragmentArguments.getBoolean(IS_EVENT_ON_ITEM)){
-                return new DbLoader<>(
-                        getActivity(), modelsToTrack, new ListEventDataEntryFragmentQuery(
-                        fragmentArguments.getString(ORG_UNIT_ID),
-                        fragmentArguments.getString(PROGRAM_ID),
-                        fragmentArguments.getString(PROGRAM_STAGE_ID),
-                        fragmentArguments.getLong(EVENT_ID, -1),
-                        fragmentArguments.getLong(ENROLLMENT_ID, -1)
-                ));
-            }
             return new DbLoader<>(
                     getActivity(), modelsToTrack, new EventDataEntryFragmentQuery(
                     fragmentArguments.getString(ORG_UNIT_ID),
@@ -278,7 +260,8 @@ public class EventDataEntryFragment extends DataEntryFragment<EventDataEntryFrag
                     fragmentArguments.getString(PROGRAM_STAGE_ID),
                     fragmentArguments.getLong(EVENT_ID, -1),
                     fragmentArguments.getLong(ENROLLMENT_ID, -1)
-            ));
+            )
+            );
         }
         return null;
     }
@@ -286,7 +269,6 @@ public class EventDataEntryFragment extends DataEntryFragment<EventDataEntryFrag
     @Override
     public void onLoadFinished(Loader<EventDataEntryFragmentForm> loader, EventDataEntryFragmentForm data) {
         if (loader.getId() == LOADER_ID && isAdded()) {
-            eventDataEntryRows = new ArrayList<>();
             progressBar.setVisibility(View.GONE);
             listView.setVisibility(View.VISIBLE);
             form = data;
@@ -299,34 +281,40 @@ public class EventDataEntryFragment extends DataEntryFragment<EventDataEntryFrag
             if (data.getStage() != null &&
                     data.getStage().getCaptureCoordinates()) {
                 GpsController.activateGps(getActivity().getBaseContext());
+            } else {
+                if(hasCoordinateQuestion()){
+                    GpsController.activateGps(getActivity().getBaseContext());
+                }
+            }
+            if (data.getStage() != null &&
+                    data.getStage().getCaptureCoordinates()) {
+                GpsController.activateGps(getActivity().getBaseContext());
             }
             if (data.getSections() != null && !data.getSections().isEmpty()) {
-                for(DataEntryFragmentSection section : data.getSections()){
-                    eventDataEntryRows.add(new SectionRow(section.getLabel(), false, null));
-                    eventDataEntryRows.addAll(section.getRows());
-                }
-
-                listViewAdapter.swapData(eventDataEntryRows);
-
                 /*if (data.getSections().size() > 1) {
                     attachSpinner();
                     spinnerAdapter.swapData(data.getSections());
-                } else {
+                } else {*/
                     /*if (form.getStage() != null) {
                         getActionBarToolbar().setTitle(form.getStage().getName());
+                    }*/
+                    ArrayList<Row> eventRow = new ArrayList<>();
+                    for(DataEntryFragmentSection section : data.getSections()){
+                        eventRow.addAll(section.getRows());
                     }
-                    DataEntryFragmentSection section = data.getSections().get(0);
-                    listViewAdapter.swapData(section.getRows());
-                }*/
+                    /*DataEntryFragmentSection section = data.getSections().get(0);
+                    listViewAdapter.swapData(section.getRows());*/
+                    listViewAdapter.swapData(eventRow);
+                //}
             }
 
             if (form.getEvent() == null) {
                 // form is null - show error message and disable editing
-                showErrorAndDisableEditing("No event present");
+                showErrorAndDisableEditing(getContext().getString(R.string.no_event_present));
             } else {
                 OrganisationUnit eventOrganisationUnit = MetaDataController.getOrganisationUnit(form.getEvent().getOrganisationUnitId());
                 if (eventOrganisationUnit == null) {
-                    showErrorAndDisableEditing("Missing Organisation Unit");
+                    showErrorAndDisableEditing(getContext().getString(R.string.missing_ou));
                 } else if (!OrganisationUnit.TYPE.ASSIGNED.equals(eventOrganisationUnit.getType())) { // if user is not assigned to the event's OrgUnit. Disable data entry screen
                     setEditableDataEntryRows(form, false, false);
                 }
@@ -339,8 +327,27 @@ public class EventDataEntryFragment extends DataEntryFragment<EventDataEntryFrag
         }
     }
 
+    private boolean hasCoordinateQuestion() {
+        List<Row> rows = new ArrayList<>();
+        if(form.getSections()!=null) {
+            List<DataEntryFragmentSection> sections = form.getSections();
+            for(DataEntryFragmentSection section : sections){
+                rows.addAll(section.getRows());
+            }
+        }
+        if(form.getCurrentSection()!=null){
+            rows.addAll(form.getCurrentSection().getRows());
+        }
+        for(Row row:rows){
+            if(row.getViewType()==(DataEntryRowTypes.QUESTION_COORDINATES.ordinal())){
+                return  true;
+            }
+        }
+        return false;
+    }
+
     private void showErrorAndDisableEditing(String extraInfo) {
-        Toast.makeText(getContext(), "Error with form: " + extraInfo +". Please retry.", Toast.LENGTH_LONG).show();
+        Toast.makeText(getContext(), getContext().getString(R.string.error_with_form) + extraInfo +getContext().getString(R.string.please_retry), Toast.LENGTH_LONG).show();
         setEditableDataEntryRows(form, false, false);
     }
 
@@ -374,14 +381,14 @@ public class EventDataEntryFragment extends DataEntryFragment<EventDataEntryFrag
         if (form.getSections() != null) {
             listViewAdapter.swapData(form.getSections().get(0).getRows()); //TODO find a better solution for this hack
         } else {
-            Toast.makeText(getContext(), "An error occurred", Toast.LENGTH_SHORT).show();
+            Toast.makeText(getContext(), getContext().getString(R.string.an_error_ocurred), Toast.LENGTH_SHORT).show();
         }
         listView.setAdapter(listViewAdapter);
     }
 
     private void attachSpinner() {
         if (!isSpinnerAttached()) {
-            final Toolbar toolbar = getAndroidXActionBarToolbar();
+            final Toolbar toolbar = getActionBarToolbar();
             final LayoutInflater inflater = LayoutInflater.from(getActivity());
             spinnerContainer = inflater.inflate(
                     R.layout.toolbar_spinner, toolbar, false);
@@ -422,9 +429,9 @@ public class EventDataEntryFragment extends DataEntryFragment<EventDataEntryFrag
     @Override
     public void onLoaderReset(Loader<EventDataEntryFragmentForm> loader) {
         if (loader.getId() == LOADER_ID) {
-            /*if (spinnerAdapter != null) {
+            if (spinnerAdapter != null) {
                 spinnerAdapter.swapData(null);
-            }*/
+            }
             if (listViewAdapter != null) {
                 listViewAdapter.swapData(null);
             }
@@ -458,12 +465,23 @@ public class EventDataEntryFragment extends DataEntryFragment<EventDataEntryFrag
         Map<String, ProgramStageDataElement> dataElements = toMap(
                 form.getStage().getProgramStageDataElements()
         );
+
+        for (DataEntryFragmentSection dataEntryFragmentSection:form.getSections()) {
+            for (Row row : dataEntryFragmentSection.getRows()) {
+                if (row.getValidationError() != null) {
+                    return false;
+                }
+            }
+        }
         for (DataValue dataValue : form.getEvent().getDataValues()) {
             ProgramStageDataElement dataElement = dataElements.get(dataValue.getDataElement());
             if (dataElement == null) {
                 return false;
             }
             if (dataElement.getCompulsory() && isEmpty(dataValue.getValue())) {
+                return false;
+            } else if (listViewAdapter.getMandatoryList().contains(dataElement.getDataelement())
+                    && isEmpty(dataValue.getValue())) {
                 return false;
             }
         }
@@ -521,6 +539,8 @@ public class EventDataEntryFragment extends DataEntryFragment<EventDataEntryFrag
 
         if (hasRules(dataElement)) {
             getProgramRuleFragmentHelper().getProgramRuleValidationErrors().clear();
+            /*getProgramRuleFragmentHelper().getShowOnCompleteErrors().clear();
+            getProgramRuleFragmentHelper().getShowOnCompleteWarningErrors().clear();*/
             initiateEvaluateProgramRules();
         }
         if (hasIndicators(dataElement)) {
@@ -617,25 +637,6 @@ public class EventDataEntryFragment extends DataEntryFragment<EventDataEntryFrag
         }
     }
 
-    public void showConfirmDiscardDialog() {
-        UiUtils.showConfirmDialog(getActivity(),
-                getString(org.hisp.dhis.android.sdk.R.string.discard), getString(org.hisp.dhis.android.sdk.R.string.discard_confirm_changes),
-                getString(org.hisp.dhis.android.sdk.R.string.discard),
-                getString(org.hisp.dhis.android.sdk.R.string.cancel), new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        //discard
-                        getActivity().finish();
-                    }
-                }, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        //cancel
-                        dialog.dismiss();
-                    }
-                });
-    }
-
     @Override
     public SectionAdapter getSpinnerAdapter() {
         return spinnerAdapter;
@@ -658,6 +659,21 @@ public class EventDataEntryFragment extends DataEntryFragment<EventDataEntryFrag
             ProgramStageDataElement dataElement = dataElements.get(dataValue.getDataElement());
             if (dataElement.getCompulsory() && isEmpty(dataValue.getValue())) {
                 errors.add(MetaDataController.getDataElement(dataElement.getDataelement()).getDisplayName());
+            }
+        }
+        return errors;
+    }
+
+    private static ArrayList<String> getRowsErrors(Context context, EventDataEntryFragmentForm form) {
+        ArrayList<String> errors = new ArrayList<>();
+        for (DataEntryFragmentSection dataEntryFragmentSection:form.getSections()){
+            for(Row row: dataEntryFragmentSection.getRows()) {
+                if (row.getValidationError() != null) {
+                    Integer stringId = row.getValidationError();
+                    if(stringId!=null) {
+                        errors.add(context.getString(stringId));
+                    }
+                }
             }
         }
         return errors;
@@ -689,8 +705,17 @@ public class EventDataEntryFragment extends DataEntryFragment<EventDataEntryFrag
         super.onShowDetailedInfo(eventClick);
     }
 
-    @Subscribe
+
     public void onItemClick(final OnCompleteEventClick eventClick) {
+        /*if (!eventClick.getEvent().getStatus().equals(Event.STATUS_COMPLETED)
+                && showOnCompleteMessages(eventClick)) {
+            return;
+        }*/
+        completeEvent(eventClick);
+    }
+
+    @Subscribe
+    public void completeEvent(final OnCompleteEventClick eventClick) {
         if (isValid()) {
             if (!eventClick.getEvent().getStatus().equals(Event.STATUS_COMPLETED)) {
                 getActivity().runOnUiThread(new Runnable() {
@@ -698,7 +723,8 @@ public class EventDataEntryFragment extends DataEntryFragment<EventDataEntryFrag
                     public void run() {
 
                         UiUtils.showConfirmDialog(getActivity(), eventClick.getLabel(), eventClick.getAction(),
-                                eventClick.getLabel(), getActivity().getString(R.string.cancel), new DialogInterface.OnClickListener() {
+                                eventClick.getLabel(), getActivity().getString(
+                                        R.string.cancel), new DialogInterface.OnClickListener() {
 
                                     @Override
                                     public void onClick(DialogInterface dialog, int which) {
@@ -711,8 +737,14 @@ public class EventDataEntryFragment extends DataEntryFragment<EventDataEntryFrag
                                         }
 
                                         eventClick.getComplete().setText(labelForCompleteButton);
+                                        //eventClick.getStatus().setText(R.string.complete);
                                         eventClick.getEvent().setStatus(Event.STATUS_COMPLETED);
                                         form.getEvent().setFromServer(false);
+                                        form.getEnrollment().setFromServer(false);
+                                        TrackedEntityInstance trackedEntityInstance =
+                                                TrackerController.getTrackedEntityInstance(form.getEnrollment().getTrackedEntityInstance());
+                                        trackedEntityInstance.setFromServer(false);
+                                        trackedEntityInstance.save();
                                         ProgramStage currentProgramStage = MetaDataController
                                                 .getProgramStage(form.getEvent().getProgramStageId());
 
@@ -727,26 +759,19 @@ public class EventDataEntryFragment extends DataEntryFragment<EventDataEntryFrag
                                                 int sortOrder = currentProgramStage.getSortOrder();
                                                 Program currentProgram = currentProgramStage.getProgram();
                                                 ProgramStage programStageToSchedule = null;
-                                                for (ProgramStage programStage : currentProgram.getProgramStages()) {
-                                                    if (programStage.getSortOrder() == (sortOrder + 1)) {
-                                                        programStageToSchedule = programStage;
-                                                    }
+                                                programStageToSchedule = getNextValidProgramStage(
+                                                        sortOrder, currentProgram,
+                                                        programStageToSchedule);
+                                                if(programStageToSchedule == null) {
+                                                    programStageToSchedule =
+                                                            getFirstValidProgramStage(
+                                                                    currentProgram,
+                                                                    programStageToSchedule);
                                                 }
-
                                                 if (programStageToSchedule != null) {
-
-                                                    List<Event> events = form.getEnrollment().getEvents();
-                                                    List<Event> eventForStage = new ArrayList<>();
-                                                    for (Event event : events) {
-                                                        if (programStageToSchedule.getUid().equals(event.getProgramStageId())) {
-                                                            eventForStage.add(event);
-                                                        }
-                                                    }
-                                                    if (eventForStage.size() < 1) {
-                                                        DateTime dateTime = calculateScheduledDate(programStageToSchedule, form.getEnrollment());
-                                                        isShowingSchedulingOfNewEvent = true;
-                                                        showDatePicker(programStageToSchedule, dateTime); // datePicker will close this fragment when date is picked and new event is scheduled
-                                                    }
+                                                    DateTime dateTime = calculateScheduledDate(programStageToSchedule, form.getEnrollment());
+                                                    isShowingSchedulingOfNewEvent = true;
+                                                    showDatePicker(programStageToSchedule, dateTime); // datePicker will close this fragment when date is picked and new event is scheduled
                                                 }
                                             }
                                         }
@@ -759,9 +784,9 @@ public class EventDataEntryFragment extends DataEntryFragment<EventDataEntryFrag
 
                                         Dhis2Application.getEventBus().post(new RowValueChangedEvent(null, null));
                                         //Exit the activity if it has just been completed.
-                                        //if (currentProgramStage.isBlockEntryForm() && !isShowingSchedulingOfNewEvent) {
+                                        if (currentProgramStage.isBlockEntryForm() && !isShowingSchedulingOfNewEvent) {
                                             goBackToPreviousActivity();
-                                        //}
+                                        }
                                     }
                                 });
 
@@ -769,6 +794,7 @@ public class EventDataEntryFragment extends DataEntryFragment<EventDataEntryFrag
                 });
             } else {
                 eventClick.getComplete().setText(R.string.complete);
+                //eventClick.getStatus().setText(R.string.incomplete);
                 form.getEvent().setStatus(Event.STATUS_ACTIVE);
                 form.getEvent().setFromServer(false);
 
@@ -789,19 +815,96 @@ public class EventDataEntryFragment extends DataEntryFragment<EventDataEntryFrag
         }
     }
 
-    private static ArrayList<String> getRowsErrors(Context context, EventDataEntryFragmentForm form) {
-        ArrayList<String> errors = new ArrayList<>();
-        for (DataEntryFragmentSection dataEntryFragmentSection:form.getSections()){
-            for(Row row: dataEntryFragmentSection.getRows()) {
-                if (row.getValidationError() != null) {
-                    Integer stringId = row.getValidationError();
-                    if(stringId!=null) {
-                        errors.add(context.getString(stringId));
-                    }
+    /*private boolean showOnCompleteMessages(
+            final OnCompleteEventClick eventClick) {
+        String message = "";
+        for(String value : getProgramRuleFragmentHelper().getShowOnCompleteErrors()){
+            message += String.format(getString(R.string.program_rule_on_complete_message_error), value)+"\n";
+        }
+        for(String value : getProgramRuleFragmentHelper().getShowOnCompleteWarningErrors()){
+            message += String.format(getString(R.string.program_rule_on_complete_message_warning), value)+"\n";
+        }
+        String title = getContext().getString(R.string.program_rule_on_complete_message_title);
+        if(getProgramRuleFragmentHelper().getShowOnCompleteErrors().size()>0) {
+            UiUtils.showConfirmDialog(getActivity(),
+                    title, message,
+                    getString(org.hisp.dhis.android.sdk.R.string.cancel),
+                    new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            //discard
+                        }
+                    });
+            return true;
+        }else if(getProgramRuleFragmentHelper().getShowOnCompleteWarningErrors().size()>0){
+            UiUtils.showConfirmDialog(getActivity(),
+                    title, message,
+                    getString(R.string.ok_option),
+                    getString(org.hisp.dhis.android.sdk.R.string.cancel),
+                    new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            completeEvent(eventClick);
+                        }
+                    });
+            return true;
+        }
+        return false;
+    }*/
+
+    @Nullable
+    private ProgramStage getFirstValidProgramStage(Program currentProgram,
+                                                   ProgramStage programStageToSchedule) {
+        for (ProgramStage programStage : currentProgram.getProgramStages()) {
+            if (programStageToSchedule == null) {
+                programStageToSchedule = getValidProgramStage(programStageToSchedule, programStage);
+            }else{
+                return programStageToSchedule;
+            }
+        }
+        return programStageToSchedule;
+    }
+
+    @Nullable
+    private ProgramStage getNextValidProgramStage(int sortOrder, Program currentProgram,
+                                                  ProgramStage programStageToSchedule) {
+        for (ProgramStage programStage : currentProgram.getProgramStages()) {
+            if (programStage.getSortOrder() >= (sortOrder + 1) && programStageToSchedule == null) {
+                programStageToSchedule = getValidProgramStage(programStageToSchedule, programStage);
+                if(programStageToSchedule!=null){
+                    return programStageToSchedule;
                 }
             }
         }
-        return errors;
+        return programStageToSchedule;
+    }
+
+    private ProgramStage getValidProgramStage(ProgramStage programStageToSchedule,
+                                              ProgramStage programStage) {
+        if(programStage.isRepeatable()) {
+            programStageToSchedule = programStage;
+        }else if(TrackerController.getEvent(form.getEnrollment().getLocalId(), programStage.getUid()) != null){
+            if(programStage.isRepeatable()) {
+                programStageToSchedule = programStage;
+            }else{
+                if (hasTheCorrectNumberOfEvents(programStage)) return programStage;
+            }
+        }
+        return programStageToSchedule;
+    }
+
+    private boolean hasTheCorrectNumberOfEvents(ProgramStage programStageToSchedule) {
+        List<Event> events = form.getEnrollment().getEvents();
+        List<Event> eventForStage = new ArrayList<>();
+        for (Event event : events) {
+            if (programStageToSchedule.getUid().equals(event.getProgramStageId())) {
+                eventForStage.add(event);
+            }
+        }
+        if(eventForStage.size()==0){
+            return true;
+        }
+        return false;
     }
 
     @Subscribe
@@ -809,13 +912,13 @@ public class EventDataEntryFragment extends DataEntryFragment<EventDataEntryFrag
         super.onRowValueChanged(event);
 
         // do not run program rules for EditTextRows - DelayedDispatcher takes care of this
-        if (event.getRow() == null || !(event.getRow() instanceof EditTextRow)) {
+        if (event.getRow() == null || !(event.getRow().isEditTextRow())) {
             evaluateRulesAndIndicators(event.getId());
         }
 
         //if rowType is coordinate or event date, save the event
-        if (event.getRowType() == null
-                //|| DataEntryRowTypes.COORDINATES.toString().equals(event.getRowType())
+        if(event.getRowType() == null
+                || DataEntryRowTypes.EVENT_COORDINATES.toString().equals(event.getRowType())
                 || DataEntryRowTypes.EVENT_DATE.toString().equals(event.getRowType())) {
             //save event
             saveThread.scheduleSaveEvent();
@@ -892,10 +995,10 @@ public class EventDataEntryFragment extends DataEntryFragment<EventDataEntryFrag
                 new DatePickerDialog(getActivity(),
                         null, scheduledDueDate.getYear(),
                         scheduledDueDate.getMonthOfYear() - 1, scheduledDueDate.getDayOfMonth() + standardInterval);
-        enrollmentDatePickerDialog.setTitle(getActivity().getString(R.string.please_enter) + " Due date for " + programStage.getDisplayName());
+        enrollmentDatePickerDialog.setTitle(getActivity().getString(R.string.please_enter) + getContext().getString(R.string.due_date_for) + programStage.getDisplayName());
         enrollmentDatePickerDialog.setCanceledOnTouchOutside(true);
 
-        enrollmentDatePickerDialog.setButton(DialogInterface.BUTTON_POSITIVE, "OK",
+        enrollmentDatePickerDialog.setButton(DialogInterface.BUTTON_POSITIVE, getContext().getString(R.string.ok_option),
                 new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
@@ -905,7 +1008,7 @@ public class EventDataEntryFragment extends DataEntryFragment<EventDataEntryFrag
                         goBackToPreviousActivity();
                     }
                 });
-        enrollmentDatePickerDialog.setButton(DialogInterface.BUTTON_NEGATIVE, "Cancel",
+        enrollmentDatePickerDialog.setButton(DialogInterface.BUTTON_NEGATIVE, getContext().getString(R.string.cancel_option),
                 new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
@@ -924,10 +1027,12 @@ public class EventDataEntryFragment extends DataEntryFragment<EventDataEntryFrag
             List<Event> eventsForEnrollment = new ArrayList<>();
             eventsForEnrollment.addAll(enrollment.getEvents());
             Collections.sort(eventsForEnrollment, new EventDateComparator());
-            Event lastKnownEvent = eventsForEnrollment.get(eventsForEnrollment.size() - 1);
+            if(eventsForEnrollment.size()>0) {
+                Event lastKnownEvent = eventsForEnrollment.get(eventsForEnrollment.size() - 1);
 
-            if (lastKnownEvent != null) {
-                return new DateTime(lastKnownEvent.getEventDate());
+                if (lastKnownEvent != null) {
+                    return new DateTime(lastKnownEvent.getEventDate());
+                }
             }
 
             if (programStage.getProgram().getDisplayIncidentDate()) {
@@ -956,5 +1061,75 @@ public class EventDataEntryFragment extends DataEntryFragment<EventDataEntryFrag
         eventsForEnrollment.add(event);
         form.getEnrollment().setEvents(eventsForEnrollment);
         form.getEnrollment().save();
+    }
+    @Override
+    public boolean onOptionsItemSelected(MenuItem menuItem) {
+        if (menuItem.getItemId() == android.R.id.home) {
+            doBack();
+            return true;
+        }else
+            return super.onOptionsItemSelected(menuItem);
+    }
+
+    @Override
+    public boolean doBack() {
+        if(form.getEvent().getDueDate()==null && form.getEvent().getEventDate()==null){
+            form.getEvent().delete();
+            return super.doBack();
+        }
+        List<String> errors = getRowsErrors(getContext(), form);
+        if (errors.size() > 0) {
+            showErrorAndGoBack();
+            return false;
+        } else {
+            return super.doBack();
+        }
+    }
+
+    private void showErrorAndGoBack() {
+
+        String title = getContext().getString(R.string.validation_field_title);
+        String message = getContext().getString(R.string.validation_field_exit);
+        UiUtils.showConfirmDialog(getActivity(),
+                title, message,
+                getString(R.string.ok_option),
+                getString(org.hisp.dhis.android.sdk.R.string.cancel),
+                new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        //discard
+                        EventDataEntryFragment.this.removeInvalidFields();
+                        EventDataEntryFragment.super.doBack();
+                    }
+                });
+    }
+
+    public void showConfirmDiscardDialog() {
+        UiUtils.showConfirmDialog(getActivity(),
+                getString(org.hisp.dhis.android.sdk.R.string.discard), getString(org.hisp.dhis.android.sdk.R.string.discard_confirm_changes),
+                getString(org.hisp.dhis.android.sdk.R.string.discard),
+                getString(org.hisp.dhis.android.sdk.R.string.cancel), new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        //discard
+                        getActivity().finish();
+                    }
+                }, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        //cancel
+                        dialog.dismiss();
+                    }
+                });
+    }
+
+    private void removeInvalidFields() {
+        for (DataEntryFragmentSection dataEntryFragmentSection : form.getSections()) {
+            for (Row row : dataEntryFragmentSection.getRows()) {
+                if (row.getValidationError() != null && row.getValue() != null) {
+                    row.getValue().delete();
+                }
+            }
+        }
     }
 }

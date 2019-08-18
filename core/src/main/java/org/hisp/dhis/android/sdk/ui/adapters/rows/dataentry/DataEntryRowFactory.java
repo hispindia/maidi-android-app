@@ -51,6 +51,10 @@ public class DataEntryRowFactory {
             //row = new YesNoRow(trackedEntityAttributeName, mandatory, null, baseValue/*, DataEntryRowTypes.INVALID_DATA_ENTRY*/);
         } else if (valueType.equals(ValueType.SECTION)) {
             row = new SectionRow(trackedEntityAttributeName, mandatory, null);
+        } else if (valueType.equals(ValueType.LONG_TEXT)){
+            row = new LongEditTextRow(trackedEntityAttributeName, mandatory, null, baseValue, DataEntryRowTypes.LONG_TEXT);
+        } else if (valueType.equals(ValueType.PHONE_NUMBER)){
+            row = new EditTextRow(trackedEntityAttributeName, mandatory, null, baseValue, DataEntryRowTypes.PHONE_NUMBER);
         } else {
             row = new EditTextRow(trackedEntityAttributeName, mandatory, null, baseValue, DataEntryRowTypes.TEXT);
         }

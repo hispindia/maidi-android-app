@@ -154,7 +154,7 @@ class EventDataEntryFragmentQuery implements Query<EventDataEntryFragmentForm> {
             addEventDateRow(context, form, rows);
             //addCoordinateRow(form, rows);
             populateDataEntryRows(form, orgUnitId ,stage.getProgramStageDataElements(), rows, username, context);
-            populateIndicatorRows(form, stage.getProgramIndicators(), rows);
+            //populateIndicatorRows(form, stage.getProgramIndicators(), rows);
             form.getSections().add(new DataEntryFragmentSection(DEFAULT_SECTION, null, rows));
         } else {
             for (int i = 0; i < stage.getProgramStageSections().size(); i++) {
@@ -173,7 +173,7 @@ class EventDataEntryFragmentQuery implements Query<EventDataEntryFragmentForm> {
                     //addCoordinateRow(form, rows);
                 }
                 populateDataEntryRows(form, orgUnitId, section.getProgramStageDataElements(), rows, username, context);
-                populateIndicatorRows(form, section.getProgramIndicators(), rows);
+                //populateIndicatorRows(form, section.getProgramIndicators(), rows);
                 form.getSections().add(new DataEntryFragmentSection(section.getName(), section.getUid(), rows));
             }
         }

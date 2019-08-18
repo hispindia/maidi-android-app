@@ -101,9 +101,21 @@ public final class LoadingController {
      */
     static void loadInitialData(Context context, DhisApi dhisApi)
             throws APIException, IllegalStateException {
-        if (!MetaDataController.isDataLoaded(context)) {
+        /*if (!MetaDataController.isDataLoaded(context)) {
             loadMetaData(context, dhisApi, true); // true = force sync
         } else if (!TrackerController.isDataLoaded(context)) {
+            Log.d(CLASS_TAG, "loading initial datavalues");
+            String message = "";
+            message = context.getString(R.string.finishing_up);
+            UiUtils.postProgressMessage(message);
+            loadDataValues(context, dhisApi);
+        }*/
+
+        if (!MetaDataController.isDataLoaded(context)) {
+            loadMetaData(context, dhisApi, true); // true = force sync
+        }
+
+        if (!TrackerController.isDataLoaded(context)) {
             Log.d(CLASS_TAG, "loading initial datavalues");
             String message = "";
             message = context.getString(R.string.finishing_up);

@@ -9,4 +9,5 @@ class ImmunisationCard() {
     lateinit var trackedEntityInstance : TrackedEntityInstance
     lateinit var enrollment: Enrollment
     lateinit var vaccineList: List<Vaccine>
+    var isShowContent = false
 }
