@@ -24,8 +24,8 @@ import com.google.android.material.textfield.TextInputEditText
 import org.hisp.dhis.android.sdk.controllers.metadata.MetaDataController
 import org.hisp.dhis.android.sdk.controllers.tracker.TrackerController
 import org.hisp.dhis.android.sdk.persistence.models.*
-import org.hisp.dhis.android.sdk.ui.fragments.enrollment.EnrollmentDataEntryFragment
-import org.hisp.dhis.android.sdk.ui.fragments.trackedentityinstance.TrackedEntityInstanceDataEntryFragment
+//import org.hisp.dhis.android.sdk.ui.fragments.enrollment.EnrollmentDataEntryFragment
+//import org.hisp.dhis.android.sdk.ui.fragments.trackedentityinstance.TrackedEntityInstanceDataEntryFragment
 import org.joda.time.DateTime
 import org.joda.time.LocalDate
 import java.util.*

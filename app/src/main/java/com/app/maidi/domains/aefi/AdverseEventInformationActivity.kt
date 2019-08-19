@@ -17,7 +17,6 @@ import com.app.maidi.utils.Utils
 import org.hisp.dhis.android.sdk.controllers.metadata.MetaDataController
 import org.hisp.dhis.android.sdk.controllers.tracker.TrackerController
 import org.hisp.dhis.android.sdk.persistence.models.*
-import org.hisp.dhis.android.sdk.ui.fragments.enrollment.EnrollmentDataEntryFragment
 import org.hisp.dhis.android.sdk.ui.fragments.eventdataentry.EventDataEntryFragment
 import org.joda.time.DateTime
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper

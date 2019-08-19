@@ -8,7 +8,7 @@ buildscript {
         
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:3.4.0'
+        classpath 'com.android.tools.build:gradle:3.4.2'
         classpath 'com.google.gms:google-services:4.2.0'
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
         classpath "org.jetbrains.kotlin:kotlin-allopen:$kotlin_version"
@@ -42,6 +42,17 @@ ext{
     targetSdkVersion = 28
     versionCode = 1
     versionName = "0.0.1"
+
+    configuration = [
+            package          : "org.hisp.dhis.android.trackercapture",
+            applicationId    : "org.hisp.dhis.android.trackercapture",
+            buildToolsVersion: "26.0.2",
+            minSdkVersion    : 15,
+            compileSdkVersion: 23,
+            targetSdkVersion : 26,
+            versionCode      : 66,
+            versionName      : "0.5.8"
+    ]
 
     //Lib Date Picker
     sdk = 28

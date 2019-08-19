@@ -42,7 +42,7 @@
                 android:name="org.hisp.dhis.android.sdk.services.StartPeriodicSynchronizerService"
                 android:enabled="true"/>
         <service
-                android:name="org.hisp.dhis.android.trackercapture.export.TrackerExportService"
+                android:name="org.hisp.dhis.android.export.TrackerExportService"
                 android:enabled="true"
                 android:exported="true">
             <intent-filter>
