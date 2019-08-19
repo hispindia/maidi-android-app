@@ -84,7 +84,7 @@ class AdverseEventInformationActivity : AppCompatActivity() {
     }
 
     override fun onBackPressed() {
-        eventDataEntryFragment.showConfirmDiscardDialog()
+        //eventDataEntryFragment.showConfirmDiscardDialog()
         //super.onBackPressed()
     }
 }

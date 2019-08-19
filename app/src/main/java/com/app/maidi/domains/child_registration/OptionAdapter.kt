@@ -9,7 +9,6 @@ import android.widget.ArrayAdapter
 import android.widget.TextView
 import com.app.maidi.R
 import org.hisp.dhis.android.sdk.persistence.models.Option
-import org.hisp.dhis.android.sdk.persistence.models.OrganUnit
 
 class OptionAdapter : ArrayAdapter<Option> {
 

@@ -13,9 +13,9 @@ class Constants{
         val SERVER_DATE_PATTERN = "^(([^01][0-9]|19|[2-9][0-9])\\d\\d)-(0?[1-9]|1[012])-(0?[1-9]|[12][0-9]|3[01])\$"
 
         val DHIS2_SERVER_URL =
-            if(BuildConfig.FLAVOR.equals("staging")) "https://maidi.icmr.org.in/dhis/"
-            else if(BuildConfig.FLAVOR.equals("production")) "http://eeb52f31.ngrok.io/dhis/"
-            else "http://192.168.0.105:8080/dhis/"
+            if(BuildConfig.FLAVOR.equals("staging")) "https://maidi.icmr.org.in/dhis/api/"
+            else if(BuildConfig.FLAVOR.equals("production")) "http://eeb52f31.ngrok.io/dhis/api/"
+            else "http://192.168.0.105:8080/dhis/api/"
 
         val BENEFICIARY_CHILD_REGISTRATION = "Child registration"
         val IMMUNISATION = "Immunisation"

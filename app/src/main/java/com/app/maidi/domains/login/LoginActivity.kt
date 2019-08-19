@@ -128,7 +128,7 @@ class LoginActivity : BaseActivity<LoginView, LoginPresenter>(), LoginView{
         if(exception.response == null){
             Toast.makeText(this, exception.message, Toast.LENGTH_SHORT).show()
         }else{
-            if(exception.response.status == 401)
+            if(exception.response.code() == 401)
                 Toast.makeText(this, "Invalid username or password", Toast.LENGTH_SHORT).show()
             else
                 Toast.makeText(this, "Unable to log in", Toast.LENGTH_SHORT).show()

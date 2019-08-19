@@ -1,37 +1,20 @@
 package com.app.maidi.domains.child_registration
 
-import android.animation.Animator
-import android.animation.ValueAnimator
-import android.graphics.Color
 import android.os.Bundle
-import android.os.Handler
-import android.util.Log
-import android.view.View
-import android.view.animation.DecelerateInterpolator
 import android.widget.*
 import butterknife.BindView
 import butterknife.ButterKnife
-import butterknife.OnClick
 import com.app.maidi.MainApplication
 import com.app.maidi.R
 import com.app.maidi.domains.base.BaseActivity
 import com.app.maidi.infrastructures.ActivityModules
-import com.app.maidi.utils.Constants
 import com.app.maidi.utils.Utils
 import com.app.maidi.utils.Utils.Companion.setupEditTextKeyboard
-import com.github.florent37.singledateandtimepicker.SingleDateAndTimePicker
-import com.google.android.material.textfield.TextInputEditText
 import org.hisp.dhis.android.sdk.controllers.metadata.MetaDataController
-import org.hisp.dhis.android.sdk.controllers.tracker.TrackerController
+import org.hisp.dhis.android.sdk.fragments.enrollment.EnrollmentDataEntryFragment
 import org.hisp.dhis.android.sdk.persistence.models.*
-//import org.hisp.dhis.android.sdk.ui.fragments.enrollment.EnrollmentDataEntryFragment
-//import org.hisp.dhis.android.sdk.ui.fragments.trackedentityinstance.TrackedEntityInstanceDataEntryFragment
 import org.joda.time.DateTime
-import org.joda.time.LocalDate
-import java.util.*
 import javax.inject.Inject
-import kotlin.collections.ArrayList
-import kotlin.collections.HashMap
 
 class ChildRegistrationActivity : BaseActivity<ChildRegistrationView, ChildRegistrationPresenter>() {
 

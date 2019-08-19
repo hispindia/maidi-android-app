@@ -64,11 +64,11 @@ class ImmunisationCardFragment : BaseFragment() {
                 var trackedEntityInstance = it.trackedEntityInstance
                 var args = Bundle()
                 args.putString("TRACKED_ENTITY_INSTANCE", trackedEntityInstance.uid)
-                var immunisationCardEventFragment = ImmunisationCardEventFragment()
+                /*var immunisationCardEventFragment = ImmunisationCardEventFragment()
                 immunisationCardEventFragment.arguments = args
                 mainActivity.transformFragment(R.id.activity_main_fl_content,
                     immunisationCardEventFragment
-                )
+                )*/
             }
         }
     }

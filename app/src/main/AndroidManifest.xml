@@ -16,6 +16,9 @@
             android:theme="@style/AppTheme"
             android:usesCleartextTraffic="true"
             tools:replace="android:allowBackup">
+
+        <uses-library android:name ="org.apache.http.legacy" android:required ="false"/>
+
         <activity android:name=".domains.aefi.AdverseEventInformationActivity"/>
         <activity
                 android:name=".domains.main.MainActivity"

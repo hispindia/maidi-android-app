@@ -34,6 +34,7 @@ import com.squareup.otto.Subscribe
 import org.hisp.dhis.android.sdk.controllers.DhisController
 import org.hisp.dhis.android.sdk.controllers.DhisService
 import org.hisp.dhis.android.sdk.controllers.PeriodicSynchronizerController
+import org.hisp.dhis.android.sdk.controllers.SyncStrategy
 import org.hisp.dhis.android.sdk.controllers.metadata.MetaDataController
 import org.hisp.dhis.android.sdk.events.LoadingMessageEvent
 import org.hisp.dhis.android.sdk.events.UiEvent
@@ -71,26 +72,13 @@ class MainActivity : BaseActivity<MainView, MainPresenter>(), View.OnClickListen
     @BindView(R.id.activity_main_actionbar)
     lateinit var actionbar: RelativeLayout
 
+    var isReloadActivity = false
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        userRoleId = AppPreferences(this).userRole
-
-        var roleUsers = MetaDataController.getRoleUsers()
-
-        for(role in roleUsers){
-            if(role.id.equals(userRoleId)){
-                if(role.name.equals(Constants.GUEST_ROLE))
-                    transformFragment(R.id.activity_main_fl_content, MainBeneficiaryFragment())
-                else
-                    transformFragment(R.id.activity_main_fl_content, MainFragment())
-            }
-        }
-
         ButterKnife.bind(this)
-
-        PeriodicSynchronizerController.activatePeriodicSynchronizer(this)
 
         resideMenu = ResideMenu(this, R.layout.layout_main_menu, -1)
         resideMenu.setBackground(R.color.dark_blue)
@@ -115,6 +103,33 @@ class MainActivity : BaseActivity<MainView, MainPresenter>(), View.OnClickListen
             showLoading()
             DhisService.forceSynchronize(this)
         }
+
+        initView()
+    }
+
+    fun initView(){
+        userRoleId = AppPreferences(this).userRole
+
+        var roleUsers = MetaDataController.getRoleUsers()
+
+        if(roleUsers != null && roleUsers.size > 0) {
+            for (role in roleUsers) {
+                if (role.id.equals(userRoleId)) {
+                    if ((role.name != null && role.name.equals(Constants.GUEST_ROLE))
+                            || (role.displayName != null && role.displayName.equals(Constants.GUEST_ROLE)))
+                        transformFragment(R.id.activity_main_fl_content, MainBeneficiaryFragment())
+                    else
+                        transformFragment(R.id.activity_main_fl_content, MainFragment())
+                }
+            }
+        }else{
+            Toast.makeText(applicationContext, "Missing meta data. Please wait for reloading", Toast.LENGTH_LONG).show()
+            showLoading()
+            DhisService.forceSynchronize(this)
+            return
+        }
+
+        PeriodicSynchronizerController.activatePeriodicSynchronizer(this)
     }
 
     fun isSwipeForceSyncronizeEnabled(isEnabled : Boolean){
@@ -128,6 +143,7 @@ class MainActivity : BaseActivity<MainView, MainPresenter>(), View.OnClickListen
         if(uiEvent.eventType.equals(UiEvent.UiEventType.SYNCING_END)){
             hideLoading()
             Toast.makeText(this, "Sync completed", Toast.LENGTH_SHORT).show()
+            initView()
             if(srlForceSyncronize != null){
                 srlForceSyncronize.isRefreshing = false
             }

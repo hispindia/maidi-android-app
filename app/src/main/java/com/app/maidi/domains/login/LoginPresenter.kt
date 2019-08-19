@@ -13,10 +13,10 @@ import com.google.firebase.FirebaseApp
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.PhoneAuthCredential
 import com.google.firebase.auth.PhoneAuthProvider
-import com.squareup.okhttp.HttpUrl
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers
+import okhttp3.HttpUrl
 import org.hisp.dhis.android.sdk.controllers.DhisService
 import org.hisp.dhis.android.sdk.network.Credentials
 import java.util.concurrent.TimeUnit
