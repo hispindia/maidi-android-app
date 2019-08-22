@@ -19,7 +19,7 @@ import org.hisp.dhis.android.sdk.persistence.Dhis2Application;
 import org.hisp.dhis.android.sdk.persistence.models.BaseValue;
 import org.hisp.dhis.android.sdk.persistence.models.OrganUnit;
 import org.hisp.dhis.android.sdk.persistence.models.OrganisationUnit;
-import org.hisp.dhis.android.sdk.ui.adapters.OrganisationUnitAdapter;
+import org.hisp.dhis.android.sdk.ui.adapters.rows.OrganisationUnitAdapter;
 import org.hisp.dhis.android.sdk.ui.fragments.dataentry.RowValueChangedEvent;
 
 import java.util.ArrayList;
