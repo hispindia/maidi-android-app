@@ -27,6 +27,10 @@ import org.hisp.dhis.android.sdk.persistence.models.Program
 
 class SessionWiseDataListFragment : BaseFragment(){
 
+    companion object{
+        val SESSION_DATE = "SEARCH_DATE"
+    }
+
     lateinit var mainActivity: MainActivity
     lateinit var mainPresenter: MainPresenter
 
@@ -45,9 +49,17 @@ class SessionWiseDataListFragment : BaseFragment(){
     @BindView(R.id.fragment_session_wise_data_list_rcv_child_list)
     lateinit var rcvChildList: RecyclerView
 
+    lateinit var sessionDate: String
+
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         mainActivity = activity as MainActivity
         createPresenter()
+
+        arguments!!.let {
+            if(it.containsKey(SESSION_DATE)){
+                sessionDate = it.getString(SESSION_DATE)
+            }
+        }
 
         //mainActivity.requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE
 
@@ -59,9 +71,12 @@ class SessionWiseDataListFragment : BaseFragment(){
 
         rcvChildList.layoutManager = LinearLayoutManager(mainActivity)
 
-        mainPresenter.getSessionWiseDatas(currentUnit.id, currentProgram.uid)
-
         return viewGroup
+    }
+
+    override fun onResume() {
+        super.onResume()
+        mainPresenter.getSessionWiseDatas(currentUnit.id, currentProgram.uid, sessionDate)
     }
 
     fun getProgramDataElements(dataElements : List<DataElement>){
@@ -80,6 +95,7 @@ class SessionWiseDataListFragment : BaseFragment(){
             var itemView = LayoutInflater.from(context).inflate(R.layout.item_session_vaccine, null)
             var tvVaccineName = itemView.findViewById<TextView>(R.id.item_session_vaccine_tv_vaccine_name)
             var tvVaccineDose = itemView.findViewById<TextView>(R.id.item_session_vaccine_tv_vaccine_dose)
+
             tvVaccineName.visibility = View.INVISIBLE
             tvVaccineDose.visibility = View.VISIBLE
             tvVaccineName.text = element.displayName

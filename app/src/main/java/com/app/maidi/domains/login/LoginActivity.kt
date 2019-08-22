@@ -10,6 +10,7 @@ import butterknife.ButterKnife
 import com.app.maidi.domains.main.MainActivity
 import com.app.maidi.MainApplication
 import com.app.maidi.R
+import com.app.maidi.custom.MaidiCrashManagerListener
 import com.app.maidi.domains.base.BaseActivity
 import com.app.maidi.domains.login.fragments.LoginMainFragment
 import com.app.maidi.infrastructures.ActivityModules
@@ -20,6 +21,7 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException
 import com.google.gson.Gson
 import com.squareup.otto.Subscribe
+import net.hockeyapp.android.CrashManager
 import org.hisp.dhis.android.sdk.controllers.DhisController
 import org.hisp.dhis.android.sdk.controllers.DhisService
 import org.hisp.dhis.android.sdk.controllers.LoadingController
@@ -147,6 +149,7 @@ class LoginActivity : BaseActivity<LoginView, LoginPresenter>(), LoginView{
         if(isPulling){
             DhisService.loadInitialData(this)
         }
+        CrashManager.register(this, MaidiCrashManagerListener())
     }
 
     override fun showLoading() {

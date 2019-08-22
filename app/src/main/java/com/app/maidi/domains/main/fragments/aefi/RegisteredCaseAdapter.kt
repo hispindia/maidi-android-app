@@ -15,6 +15,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.RecyclerView
 import com.app.maidi.R
 import com.app.maidi.domains.aefi.AdverseEventInformationActivity
+import com.app.maidi.domains.main.fragments.listener.OnItemClickListener
 import com.app.maidi.utils.Constants
 import com.app.maidi.utils.Utils
 import org.hisp.dhis.android.sdk.controllers.metadata.MetaDataController
@@ -25,10 +26,12 @@ class RegisteredCaseAdapter : RecyclerView.Adapter<RegisteredCaseAdapter.Registe
 
     var activity: AppCompatActivity
     var trackedEntityInstances: List<TrackedEntityInstance>
+    var listener: OnItemClickListener
 
-    constructor(activity: AppCompatActivity, trackedEntityInstances: List<TrackedEntityInstance>){
+    constructor(activity: AppCompatActivity, trackedEntityInstances: List<TrackedEntityInstance>, listener: OnItemClickListener){
         this.activity = activity
         this.trackedEntityInstances = trackedEntityInstances
+        this.listener = listener
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RegisteredCaseHolder {
@@ -60,7 +63,7 @@ class RegisteredCaseAdapter : RecyclerView.Adapter<RegisteredCaseAdapter.Registe
                 }
 
                 if (attribute.displayName.contains("Date of Birth")) {
-                    if(Utils.isValidDateFollowPattern(Constants.SERVER_DATE_PATTERN, attribute.value)) {
+                    if(Utils.isValidDateFollowPattern(attribute.value)) {
                         holder.tvDob.text = attribute.value
                     } else {
                         holder.tvDob.text = Utils.convertFromFullDateToSimpleDate(attribute.value)
@@ -85,9 +88,10 @@ class RegisteredCaseAdapter : RecyclerView.Adapter<RegisteredCaseAdapter.Registe
             }
 
             holder.llChildInfo.setOnClickListener {
-                var intent = Intent(activity, AdverseEventInformationActivity::class.java)
+                listener.onItemClicked(holder.layoutPosition)
+                /*var intent = Intent(activity, AdverseEventInformationActivity::class.java)
                 intent.putExtra(AdverseEventInformationActivity.TRACKED_ENTITY_INSTANCE_ID, trackedEntityInstance.uid)
-                activity.startActivity(intent)
+                activity.startActivity(intent)*/
             }
 
         }catch(exception : Exception){

@@ -52,6 +52,12 @@ class Utils {
             return serverDateString
         }
 
+        fun convertServerDateToLocalDate(serverDateString: String) : String{
+            var serverDate = simpleServerDateFormat.parse(serverDateString)
+            val localDate = simpleLocalDateFormat.format(serverDate)
+            return localDate
+        }
+
         fun convertStringToCalendar(dateString: String) : Calendar{
             var date = simpleLocalDateFormat.parse(dateString)
             var cal = Calendar.getInstance()
@@ -90,7 +96,7 @@ class Utils {
             return ""
         }
 
-        fun isValidDateFollowPattern(regex: String, date: String) : Boolean{
+        fun isValidDateFollowPattern(date: String) : Boolean{
             try {
                 return Pattern.matches(Constants.SERVER_DATE_PATTERN, date)
             } catch (e: ParseException) {

@@ -47,8 +47,6 @@ class ImmunisationCardFragment : BaseFragment() {
 
         rcvList.layoutManager = LinearLayoutManagerWrapper(mainActivity, LinearLayoutManager.VERTICAL, false)
 
-        mainPresenter.getRemoteTrackedEntityInstances(currentUnit.id, currentProgram.uid)
-
         return viewGroup
     }
 
@@ -64,11 +62,11 @@ class ImmunisationCardFragment : BaseFragment() {
                 var trackedEntityInstance = it.trackedEntityInstance
                 var args = Bundle()
                 args.putString("TRACKED_ENTITY_INSTANCE", trackedEntityInstance.uid)
-                /*var immunisationCardEventFragment = ImmunisationCardEventFragment()
+                var immunisationCardEventFragment = ImmunisationCardEventFragment()
                 immunisationCardEventFragment.arguments = args
                 mainActivity.transformFragment(R.id.activity_main_fl_content,
                     immunisationCardEventFragment
-                )*/
+                )
             }
         }
     }
@@ -82,6 +80,7 @@ class ImmunisationCardFragment : BaseFragment() {
         super.onResume()
         mainActivity.solidActionBar(resources.getString(R.string.immunisation_card_title))
         mainActivity.isSwipeForceSyncronizeEnabled(false)
+        mainPresenter.getRemoteTrackedEntityInstances(currentUnit.id, currentProgram.uid)
     }
 
     fun createPresenter() : MainPresenter{

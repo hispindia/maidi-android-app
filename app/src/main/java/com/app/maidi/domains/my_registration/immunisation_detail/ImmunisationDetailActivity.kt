@@ -10,11 +10,13 @@ import butterknife.BindView
 import butterknife.ButterKnife
 import com.app.maidi.MainApplication
 import com.app.maidi.R
+import com.app.maidi.custom.MaidiCrashManagerListener
 import com.app.maidi.domains.base.BaseActivity
 import com.app.maidi.domains.my_registration.list_my_registration.ListMyRegistrationActivity
 import com.app.maidi.infrastructures.ActivityModules
 import com.app.maidi.models.Vaccine
 import com.app.maidi.utils.Constants
+import net.hockeyapp.android.CrashManager
 import org.hisp.dhis.android.sdk.controllers.DhisController
 import org.hisp.dhis.android.sdk.controllers.metadata.MetaDataController
 import org.hisp.dhis.android.sdk.controllers.tracker.TrackerController
@@ -62,11 +64,18 @@ class ImmunisationDetailActivity : BaseActivity<ImmunisationDetailView, Immunisa
 
         rcvList.layoutManager = LinearLayoutManager(this)
 
-        if(trackedEntityInstance.isFromServer) {
+        /*if(trackedEntityInstance.isFromServer) {
             immunisationDetailPresenter.queryImmunisationInfo(organUnit.id, program.uid, trackedEntityInstance)
         }else{
             immunisationDetailPresenter.queryLocalImmunisationInfo(program.uid)
-        }
+        }*/
+
+        immunisationDetailPresenter.queryLocalImmunisationInfo(program.uid)
+    }
+
+    override fun onResume() {
+        super.onResume()
+        CrashManager.register(this, MaidiCrashManagerListener())
     }
 
     override fun getDataElementSuccess(dataElements: ArrayList<Vaccine>) {

@@ -8,6 +8,7 @@ import com.app.maidi.models.Vaccine
 import com.app.maidi.networks.NetworkProvider
 import com.app.maidi.services.account.AccountService
 import com.app.maidi.utils.Constants
+import com.app.maidi.utils.Utils
 import com.hannesdorfmann.mosby3.mvp.MvpPresenter
 import io.reactivex.disposables.Disposable
 import org.hisp.dhis.android.sdk.controllers.DhisController
@@ -18,8 +19,12 @@ import org.hisp.dhis.android.sdk.job.NetworkJob
 import org.hisp.dhis.android.sdk.network.APIException
 import org.hisp.dhis.android.sdk.network.ResponseHolder
 import org.hisp.dhis.android.sdk.persistence.models.DataElement
+import org.hisp.dhis.android.sdk.persistence.models.DataValue
 import org.hisp.dhis.android.sdk.persistence.models.Enrollment
 import org.hisp.dhis.android.sdk.persistence.models.TrackedEntityInstance
+import org.joda.time.DateTime
+import org.joda.time.Days
+import org.joda.time.format.DateTimeFormat
 import javax.inject.Inject
 
 class MainPresenter : BasePresenter<MainView> {
@@ -34,7 +39,7 @@ class MainPresenter : BasePresenter<MainView> {
         this.accountService = accountService
     }
 
-    fun getRemoteAefiTrackedEntityInstances(orgUnitId: String, programId: String){
+    fun getAefiTrackedEntityInstances(orgUnitId: String, programId: String){
         if(isViewAttached){
             view.showLoading()
         }
@@ -44,22 +49,23 @@ class MainPresenter : BasePresenter<MainView> {
 
                 @Throws(APIException::class)
                 override fun execute(): Any {
-
                     var trackedEntityInstances = listOf<TrackedEntityInstance>()
 
-                    trackedEntityInstances = TrackerController.queryTrackedEntityInstancesDataFromServer(
+                    trackedEntityInstances = TrackerController.queryLocalTrackedEntityInstances(orgUnitId, programId)
+
+                    /*trackedEntityInstances = TrackerController.queryTrackedEntityInstancesDataFromServer(
                         DhisController.getInstance().dhisApi,
                         orgUnitId,
                         programId, ""
-                    )
+                    )*/
 
-                    for(trackedEntityInstance in trackedEntityInstances){
+                    /*for(trackedEntityInstance in trackedEntityInstances){
 
                         TrackerController.getEnrollmentDataFromServer(
                             DhisController.getInstance().dhisApi,
                             trackedEntityInstance,
                             null)
-                    }
+                    }*/
 
                     if(isViewAttached)
                         view.getAefiTrackedEntityInstances(trackedEntityInstances)
@@ -126,7 +132,7 @@ class MainPresenter : BasePresenter<MainView> {
 
                         for(enrollment in enrollments){
                             if(enrollment.trackedEntityInstance.equals(trackedEntityInstance.uid)){
-                                var events = enrollment.getEvents(true)
+                                var events = enrollment.getEventThoughOrganisationUnit(orgUnitId)
                                 if(events != null){
                                     for(event in events){
                                         var dataValues = event.dataValues
@@ -135,13 +141,15 @@ class MainPresenter : BasePresenter<MainView> {
                                                 for(vaccine in vaccineList){
                                                     if(dataValue.dataElement.equals(vaccine.dataElement.uid)){
                                                         if(!vaccine.dataElement.displayName.contains("Show")) {
-                                                            var item = Vaccine(
-                                                                vaccine.dataElement,
-                                                                dataValue,
-                                                                event.dueDate,
-                                                                true
-                                                            )
-                                                            injectedVaccineList.add(item)
+                                                            if(!dataValue.value.isEmpty()){
+                                                                var item = Vaccine(
+                                                                    vaccine.dataElement,
+                                                                    dataValue,
+                                                                    event.dueDate,
+                                                                    true
+                                                                )
+                                                                injectedVaccineList.add(item)
+                                                            }
                                                         }
                                                         /*vaccine.dueDate = event.dueDate
                                                         vaccine.dataValue = dataValue
@@ -180,7 +188,7 @@ class MainPresenter : BasePresenter<MainView> {
 
     }
 
-    fun getSessionWiseDatas(orgUnitId: String, programId: String){
+    fun getSessionWiseDatas(orgUnitId: String, programId: String, sessionDate: String){
         if(isViewAttached){
             view.showLoading()
         }
@@ -195,13 +203,13 @@ class MainPresenter : BasePresenter<MainView> {
                     if(isViewAttached)
                         view.getProgramDataElements(dataElements)
 
-                    var immunisationCardList = getSessionWiseDataList(orgUnitId, programId)
+                    var immunisationCardList = getSessionWiseDataList(orgUnitId, programId, sessionDate)
                     if(isViewAttached)
                         view.getSessionWiseDataListSuccess(immunisationCardList)
 
                     var doseList = arrayListOf<Dose>()
                     for(element in dataElements){
-                        var total = getTotalDosesForVaccine(element)
+                        var total = getTotalDosesForVaccine(element, sessionDate)
                         doseList.add(Dose(element.uid, total))
                     }
 
@@ -236,7 +244,7 @@ class MainPresenter : BasePresenter<MainView> {
         return assignedDataElements
     }
 
-    fun getSessionWiseDataList(orgUnitId: String, programId: String) : List<ImmunisationCard>{
+    fun getSessionWiseDataList(orgUnitId: String, programId: String, sessionDate: String) : List<ImmunisationCard>{
 
         var immunisationCardList = arrayListOf<ImmunisationCard>()
         var trackedEntityInstances = listOf<TrackedEntityInstance>()
@@ -278,9 +286,11 @@ class MainPresenter : BasePresenter<MainView> {
                                 for(dataValue in dataValues){
                                     for(vaccine in vaccineList){
                                         if(dataValue.dataElement.equals(vaccine.dataElement.uid)){
-                                            vaccine.dueDate = event.dueDate
-                                            vaccine.isInjected = true
-                                            break
+                                            if(checkDateInOnSessionOrNot(sessionDate, event.dueDate)) {
+                                                vaccine.dueDate = event.dueDate
+                                                vaccine.isInjected = true
+                                                break
+                                            }
                                         }
                                     }
 
@@ -304,11 +314,35 @@ class MainPresenter : BasePresenter<MainView> {
         return immunisationCardList
     }
 
-    fun getTotalDosesForVaccine(dataElement: DataElement) : Int{
+    fun getTotalDosesForVaccine(dataElement: DataElement, sessionDate: String) : Int{
         var doseLists = TrackerController.getDataValuesFollowElement(dataElement.uid)
-        if(doseLists != null)
-            return doseLists.size
+        var filterDoseList = arrayListOf<DataValue>()
+        if(doseLists != null){
+            for(item in doseLists){
+                var event = TrackerController.getEventByUid(item.event)
+                if(checkDateInOnSessionOrNot(sessionDate, event.dueDate)){
+                    filterDoseList.add(item)
+                }
+            }
+        }
 
-        return 0
+        return filterDoseList.size
+    }
+
+    fun checkDateInOnSessionOrNot(sessionDate: String, dueDate: String) : Boolean{
+        var sessionDateTime = DateTime.parse(sessionDate, DateTimeFormat.forPattern(Constants.SIMPLE_SERVER_DATE_PATTERN))
+        var dueDateTime: DateTime? = null
+        if(Utils.isValidDateFollowPattern(dueDate)){
+            dueDateTime = DateTime.parse(dueDate, DateTimeFormat.forPattern(Constants.SIMPLE_SERVER_DATE_PATTERN))
+        }else{
+            dueDateTime = DateTime.parse(dueDate /*DateTimeFormat.forPattern(Constants.FULL_DATE_PATTERN)*/)
+        }
+        if(sessionDateTime.isAfter(dueDateTime)
+            || sessionDateTime.isEqual(dueDateTime)
+            || (dueDateTime.isAfter(sessionDateTime) && Days.daysBetween(sessionDateTime, dueDateTime).days <= 3)){
+            return true
+        }
+
+        return false
     }
 }

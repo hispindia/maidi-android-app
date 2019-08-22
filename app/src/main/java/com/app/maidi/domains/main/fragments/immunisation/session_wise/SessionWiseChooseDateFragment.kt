@@ -2,6 +2,7 @@ package com.app.maidi.domains.main.fragments.immunisation.session_wise
 
 import android.animation.Animator
 import android.os.Bundle
+import android.os.Handler
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -12,11 +13,14 @@ import com.app.maidi.R
 import com.app.maidi.domains.base.BaseFragment
 import com.app.maidi.domains.main.MainActivity
 import com.app.maidi.domains.main.MainPresenter
+import com.app.maidi.domains.my_registration.list_my_registration.ListMyRegistrationActivity
 import com.app.maidi.utils.Utils
 import com.github.florent37.singledateandtimepicker.SingleDateAndTimePicker
 import com.google.android.material.textfield.TextInputEditText
+import org.joda.time.DateTime
+import java.util.*
 
-class SessionWiseChooseDateFragment : BaseFragment() {
+class SessionWiseChooseDateFragment : BaseFragment(), SingleDateAndTimePicker.OnDateChangedListener {
 
     lateinit var mainActivity: MainActivity
     lateinit var mainPresenter: MainPresenter
@@ -34,6 +38,9 @@ class SessionWiseChooseDateFragment : BaseFragment() {
         var viewGroup = inflater.inflate(R.layout.fragment_session_wise_choose_date, container, false)
         ButterKnife.bind(this, viewGroup)
 
+        datePicker.addOnDateChangedListener(this)
+        etDateOfBirth.setText(Utils.convertCalendarToString(DateTime.now().toDate()))
+
         return viewGroup
     }
 
@@ -43,14 +50,34 @@ class SessionWiseChooseDateFragment : BaseFragment() {
         mainActivity.isSwipeForceSyncronizeEnabled(false)
     }
 
-    @OnClick(R.id.fragment_session_wise_choose_date_v_date_of_birth)
-    fun onDateOfBirthClicked(){
-        Utils.showHideDateContainer(etDateOfBirth, datePicker, 500)
+    override fun onDateChanged(displayed: String?, date: Date?) {
+        date!!.let {
+            etDateOfBirth.setText(Utils.convertCalendarToString(date))
+        }
     }
 
     @OnClick(R.id.fragment_session_wise_choose_date_btn_ok)
     fun onOkButtonClicked(){
-        mainActivity.transformFragment(R.id.activity_main_fl_content, SessionWiseDataListFragment())
+
+        if(datePicker.visibility == View.VISIBLE){
+            mainActivity.showHUD()
+            //Utils.showHideDateContainer(etDateOfBirth, datePicker, 500)
+            Handler().postDelayed({
+                gotoSessionWiseDataFragment()
+                mainActivity.hideHUD()
+            }, 600)
+            return
+        }
+
+        gotoSessionWiseDataFragment()
+    }
+
+    fun gotoSessionWiseDataFragment(){
+        var bundle = Bundle()
+        bundle.putString(SessionWiseDataListFragment.SESSION_DATE, Utils.convertLocalDateToServerDate(etDateOfBirth.text.toString()))
+        var sessionWiseDataListFragment = SessionWiseDataListFragment()
+        sessionWiseDataListFragment.arguments = bundle
+        mainActivity.transformFragment(R.id.activity_main_fl_content, sessionWiseDataListFragment)
     }
 
     @OnClick(R.id.fragment_session_wise_choose_date_btn_cancel)

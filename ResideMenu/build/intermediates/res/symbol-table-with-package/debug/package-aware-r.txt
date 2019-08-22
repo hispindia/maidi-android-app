@@ -1,0 +1,17 @@
+com.special.ResideMenu
+drawable ic_launcher
+drawable shadow
+id iv_background
+id iv_icon
+id iv_shadow
+id layout_left_menu
+id layout_right_menu
+id sv_left_menu
+id sv_menu_holder
+id sv_right_menu
+id tv_title
+layout residemenu_custom
+layout residemenu_custom_left_scrollview
+layout residemenu_custom_right_scrollview
+layout residemenu_item
+string app_name

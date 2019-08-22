@@ -61,6 +61,8 @@ class MainActivity : BaseActivity<MainView, MainPresenter>(), View.OnClickListen
 
     lateinit var userRoleId: String
     lateinit var ivMenu: ImageView
+    lateinit var ivCreate: ImageView
+    lateinit var ivReferral: ImageView
     lateinit var tvTitle: TextView
 
     @BindView(R.id.activity_main_srl_force_syncronize)
@@ -95,6 +97,8 @@ class MainActivity : BaseActivity<MainView, MainPresenter>(), View.OnClickListen
         llSignOut.setOnClickListener(this)
 
         ivMenu = actionbar.findViewById(R.id.layout_actionbar_iv_action)
+        ivCreate = actionbar.findViewById(R.id.layout_actionbar_iv_create)
+        ivReferral = actionbar.findViewById(R.id.layout_actionbar_iv_referral)
         tvTitle = actionbar.findViewById(R.id.layout_actionbar_tv_title)
 
         setupCloseMenu(rlContent, this)
@@ -122,13 +126,14 @@ class MainActivity : BaseActivity<MainView, MainPresenter>(), View.OnClickListen
                         transformFragment(R.id.activity_main_fl_content, MainFragment())
                 }
             }
+            isReloadActivity = false
         }else{
             Toast.makeText(applicationContext, "Missing meta data. Please wait for reloading", Toast.LENGTH_LONG).show()
+            isReloadActivity = true
             showLoading()
             DhisService.forceSynchronize(this)
             return
         }
-
         PeriodicSynchronizerController.activatePeriodicSynchronizer(this)
     }
 
@@ -140,12 +145,25 @@ class MainActivity : BaseActivity<MainView, MainPresenter>(), View.OnClickListen
 
     @Subscribe
     fun updateUiEvent(uiEvent: UiEvent){
-        if(uiEvent.eventType.equals(UiEvent.UiEventType.SYNCING_END)){
-            hideLoading()
-            Toast.makeText(this, "Sync completed", Toast.LENGTH_SHORT).show()
-            initView()
-            if(srlForceSyncronize != null){
-                srlForceSyncronize.isRefreshing = false
+        when(uiEvent.eventType){
+            UiEvent.UiEventType.SYNCING_END -> {
+                hideLoading()
+                Toast.makeText(this, "Sync completed", Toast.LENGTH_SHORT).show()
+                if(isReloadActivity)
+                    initView()
+                if(srlForceSyncronize != null){
+                    srlForceSyncronize.isRefreshing = false
+                }
+            }
+            UiEvent.UiEventType.START_SEND_DATA -> showLoading()
+            UiEvent.UiEventType.ERROR_SEND_DATA -> hideLoading()
+            UiEvent.UiEventType.SUCCESS_SEND_DATA -> {
+                hideLoading()
+                Toast.makeText(
+                    this,
+                    resources.getString(R.string.create_update_successful),
+                    Toast.LENGTH_LONG
+                ).show()
             }
         }
     }
@@ -180,6 +198,44 @@ class MainActivity : BaseActivity<MainView, MainPresenter>(), View.OnClickListen
         ivMenu.setOnClickListener({
             onBackPressed()
         })
+
+        ivCreate.visibility = View.GONE
+        ivReferral.visibility = View.GONE
+        ivCreate.setOnClickListener(null)
+        ivReferral.setOnClickListener(null)
+    }
+
+    fun solidActionBar(title: String, createButtonlistener: View.OnClickListener){
+        actionbar.setBackgroundResource(R.color.dark_blue)
+        tvTitle.text = title
+        ivMenu.setImageResource(R.drawable.ic_arrow_left)
+        ivMenu.imageTintList = ColorStateList.valueOf(Color.WHITE)
+
+        ivMenu.setOnClickListener({
+            onBackPressed()
+        })
+
+        ivCreate.visibility = View.VISIBLE
+        ivCreate.setOnClickListener(createButtonlistener)
+        ivReferral.visibility = View.GONE
+        ivReferral.setOnClickListener(null)
+    }
+
+    fun solidActionBar(title: String, createButtonlistener: View.OnClickListener, referralButtonListener: View.OnClickListener){
+        actionbar.setBackgroundResource(R.color.dark_blue)
+        tvTitle.text = title
+        ivMenu.setImageResource(R.drawable.ic_arrow_left)
+        ivMenu.imageTintList = ColorStateList.valueOf(Color.WHITE)
+
+        ivMenu.setOnClickListener({
+            onBackPressed()
+        })
+
+        ivCreate.visibility = View.VISIBLE
+        ivCreate.setOnClickListener(createButtonlistener)
+
+        ivReferral.visibility = View.VISIBLE
+        ivReferral.setOnClickListener(referralButtonListener)
     }
 
     fun setupCloseMenu(view: View, activity: AppCompatActivity) {

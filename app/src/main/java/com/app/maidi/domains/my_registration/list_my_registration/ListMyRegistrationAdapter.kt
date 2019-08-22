@@ -63,7 +63,7 @@ class ListMyRegistrationAdapter : RecyclerView.Adapter<ListMyRegistrationAdapter
             }
         }
 
-        if(Utils.isValidDateFollowPattern(Constants.SERVER_DATE_PATTERN, dateOfBirth)) {
+        if(Utils.isValidDateFollowPattern(dateOfBirth)) {
             stringBuilder.append(dateOfBirth)
         } else {
             stringBuilder.append(Utils.convertFromFullDateToSimpleDate(dateOfBirth))

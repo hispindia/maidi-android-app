@@ -39,7 +39,11 @@ class ImmunisationVaccineAdapter : RecyclerView.Adapter<ImmunisationVaccineAdapt
         holder.tvVaccineName.text = vaccine.dataElement.displayName
 
         if(vaccine.dueDate != null && !vaccine.dueDate.isEmpty()){
-            holder.tvVaccineDueDate.text = Utils.convertFromFullDateToSimpleDate(vaccine.dueDate)
+            if(Utils.isValidDateFollowPattern(vaccine.dueDate))
+                holder.tvVaccineDueDate.text = Utils.convertServerDateToLocalDate(vaccine.dueDate)
+            else
+                holder.tvVaccineDueDate.text = Utils.convertFromFullDateToSimpleDate(vaccine.dueDate)
+
             holder.tvVaccineDueDate.visibility = View.VISIBLE
             holder.cbInjected.visibility = View.GONE
         }

@@ -51,7 +51,11 @@ class SessionWiseDataAdapter : RecyclerView.Adapter<SessionWiseDataAdapter.Sessi
         }
 
         immunisationCard.enrollment!!.let {
-            holder.tvDateOfBirth.text = Utils.convertFromFullDateToSimpleDate(it.incidentDate)
+            if(Utils.isValidDateFollowPattern(it.incidentDate))
+                holder.tvDateOfBirth.text = Utils.convertServerDateToLocalDate(it.incidentDate)
+            else
+                holder.tvDateOfBirth.text = Utils.convertFromFullDateToSimpleDate(it.incidentDate)
+
         }
         holder.tvRegId.text = immunisationCard.trackedEntityInstance.uid
 

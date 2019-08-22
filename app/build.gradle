@@ -21,6 +21,7 @@ android {
         versionCode 1
         versionName "1.0"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+        manifestPlaceholders = [HOCKEYAPP_APP_ID: "7fffceac175849808b03e84d0ea94aae"]
     }
     signingConfigs {
         release {
@@ -123,6 +124,9 @@ dependencies {
 
     //DebugDB
     implementation 'com.amitshekhar.android:debug-db:1.0.6'
+
+    //Hockeyapp
+    implementation 'net.hockeyapp.android:HockeySDK:5.2.0'
 
     implementation project(path: ':caf')
     implementation project(path: ':ResideMenu')

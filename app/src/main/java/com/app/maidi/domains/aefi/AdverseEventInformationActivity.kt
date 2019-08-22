@@ -11,9 +11,11 @@ import android.widget.TextView
 import butterknife.BindView
 import butterknife.ButterKnife
 import com.app.maidi.R
+import com.app.maidi.custom.MaidiCrashManagerListener
 import com.app.maidi.domains.child_registration.ChildRegistrationActivity
 import com.app.maidi.utils.Constants
 import com.app.maidi.utils.Utils
+import net.hockeyapp.android.CrashManager
 import org.hisp.dhis.android.sdk.controllers.metadata.MetaDataController
 import org.hisp.dhis.android.sdk.controllers.tracker.TrackerController
 import org.hisp.dhis.android.sdk.persistence.models.*
@@ -79,12 +81,12 @@ class AdverseEventInformationActivity : AppCompatActivity() {
         }
     }
 
-    override fun attachBaseContext(newBase: Context?) {
-        super.attachBaseContext(CalligraphyContextWrapper.wrap(newBase))
+    override fun onResume() {
+        super.onResume()
+        CrashManager.register(this, MaidiCrashManagerListener())
     }
 
-    override fun onBackPressed() {
-        //eventDataEntryFragment.showConfirmDiscardDialog()
-        //super.onBackPressed()
+    override fun attachBaseContext(newBase: Context?) {
+        super.attachBaseContext(CalligraphyContextWrapper.wrap(newBase))
     }
 }

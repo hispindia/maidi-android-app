@@ -30,7 +30,7 @@ class ListMyRegistrationPresenter : BasePresenter<ListMyRegistrationView> {
             override fun execute(): Any {
 
                 try{
-                    var searchTrackedEntityInstanceLists = ArrayList<TrackedEntityInstance>()
+                    /*var searchTrackedEntityInstanceLists = ArrayList<TrackedEntityInstance>()
                     var trackedEntityInstancesQueryResult: List<TrackedEntityInstance>?
                     if (detailedSearch) {
                         trackedEntityInstancesQueryResult =
@@ -46,20 +46,21 @@ class ListMyRegistrationPresenter : BasePresenter<ListMyRegistrationView> {
                             birthdayValue,
                             phoneValue
                         )
-                    }
+                    }*/
 
-                    var localTrackedEntityInstances = TrackerController.queryLocalTrackedEntityInstances(birthdayValue, phoneValue)
+                    var trackedEntityInstancesQueryResult = TrackerController.queryLocalTrackedEntityInstances(birthdayValue, phoneValue)
 
-                    if(trackedEntityInstancesQueryResult != null){
+                    /*if(trackedEntityInstancesQueryResult != null){
                         searchTrackedEntityInstanceLists.addAll(trackedEntityInstancesQueryResult)
                     }
 
                     if(localTrackedEntityInstances != null){
                         searchTrackedEntityInstanceLists.addAll(localTrackedEntityInstances)
-                    }
+                    }*/
 
                     if(isViewAttached)
-                        view.getListMyRegistrationSuccess(searchTrackedEntityInstanceLists)
+                        //view.getListMyRegistrationSuccess(searchTrackedEntityInstanceLists)
+                        view.getListMyRegistrationSuccess(trackedEntityInstancesQueryResult)
                 }catch (ex : APIException){
                     if(isViewAttached)
                         view.getListMyRegistrationFailed(ex)

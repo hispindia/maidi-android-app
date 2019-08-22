@@ -24,4 +24,31 @@
             android:gravity="center"
             fontPath="fonts/NunitoSans-Bold.ttf"/>
 
+    <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_alignParentRight="true">
+
+        <ImageView
+                android:id="@+id/layout_actionbar_iv_referral"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:src="@drawable/baseline_reply_24"
+                android:tint="@android:color/white"
+                android:paddingLeft="10dp"
+                android:paddingRight="10dp"
+                android:visibility="gone"/>
+
+        <ImageView
+                android:id="@+id/layout_actionbar_iv_create"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:src="@drawable/ic_add"
+                android:tint="@android:color/white"
+                android:paddingLeft="10dp"
+                android:paddingRight="10dp"
+                android:visibility="gone"/>
+
+    </LinearLayout>
+
 </RelativeLayout>
