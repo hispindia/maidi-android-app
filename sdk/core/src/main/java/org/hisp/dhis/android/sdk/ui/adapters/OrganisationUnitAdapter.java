@@ -1,4 +1,4 @@
-package org.hisp.dhis.android.sdk.ui.adapters;
+package org.hisp.dhis.android.sdk.ui.adapters.rows;
 
 import android.content.Context;
 import android.graphics.Color;
@@ -25,7 +25,7 @@ public class OrganisationUnitAdapter extends ArrayAdapter<OrganUnit> {
     }
 
     public void resetData(){
-        if(organUnits != null) {
+        if(organUnits != null){
             organUnits.clear();
         }
         notifyDataSetChanged();
