@@ -44,11 +44,11 @@ ext{
     versionName = "0.0.1"
 
     configuration = [
-            package          : "org.hisp.dhis.android.trackercapture",
-            applicationId    : "org.hisp.dhis.android.trackercapture",
+            //package          : "org.hisp.dhis.android.trackercapture",
+            //applicationId    : "org.hisp.dhis.android.trackercapture",
             buildToolsVersion: "26.0.2",
             minSdkVersion    : 15,
-            compileSdkVersion: 23,
+            compileSdkVersion: 28,
             targetSdkVersion : 26,
             versionCode      : 66,
             versionName      : "0.5.8"
@@ -70,7 +70,7 @@ ext{
     libraries = [
             // android libs
             supportVersion    : "28.0.0",
-            lib_supportVersion: "23.3.0",
+            lib_supportVersion: "28.0.0",
             progressBarVersion: "1.2.0",
             calligraphyVersion: "2.3.0",
 

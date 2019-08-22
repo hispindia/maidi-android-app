@@ -44,8 +44,8 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import org.hisp.dhis.client.sdk.ui.BuildConfig;
-import org.hisp.dhis.client.sdk.ui.R;
+import org.hisp.dhis.android.sdk.ui.BuildConfig;
+import org.hisp.dhis.android.sdk.ui.R;
 import org.hisp.dhis.client.sdk.ui.activities.BaseActivity;
 import org.hisp.dhis.client.sdk.ui.activities.OnBackPressedCallback;
 import org.hisp.dhis.client.sdk.ui.activities.OnBackPressedFromFragmentCallback;

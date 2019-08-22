@@ -38,7 +38,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.recyclerview.widget.RecyclerView;
-import org.hisp.dhis.client.sdk.ui.R;
+import org.hisp.dhis.android.sdk.ui.R;
 import org.hisp.dhis.client.sdk.ui.fragments.FilterableDialogFragment;
 import org.hisp.dhis.client.sdk.ui.models.Picker;
 

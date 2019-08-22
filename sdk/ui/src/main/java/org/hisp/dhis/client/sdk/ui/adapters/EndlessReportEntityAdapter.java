@@ -43,7 +43,7 @@ import android.widget.Toast;
 
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-import org.hisp.dhis.client.sdk.ui.R;
+import org.hisp.dhis.android.sdk.ui.R;
 import org.hisp.dhis.client.sdk.ui.models.ReportEntity;
 import org.hisp.dhis.client.sdk.ui.views.CircleView;
 

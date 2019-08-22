@@ -42,7 +42,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import org.hisp.dhis.client.sdk.ui.R;
+import org.hisp.dhis.android.sdk.ui.R;
 
 import java.io.Serializable;
 

@@ -9,7 +9,7 @@ import androidx.core.app.ShareCompat;
 import androidx.core.content.FileProvider;
 import org.hisp.dhis.android.sdk.R;
 import org.hisp.dhis.android.sdk.persistence.Dhis2Database;
-import org.hisp.dhis.client.sdk.ui.BuildConfig;
+import org.hisp.dhis.android.sdk.ui.BuildConfig;
 
 import java.io.*;
 import java.nio.channels.FileChannel;

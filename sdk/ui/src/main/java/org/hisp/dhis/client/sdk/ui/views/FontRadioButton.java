@@ -37,7 +37,7 @@ import android.widget.RadioGroup;
 
 import androidx.annotation.StringRes;
 import androidx.appcompat.widget.AppCompatRadioButton;
-import org.hisp.dhis.client.sdk.ui.R;
+import org.hisp.dhis.android.sdk.ui.R;
 import org.hisp.dhis.client.sdk.ui.utils.TypefaceManager;
 
 import static org.hisp.dhis.client.sdk.utils.Preconditions.isNull;
