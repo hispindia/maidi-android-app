@@ -1,28 +1,26 @@
 package com.app.maidi.domains.base
 
-import android.app.Activity
 import android.app.ActivityOptions
+import android.app.DatePickerDialog
 import android.app.Dialog
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
-import android.view.MotionEvent
 import android.view.View
-import android.view.ViewGroup
 import android.view.Window
-import android.view.inputmethod.InputMethodManager
-import android.widget.EditText
+import android.widget.DatePicker
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.FragmentActivity
 import com.app.maidi.R
 import com.hannesdorfmann.mosby3.mvp.MvpActivity
 import com.hannesdorfmann.mosby3.mvp.MvpPresenter
 import com.hannesdorfmann.mosby3.mvp.MvpView
+import com.whiteelephant.monthpicker.MonthPickerDialog
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper
 import java.lang.Exception
+import java.util.*
 
 abstract class BaseActivity<V : MvpView, P : MvpPresenter<V>> : MvpActivity<V, P>(){
 
@@ -93,6 +91,15 @@ abstract class BaseActivity<V : MvpView, P : MvpPresenter<V>> : MvpActivity<V, P
         }catch (exception : Exception){
             Log.d("Null Exception", exception.toString())
         }
+    }
+
+    fun showSelectMonthChooseDialog(datePickerListener: MonthPickerDialog.OnDateSetListener, dueDateCalendar: Calendar){
+        var builder = MonthPickerDialog.Builder(this, datePickerListener,
+            dueDateCalendar.get(Calendar.YEAR), dueDateCalendar.get(Calendar.MONTH))
+        builder.setMinYear(1900)
+        builder.setMaxYear(2100)
+        builder.setTitle("Select month")
+        builder.build().show()
     }
 
     inline fun <reified T> isCurrentFragment(containerId: Int) : Boolean {

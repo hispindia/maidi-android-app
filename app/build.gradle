@@ -122,11 +122,17 @@ dependencies {
     //Expandable Recycleview
     implementation "com.thoughtbot:expandablerecyclerview:${lib.expandable_recycleview_version}"
 
+    //Itext G
+    implementation "com.itextpdf:itextg:${lib.itextg_version}"
+
     //DebugDB
     implementation 'com.amitshekhar.android:debug-db:1.0.6'
 
     //Hockeyapp
     implementation 'net.hockeyapp.android:HockeySDK:5.2.0'
+
+    //MonthAndYear Picker
+    implementation 'com.whiteelephant:monthandyearpicker:1.3.0'
 
     implementation project(path: ':caf')
     implementation project(path: ':ResideMenu')

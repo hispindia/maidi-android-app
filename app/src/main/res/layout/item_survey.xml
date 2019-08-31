@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:id="@+id/item_survey_ll_container"
+              android:orientation="horizontal"
+              android:layout_width="match_parent"
+              android:layout_height="38.4dp"
+              android:paddingLeft="28dp"
+              android:paddingRight="14dp">
+
+    <TextView
+            android:id="@+id/item_survey_tv_title"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="center_vertical"
+            android:text="Form 3"
+            android:textSize="15.4dp"
+            android:textColor="@android:color/black"/>
+
+    <ImageView
+            android:id="@+id/item_survey_iv_view"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:paddingLeft="14dp"
+            android:paddingRight="14dp"
+            android:src="@drawable/ic_black_eye"
+            android:tint="@color/dark_blue"/>
+
+    <ImageView
+            android:id="@+id/item_survey_iv_export"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:paddingLeft="14dp"
+            android:paddingRight="14dp"
+            android:src="@drawable/ic_sign_out"
+            android:tint="@color/dark_gray"/>
+
+</LinearLayout>

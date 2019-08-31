@@ -241,6 +241,11 @@ public class TrackedEntityInstanceDataEntryFragment extends
     }
 
     @Override
+    public void onNothingSelected(AdapterView<?> adapterView) {
+
+    }
+
+    @Override
     protected HashMap<ErrorType, ArrayList<String>>  getValidationErrors() {
         HashMap<ErrorType, ArrayList<String>> errors = new HashMap<>();
 

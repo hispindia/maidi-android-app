@@ -32,6 +32,7 @@ package org.hisp.dhis.android.sdk.ui.fragments.dataentry;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.os.Parcelable;
+import android.widget.*;
 import androidx.cardview.widget.CardView;
 import androidx.loader.app.LoaderManager;
 import androidx.loader.content.Loader;
@@ -45,11 +46,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewParent;
-import android.widget.AbsListView;
-import android.widget.AdapterView;
-import android.widget.ListView;
-import android.widget.ProgressBar;
-import android.widget.Toast;
 
 import com.squareup.otto.Subscribe;
 
@@ -82,6 +78,7 @@ public abstract class DataEntryFragment<D> extends AbsProgramRuleFragment<D>
     protected static final int INITIAL_POSITION = 0;
     protected static final String EXTRA_ARGUMENTS = "extra:Arguments";
     protected static final String EXTRA_SAVED_INSTANCE_STATE = "extra:savedInstanceState";
+    protected Spinner spinner;
     protected ListView listView;
     protected ProgressBar progressBar;
     protected DataValueAdapter listViewAdapter;
@@ -91,7 +88,8 @@ public abstract class DataEntryFragment<D> extends AbsProgramRuleFragment<D>
     protected RulesEvaluatorThread rulesEvaluatorThread;
     private Parcelable listViewState;
     private Parcelable listViewAdapterState;
-    protected boolean isShowSubmitButton = false;
+    protected boolean isShowSubmitButton = true;
+    protected boolean isShowSpinnerButton = false;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -157,8 +155,12 @@ public abstract class DataEntryFragment<D> extends AbsProgramRuleFragment<D>
                 }
             }
         });
+
+        spinner = (Spinner) view.findViewById(R.id.spinner);
+
         View submitLayout = getLayoutInflater(savedInstanceState)
                 .inflate(R.layout.submit_button_layout, listView, false);
+        submitLayout.setPadding(0, 20, 0, 0);
         CardView submitButton = submitLayout.findViewById(R.id.submit_button_layout_sb_submit);
         listViewAdapter = new DataValueAdapter(getChildFragmentManager(),
                 getLayoutInflater(savedInstanceState), listView, getContext());
@@ -173,6 +175,8 @@ public abstract class DataEntryFragment<D> extends AbsProgramRuleFragment<D>
 
         listView.addFooterView(upButton);*/
         listView.setVisibility(View.VISIBLE);
+        if(isShowSpinnerButton)
+            spinner.setVisibility(View.VISIBLE);
         listView.setAdapter(listViewAdapter);
 
         if (listViewState != null) {
@@ -217,10 +221,7 @@ public abstract class DataEntryFragment<D> extends AbsProgramRuleFragment<D>
 
         progressBar.setVisibility(View.VISIBLE);
         listView.setVisibility(View.GONE);
-    }
-
-    @Override
-    public void onNothingSelected(AdapterView<?> parent) {
+        spinner.setVisibility(View.GONE);
     }
 
     public static void resetHidingAndWarnings(DataValueAdapter dataValueAdapter,
@@ -406,5 +407,13 @@ public abstract class DataEntryFragment<D> extends AbsProgramRuleFragment<D>
             getActivity().finish();
         }
         return false;
+    }
+
+    public boolean isShowSpinnerButton() {
+        return isShowSpinnerButton;
+    }
+
+    public void setShowSpinnerButton(boolean showSpinnerButton) {
+        isShowSpinnerButton = showSpinnerButton;
     }
 }

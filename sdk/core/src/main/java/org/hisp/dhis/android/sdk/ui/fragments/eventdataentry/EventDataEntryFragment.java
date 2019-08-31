@@ -71,6 +71,7 @@ import org.hisp.dhis.android.sdk.persistence.models.ProgramRule;
 import org.hisp.dhis.android.sdk.persistence.models.ProgramStage;
 import org.hisp.dhis.android.sdk.persistence.models.ProgramStageDataElement;
 import org.hisp.dhis.android.sdk.persistence.models.TrackedEntityInstance;
+import org.hisp.dhis.android.sdk.ui.adapters.ChangeSectionAdapter;
 import org.hisp.dhis.android.sdk.ui.adapters.SectionAdapter;
 import org.hisp.dhis.android.sdk.ui.adapters.rows.dataentry.*;
 import org.hisp.dhis.android.sdk.ui.adapters.rows.events.OnCompleteEventClick;
@@ -106,11 +107,14 @@ public class EventDataEntryFragment extends DataEntryFragment<EventDataEntryFrag
     public static final String PROGRAM_STAGE_ID = "extra:ProgramStageId";
     public static final String EVENT_ID = "extra:EventId";
     public static final String ENROLLMENT_ID = "extra:EnrollmentId";
+    private boolean isFinish = false;
+    private boolean isExistedValueChanged = false;
+    private boolean isCreateNewEvent = false;
     private ImageView previousSectionButton;
     private ImageView nextSectionButton;
     private View spinnerContainer;
-    private Spinner spinner;
-    private SectionAdapter spinnerAdapter;
+    //private Spinner spinner;
+    private ChangeSectionAdapter spinnerAdapter;
     private EventDataEntryFragmentForm form;
     private DateTime scheduledDueDate;
 
@@ -137,6 +141,31 @@ public class EventDataEntryFragment extends DataEntryFragment<EventDataEntryFrag
         args.putString(PROGRAM_STAGE_ID, programStageId);
         args.putLong(EVENT_ID, eventId);
         fragment.setArguments(args);
+        return fragment;
+    }
+
+    public static EventDataEntryFragment newEventInstance(String unitId, String programId, String programStageId) {
+        EventDataEntryFragment fragment = new EventDataEntryFragment();
+        Bundle args = new Bundle();
+        args.putString(ORG_UNIT_ID, unitId);
+        args.putString(PROGRAM_ID, programId);
+        args.putString(PROGRAM_STAGE_ID, programStageId);
+        fragment.setArguments(args);
+        fragment.isCreateNewEvent = true;
+        fragment.isShowSpinnerButton = true;
+        return fragment;
+    }
+
+    public static EventDataEntryFragment newSurveyEventInstance(String unitId, String programId, String programStageId,
+                                                     long eventId) {
+        EventDataEntryFragment fragment = new EventDataEntryFragment();
+        Bundle args = new Bundle();
+        args.putString(ORG_UNIT_ID, unitId);
+        args.putString(PROGRAM_ID, programId);
+        args.putString(PROGRAM_STAGE_ID, programStageId);
+        args.putLong(EVENT_ID, eventId);
+        fragment.setArguments(args);
+        fragment.isShowSpinnerButton = true;
         return fragment;
     }
 
@@ -167,7 +196,7 @@ public class EventDataEntryFragment extends DataEntryFragment<EventDataEntryFrag
 
     @Override
     public void onDestroyView() {
-        detachSpinner();
+        //detachSpinner();
         super.onDestroyView();
     }
 
@@ -179,26 +208,21 @@ public class EventDataEntryFragment extends DataEntryFragment<EventDataEntryFrag
 
     private void detachSpinner() {
         if (isSpinnerAttached()) {
-            if (spinnerContainer != null) {
-                ((ViewGroup) spinnerContainer.getParent()).removeView(spinnerContainer);
-                spinnerContainer = null;
-                spinner = null;
-                if (spinnerAdapter != null) {
-                    spinnerAdapter.swapData(null);
-                    spinnerAdapter = null;
-                }
+            spinner = null;
+            if (spinnerAdapter != null) {
+                spinnerAdapter.swapData(null);
+                spinnerAdapter = null;
             }
         }
     }
 
     private boolean isSpinnerAttached() {
-        return spinnerContainer != null;
+        return spinner != null;
     }
 
     @Override
     public void onCreate(Bundle onSavedInstanceState) {
         super.onCreate(onSavedInstanceState);
-        isShowSubmitButton = true;
         VariableService.reset();
         if (saveThread == null || saveThread.isKilled()) {
             saveThread = new EventSaveThread();
@@ -244,9 +268,9 @@ public class EventDataEntryFragment extends DataEntryFragment<EventDataEntryFrag
     }
 
     void hideSection(String programStageSectionId) {
-        if (spinnerAdapter != null) {
+        /*if (spinnerAdapter != null) {
             spinnerAdapter.hideSection(programStageSectionId);
-        }
+        }*/
     }
 
     @Override
@@ -275,6 +299,8 @@ public class EventDataEntryFragment extends DataEntryFragment<EventDataEntryFrag
         if (loader.getId() == LOADER_ID && isAdded()) {
             progressBar.setVisibility(View.GONE);
             listView.setVisibility(View.VISIBLE);
+            if(isShowSpinnerButton)
+                spinner.setVisibility(View.VISIBLE);
             form = data;
 
             saveThread.setEvent(form.getEvent());
@@ -295,21 +321,21 @@ public class EventDataEntryFragment extends DataEntryFragment<EventDataEntryFrag
                 GpsController.activateGps(getActivity().getBaseContext());
             }
             if (data.getSections() != null && !data.getSections().isEmpty()) {
-                //if (data.getSections().size() > 1) {
-                    //attachSpinner();
-                    //spinnerAdapter.swapData(data.getSections());
-                //} else {
-                    //if (form.getStage() != null) {
-                        //getActionBarToolbar().setTitle(form.getStage().getName());
-                    //}
-                    ArrayList<Row> eventRows = new ArrayList<>();
-                    for(DataEntryFragmentSection section : data.getSections()){
-                        eventRows.add(new SectionRow(section.getLabel()));
-                        eventRows.addAll(section.getRows());
+                ArrayList<Row> eventRows = new ArrayList<>();
+                if(data.getSections().size() > 0) {
+                    if (isShowSpinnerButton) {
+                        attachSpinner();
+                        spinnerAdapter.swapData(data.getSections());
+                        spinner.setSelection(0);
+                        //selectSection(0);
+                    } else {
+                        for (DataEntryFragmentSection section : data.getSections()) {
+                            eventRows.add(new SectionRow(section.getLabel()));
+                            eventRows.addAll(section.getRows());
+                        }
+                        listViewAdapter.swapData(eventRows);
                     }
-                    //DataEntryFragmentSection section = data.getSections().get(0);
-                    listViewAdapter.swapData(eventRows);
-                //}
+                }
             }
 
             if (form.getEvent() == null) {
@@ -391,43 +417,12 @@ public class EventDataEntryFragment extends DataEntryFragment<EventDataEntryFrag
     }
 
     private void attachSpinner() {
-        if (!isSpinnerAttached()) {
-            final Toolbar toolbar = getActionBarToolbar();
+        //if (!isSpinnerAttached()) {
             final LayoutInflater inflater = LayoutInflater.from(getActivity());
-            spinnerContainer = inflater.inflate(
-                    R.layout.toolbar_spinner, toolbar, false);
-            previousSectionButton = (ImageView) spinnerContainer
-                    .findViewById(R.id.previous_section);
-            nextSectionButton = (ImageView) spinnerContainer
-                    .findViewById(R.id.next_section);
-            final ActionBar.LayoutParams lp = new ActionBar.LayoutParams(
-                    ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
-            toolbar.addView(spinnerContainer, lp);
-            spinnerAdapter = new SectionAdapter(inflater);
-            spinner = (Spinner) spinnerContainer.findViewById(R.id.toolbar_spinner);
+            spinnerAdapter = new ChangeSectionAdapter(getActivity(), R.layout.toolbar_spinner_item_actionbar, new ArrayList<DataEntryFragmentSection>());
             spinner.setAdapter(spinnerAdapter);
             spinner.setOnItemSelectedListener(this);
-            previousSectionButton.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    int currentPosition = spinner.getSelectedItemPosition();
-                    if (!(currentPosition - 1 < 0)) {
-                        currentPosition = currentPosition - 1;
-                        spinner.setSelection(currentPosition);
-                    }
-                }
-            });
-            nextSectionButton.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    int currentPosition = spinner.getSelectedItemPosition();
-                    if (!(currentPosition + 1 >= spinnerAdapter.getCount())) {
-                        currentPosition = currentPosition + 1;
-                        spinner.setSelection(currentPosition);
-                    }
-                }
-            });
-        }
+        //}
     }
 
     @Override
@@ -447,6 +442,11 @@ public class EventDataEntryFragment extends DataEntryFragment<EventDataEntryFrag
         selectSection(position);
     }
 
+    @Override
+    public void onNothingSelected(AdapterView<?> parent) {
+        selectSection(0);
+    }
+
     private void selectSection(int position) {
         DataEntryFragmentSection section = (DataEntryFragmentSection)
                 spinnerAdapter.getItem(position);
@@ -455,7 +455,7 @@ public class EventDataEntryFragment extends DataEntryFragment<EventDataEntryFrag
             listView.smoothScrollToPosition(INITIAL_POSITION);
             listViewAdapter.swapData(section.getRows());
         }
-        updateSectionNavigationButtons();
+        //updateSectionNavigationButtons();
     }
 
     @Override
@@ -502,7 +502,11 @@ public class EventDataEntryFragment extends DataEntryFragment<EventDataEntryFrag
     @Override
     protected void proceed() {
         if (isValid()) {
-            DhisService.updateData(getActivity(), form.getEnrollment().getTrackedEntityInstance());
+            if(isShowSpinnerButton)
+                DhisService.sendEventData();
+            else
+                DhisService.updateData();
+            isFinish = true;
         }
     }
 
@@ -645,7 +649,7 @@ public class EventDataEntryFragment extends DataEntryFragment<EventDataEntryFrag
 
     @Override
     public SectionAdapter getSpinnerAdapter() {
-        return spinnerAdapter;
+        return null;
     }
 
     public static ArrayList<String> getValidationErrors(Event event, ProgramStage programStage, Context context) {
@@ -690,7 +694,7 @@ public class EventDataEntryFragment extends DataEntryFragment<EventDataEntryFrag
         super.onHideLoadingDialog(event);
     }
 
-    @Subscribe
+    //@Subscribe
     public void onUpdateSectionsSpinner(UpdateSectionsEvent event) {
         if (spinnerAdapter != null) {
             spinnerAdapter.notifyDataSetChanged();
@@ -915,6 +919,7 @@ public class EventDataEntryFragment extends DataEntryFragment<EventDataEntryFrag
     @Subscribe
     public void onRowValueChanged(final RowValueChangedEvent event) {
         super.onRowValueChanged(event);
+        isExistedValueChanged = true;
 
         // do not run program rules for EditTextRows - DelayedDispatcher takes care of this
         if (event.getRow() == null || !(event.getRow().isEditTextRow())) {
@@ -927,16 +932,19 @@ public class EventDataEntryFragment extends DataEntryFragment<EventDataEntryFrag
                 || DataEntryRowTypes.EVENT_DATE.toString().equals(event.getRowType())) {
             //save event
             saveThread.scheduleSaveEvent();
-            List<Event> eventsForEnrollment = new ArrayList<>();
 
-            for (Event eventd : form.getEnrollment().getEvents()) {
-                if (eventd.getUid().equals(form.getEvent().getUid())) {
-                    eventsForEnrollment.add(form.getEvent());
-                } else {
-                    eventsForEnrollment.add(eventd);
+            if(form.getEnrollment() != null){
+                List<Event> eventsForEnrollment = new ArrayList<>();
+
+                for (Event eventd : form.getEnrollment().getEvents()) {
+                    if (eventd.getUid().equals(form.getEvent().getUid())) {
+                        eventsForEnrollment.add(form.getEvent());
+                    } else {
+                        eventsForEnrollment.add(eventd);
+                    }
                 }
+                form.getEnrollment().setEvents(eventsForEnrollment);
             }
-            form.getEnrollment().setEvents(eventsForEnrollment);
         } else {// save data element
             saveThread.scheduleSaveDataValue(event.getId());
         }
@@ -1078,17 +1086,46 @@ public class EventDataEntryFragment extends DataEntryFragment<EventDataEntryFrag
 
     @Override
     public boolean doBack() {
-        if(form.getEvent().getDueDate()==null && form.getEvent().getEventDate()==null){
+        //if(form.getEvent().getDueDate()==null && form.getEvent().getEventDate()==null){
+        if(isExistedValueChanged && isCreateNewEvent)
             form.getEvent().delete();
-            return super.doBack();
-        }
+            //return super.doBack();
+        //}
         List<String> errors = getRowsErrors(getContext(), form);
         if (errors.size() > 0) {
             showErrorAndGoBack();
             return false;
-        } else {
-            return super.doBack();
         }
+        return false;
+    }
+
+    @Override
+    public boolean onBackPressed() {
+        if(!isFinish) {
+            showConfirmDiscardDialog();
+        }
+        return isFinish;
+    }
+
+    public void showConfirmDiscardDialog() {
+        UiUtils.showConfirmDialog(getActivity(),
+                getString(R.string.discard), getString(R.string.discard_confirm_changes),
+                getString(R.string.discard),
+                getString(R.string.cancel), new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        //discard
+                        doBack();
+                        isFinish = true;
+                        getActivity().onBackPressed();
+                    }
+                }, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        //cancel
+                        dialog.dismiss();
+                    }
+                });
     }
 
     private void showErrorAndGoBack() {

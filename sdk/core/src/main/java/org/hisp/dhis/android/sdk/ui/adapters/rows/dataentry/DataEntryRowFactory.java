@@ -80,6 +80,20 @@ public class DataEntryRowFactory {
         return row;
     }
 
+    public static Row createWorkplanDataEntryView(Context context, String mOrganUnitId, boolean mandatory,
+                                                  String rowName, BaseValue baseValue,
+                                                  ValueType valueType, boolean editable,
+                                                  boolean shouldNeverBeEdited){
+        Row row = null;
+        String trackedEntityAttributeName = rowName;
+        if(valueType.equals(ValueType.ORGANISATION_UNIT)){
+            row = new WorkplanChooseOrganisationUnitRow(context, mOrganUnitId, trackedEntityAttributeName, mandatory, null, baseValue, DataEntryRowTypes.ORGANISATION_UNIT);
+            row.setEditable(editable);
+            row.setShouldNeverBeEdited(shouldNeverBeEdited);
+        }
+        return row;
+    }
+
     private static boolean isDataEntryRadioButtons(boolean dataEntryMethod, List<Option> options) {
         return dataEntryMethod && options.size() < 8;
     }

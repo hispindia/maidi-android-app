@@ -28,11 +28,16 @@
     <string name="organisation_unit">Organisation Unit</string>
     <string name="event">Event</string>
     <string name="due_date">Due date</string>
+    <string name="data_entry">Data Entry</string>
+    <string name="view">View</string>
 
     <!-- *************** GLOBAL WARNING STRING ************* -->
     <string name="phone_number_invalid">The phone number is invalid. Please recheck and try again</string>
     <string name="phone_number_not_been_typed">You need to type your phone number to continue</string>
     <string name="form_is_empty">Form is empty, please fill at least one</string>
+    <string name="write_storage_permission">Permissions need to be granted to export datas into PDF file. Please grant permissions and re-open the app</string>
+    <string name="export_pdf_file_failed">Failed to export to Pdf file. Please try again</string>
+    <string name="export_pdf_file_success">The PDF file was exported successfully</string>
 
     <!-- ************** LOGIN SCREEN ************ -->
     <string name="login_app_title">MAIDI APP</string>
@@ -80,6 +85,8 @@
     <string name="login_input_username_hint">Username</string>
     <string name="login_input_password_hint">Password</string>
     <string name="session_wise_vaccination_due_hint">Select session date to proceed</string>
+    <string name="view_or_update_your_workplan">View or Update your Workplan</string>
+    <string name="select_a_year_and_a_month_to_update_the_workplan">Select a year and a month to update the workplan</string>
 
     <!--- *************** Fragments of Main Screen's titles ************* -->
     <string name="my_immunisation_title">My Immunisation</string>
@@ -88,6 +95,16 @@
     <string name="session_wise_vaccination_due">Session wise Vaccination due</string>
     <string name="registered_case">Registered Cases</string>
     <string name="adverse_event_information">Adverse Event Information</string>
+    <string name="surveys">Surveys</string>
+    <string name="house_to_house_survey">House to house survey</string>
+    <string name="monthly_workplan_update">Monthly Workplan - Update</string>
 
+    <!--- *************** Days of week ************* -->
+    <string name="monday">Monday</string>
+    <string name="tuesday">Tuesday</string>
+    <string name="wednesday">Wednesday</string>
+    <string name="thursday">Thursday</string>
+    <string name="friday">Friday</string>
+    <string name="saturday">Saturday</string>
 
 </resources>

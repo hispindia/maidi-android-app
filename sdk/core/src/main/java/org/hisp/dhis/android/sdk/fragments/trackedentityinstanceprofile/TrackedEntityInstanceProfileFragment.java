@@ -512,6 +512,11 @@ public class TrackedEntityInstanceProfileFragment extends DataEntryFragment<Trac
     public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {}
 
     @Override
+    public void onNothingSelected(AdapterView<?> adapterView) {
+
+    }
+
+    @Override
     public void onDetach() {
         super.onDetach();
         GpsController.disableGps();

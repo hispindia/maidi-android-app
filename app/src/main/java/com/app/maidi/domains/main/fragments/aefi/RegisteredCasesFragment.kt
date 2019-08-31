@@ -12,14 +12,18 @@ import butterknife.ButterKnife
 import com.app.maidi.R
 import com.app.maidi.domains.aefi.AdverseEventInformationActivity
 import com.app.maidi.domains.base.BaseFragment
+import com.app.maidi.domains.child_registration.ChildRegistrationActivity
 import com.app.maidi.domains.main.MainActivity
 import com.app.maidi.domains.main.MainPresenter
 import com.app.maidi.domains.main.fragments.listener.OnItemClickListener
 import com.app.maidi.utils.Constants
 import org.hisp.dhis.android.sdk.controllers.metadata.MetaDataController
+import org.hisp.dhis.android.sdk.controllers.tracker.TrackerController
+import org.hisp.dhis.android.sdk.fragments.enrollment.EnrollmentDataEntryFragment
 import org.hisp.dhis.android.sdk.persistence.models.OrganisationUnit
 import org.hisp.dhis.android.sdk.persistence.models.Program
 import org.hisp.dhis.android.sdk.persistence.models.TrackedEntityInstance
+import org.hisp.dhis.android.sdk.ui.fragments.eventdataentry.EventDataEntryFragment
 
 class RegisteredCasesFragment : BaseFragment(), OnItemClickListener{
 
@@ -48,8 +52,6 @@ class RegisteredCasesFragment : BaseFragment(), OnItemClickListener{
 
         rcvList.layoutManager = LinearLayoutManager(mainActivity)
 
-        mainPresenter.getAefiTrackedEntityInstances(currentUnit.id, currentProgram.uid)
-
         return viewGroup
     }
 
@@ -68,8 +70,16 @@ class RegisteredCasesFragment : BaseFragment(), OnItemClickListener{
 
     override fun onResume() {
         super.onResume()
-        mainActivity.solidActionBar(resources.getString(R.string.registered_case))
+
+        var createButtonListener = View.OnClickListener {
+            var bundle = Bundle()
+            bundle.putString(ChildRegistrationActivity.ORGANISATION_UNIT, Constants.AEFI)
+            mainActivity.transformActivity(mainActivity, ChildRegistrationActivity::class.java, false, bundle)
+        }
+
+        mainActivity.solidActionBar(resources.getString(R.string.registered_case), createButtonListener)
         mainActivity.isSwipeForceSyncronizeEnabled(false)
+        mainPresenter.getAefiTrackedEntityInstances(currentUnit.id, currentProgram.uid)
     }
 
     fun createPresenter() : MainPresenter{

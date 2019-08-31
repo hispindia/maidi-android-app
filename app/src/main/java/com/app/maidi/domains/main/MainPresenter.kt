@@ -18,10 +18,7 @@ import org.hisp.dhis.android.sdk.job.JobExecutor
 import org.hisp.dhis.android.sdk.job.NetworkJob
 import org.hisp.dhis.android.sdk.network.APIException
 import org.hisp.dhis.android.sdk.network.ResponseHolder
-import org.hisp.dhis.android.sdk.persistence.models.DataElement
-import org.hisp.dhis.android.sdk.persistence.models.DataValue
-import org.hisp.dhis.android.sdk.persistence.models.Enrollment
-import org.hisp.dhis.android.sdk.persistence.models.TrackedEntityInstance
+import org.hisp.dhis.android.sdk.persistence.models.*
 import org.joda.time.DateTime
 import org.joda.time.Days
 import org.joda.time.format.DateTimeFormat
@@ -39,6 +36,7 @@ class MainPresenter : BasePresenter<MainView> {
         this.accountService = accountService
     }
 
+    // AEFI MODULE
     fun getAefiTrackedEntityInstances(orgUnitId: String, programId: String){
         if(isViewAttached){
             view.showLoading()
@@ -79,7 +77,8 @@ class MainPresenter : BasePresenter<MainView> {
         }
     }
 
-    fun getRemoteTrackedEntityInstances(orgUnitId: String, programId: String){
+    // IMMUNISATION SUB-MODULE
+    fun getImmunisationTrackedEntityInstances(orgUnitId: String, programId: String){
 
         if(isViewAttached){
             view.showLoading()
@@ -188,6 +187,7 @@ class MainPresenter : BasePresenter<MainView> {
 
     }
 
+    // ------- SESSION WISE SUB-MODULE ----------- //
     fun getSessionWiseDatas(orgUnitId: String, programId: String, sessionDate: String){
         if(isViewAttached){
             view.showLoading()
@@ -344,5 +344,60 @@ class MainPresenter : BasePresenter<MainView> {
         }
 
         return false
+    }
+
+    // -------END - SESSION WISE SUB-MODULE ----------- //
+
+    // SURVEY MODULE
+    fun getSurveyEntities(orgUnitId: String, programId: String){
+        if(isViewAttached){
+            view.showLoading()
+        }
+
+        try{
+            JobExecutor.enqueueJob<ResponseHolder<Any>>(object : NetworkJob<Any>(1, null) {
+
+                @Throws(APIException::class)
+                override fun execute(): Any {
+                    var events = listOf<Event>()
+
+                    events = TrackerController.getEventEntries(orgUnitId, programId)
+
+                    if(isViewAttached)
+                        view.getSurveyEvents(events)
+
+                    return Any()
+                }
+            })
+        }catch(exception : APIException){
+            if(isViewAttached)
+                view.getApiFailed(exception)
+        }
+    }
+
+    fun getWorkplanEntities(orgUnitId: String, programId: String){
+        if(isViewAttached){
+            view.showLoading()
+        }
+
+        try{
+            JobExecutor.enqueueJob<ResponseHolder<Any>>(object : NetworkJob<Any>(1, null) {
+
+                @Throws(APIException::class)
+                override fun execute(): Any {
+                    var events = listOf<Event>()
+
+                    events = TrackerController.getEventEntries(orgUnitId, programId)
+
+                    if(isViewAttached)
+                        view.getWorkplanEvents(events)
+
+                    return Any()
+                }
+            })
+        }catch(exception : APIException){
+            if(isViewAttached)
+                view.getApiFailed(exception)
+        }
     }
 }

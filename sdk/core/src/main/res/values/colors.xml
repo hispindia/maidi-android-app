@@ -114,5 +114,7 @@
     <!-- ADD NEW COLOR - 2019 -->
     <color name="title_text_color">#93a2a6</color>
     <color name="gray_icon">#bdc5c7</color>
+    <color name="button_gray_color">#f4f6f6</color>
+    <color name="button_gray_stroke_color">#d9dddf</color>
 
 </resources>

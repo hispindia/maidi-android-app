@@ -1,15 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
               xmlns:app="http://schemas.android.com/apk/res-auto"
-              android:orientation="vertical"
               android:layout_width="match_parent"
-              android:layout_height="wrap_content"
-              android:paddingTop="10dp">
+              android:layout_height="64dp">
 
     <androidx.cardview.widget.CardView
             android:id="@+id/submit_button_layout_sb_submit"
             android:layout_width="match_parent"
             android:layout_height="44dp"
+            android:layout_marginTop="20dp"
             app:cardCornerRadius="4dp"
             app:cardElevation="5dp">
 
