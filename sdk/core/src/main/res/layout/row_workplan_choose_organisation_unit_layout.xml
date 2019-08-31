@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:orientation="vertical"
+              android:layout_width="match_parent"
+              android:layout_height="wrap_content">
+
+    <include layout="@layout/listview_row_text_view_label" />
+
+    <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+        <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/row_workplan_choose_organisation_unit_layout_til_village"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@android:color/white">
+
+            <EditText
+                    android:id="@+id/row_workplan_choose_organisation_unit_layout_et_village"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:drawableEnd="@drawable/ic_gray_arrow_down"
+                    android:textSize="15.4dp"
+                    android:editable="false"/>
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <Spinner
+                android:id="@+id/row_workplan_choose_organisation_unit_layout_sp_village"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:dropDownSelector="@null"
+                android:background="@null"
+                android:overlapAnchor="false"
+        />
+
+    </FrameLayout>
+
+</LinearLayout>
