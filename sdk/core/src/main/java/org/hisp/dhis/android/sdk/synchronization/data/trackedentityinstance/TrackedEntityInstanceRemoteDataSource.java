@@ -85,9 +85,7 @@ public class TrackedEntityInstanceRemoteDataSource  extends ARemoteDataSource {
     private ImportSummary putTrackedEntityInstance(TrackedEntityInstance trackedEntityInstance, DhisApi dhisApi) throws APIException {
         Response response = null;
         try {
-
             response = dhisApi.putTrackedEntityInstance(trackedEntityInstance.getUid(), trackedEntityInstance).execute();
-
         } catch (IOException e) {
             e.printStackTrace();
         }

@@ -42,6 +42,7 @@ class Utils {
     companion object{
 
         val simpleLocalDateFormat = SimpleDateFormat(Constants.SIMPLE_DATE_PATTERN)
+        val simpleMonthYearFormat = SimpleDateFormat(Constants.SIMPLE_MONTH_YEAR_PATTERN)
         val simpleServerDateFormat = SimpleDateFormat(Constants.SIMPLE_SERVER_DATE_PATTERN)
         val fullDateFormat = SimpleDateFormat(Constants.FULL_DATE_PATTERN)
         val serverDateFormat = SimpleDateFormat(Constants.SERVER_DATE_PATTERN)
@@ -58,6 +59,17 @@ class Utils {
             return localDate
         }
 
+        fun convertMonthStringToCalendar(monthString: String) : Calendar{
+            var date = simpleMonthYearFormat.parse(monthString)
+            var cal = Calendar.getInstance()
+            cal.time = date
+            return cal
+        }
+
+        fun convertMonthStringToLocalDate(dateString: String) : LocalDate{
+            return LocalDate.parse(dateString, DateTimeFormat.forPattern(Constants.SIMPLE_MONTH_YEAR_PATTERN))
+        }
+
         fun convertStringToCalendar(dateString: String) : Calendar{
             var date = simpleLocalDateFormat.parse(dateString)
             var cal = Calendar.getInstance()
@@ -67,6 +79,11 @@ class Utils {
 
         fun convertStringToLocalDate(dateString: String) : LocalDate{
             return LocalDate.parse(dateString, DateTimeFormat.forPattern(Constants.SIMPLE_DATE_PATTERN))
+        }
+
+        fun convertCalendarToMonthString(date: Date) : String {
+            var dateString = simpleMonthYearFormat.format(date)
+            return dateString
         }
 
         fun convertCalendarToString(date: Date) : String{

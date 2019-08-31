@@ -38,6 +38,7 @@ import android.util.Log;
 
 import com.fasterxml.jackson.databind.JsonNode;
 
+import com.raizlabs.android.dbflow.structure.BaseModel;
 import org.hisp.dhis.android.sdk.R;
 import org.hisp.dhis.android.sdk.controllers.ApiEndpointContainer;
 import org.hisp.dhis.android.sdk.controllers.LoadingController;
@@ -136,6 +137,9 @@ final class TrackerDataLoader extends ResourceController {
                 programsForOrganisationUnits.put(organisationUnit.getId(), programsForOrgUnit);
             }
 
+            Program surveyProgram = MetaDataController.getProgramByName(Utils.SURVEY);
+            Program workplanProgram = MetaDataController.getProgramByName(Utils.WORKPLAN);
+
             for (final OrganisationUnit organisationUnit : assignedOrganisationUnits) {
                 if (organisationUnit.getId() == null
                         || organisationUnit.getId().length() == Utils.randomUUID.length()) {
@@ -151,40 +155,42 @@ final class TrackerDataLoader extends ResourceController {
 
                     if (shouldLoad(serverDateTime, ResourceType.EVENTS,
                             organisationUnit.getId() + program.getUid())) {
-                        /*UiUtils.postProgressMessage(
-                                context.getString(R.string.loading_events) + ": "
-                                        + organisationUnit.getLabel() + ": " + program.getName(),
-                                LoadingMessageEvent.EventType.DATA);*/
-                        try {
-                            trackedEntityInstances =
-                                    TrackerController.queryTrackedEntityInstancesDataFromServer(dhisApi, organisationUnit.getId(), program.getUid(), "");
-                            getTrackedEntityInstancesDataFromServer(dhisApi, trackedEntityInstances, true, true);
-                            for(TrackedEntityInstance instance : trackedEntityInstances){
-                                TrackedEntityInstance localInstance = TrackerController.getTrackedEntityInstance(instance.getTrackedEntityInstance());
-                                for(TrackedEntityAttributeValue value : instance.getAttributes()){
-                                    value.setTrackedEntityInstanceId(localInstance.getUid());
-                                    value.setLocalTrackedEntityInstanceId(localInstance.getLocalId());
-                                }
-                                saveResourceDataFromServer(resource, null, instance.getAttributes(),
-                                        TrackerController.getTrackedEntityAttributeValues(instance.getUid()), serverDateTime);
+                        if(surveyProgram != null && program.getUid().equals(surveyProgram.getUid())){
+                            try {
+                                getEventsDataFromServer(dhisApi, syncStrategy, organisationUnit.getId(), program.getUid(), serverDateTime);
+                            } catch (APIException e) {
+                                e.printStackTrace();
+                                //todo: could probably do something prettier here. This catch is done to prevent
+                                // stopping loading of the following program/orgUnit as throwing and exception would exit the loop..
                             }
-                            /*getEventsDataFromServer(dhisApi, syncStrategy, organisationUnit.getId(),
-                                    program.getUid(), serverDateTime);*/
-                        } catch (APIException e) {
-                            e.printStackTrace();
-                            //todo: could probably do something prettier here. This catch is done to prevent
-                            // stopping loading of the following program/orgUnit as throwing and exception would exit the loop..
+                        }else if(workplanProgram != null && program.getUid().equals(workplanProgram.getUid())){
+                            try {
+                                getEventsDataFromServer(dhisApi, syncStrategy, organisationUnit.getId(), program.getUid(), serverDateTime);
+                            } catch (APIException e) {
+                                e.printStackTrace();
+                                //todo: could probably do something prettier here. This catch is done to prevent
+                                // stopping loading of the following program/orgUnit as throwing and exception would exit the loop..
+                            }
+                        }else {
+                            try {
+                                trackedEntityInstances =
+                                        TrackerController.queryTrackedEntityInstancesDataFromServer(dhisApi, organisationUnit.getId(), program.getUid(), "");
+                                getTrackedEntityInstancesDataFromServer(dhisApi, trackedEntityInstances, true, true);
+                                for(TrackedEntityInstance instance : trackedEntityInstances){
+                                    TrackedEntityInstance localInstance = TrackerController.getTrackedEntityInstance(instance.getTrackedEntityInstance());
+                                    for(TrackedEntityAttributeValue value : instance.getAttributes()){
+                                        value.setTrackedEntityInstanceId(localInstance.getUid());
+                                        value.setLocalTrackedEntityInstanceId(localInstance.getLocalId());
+                                    }
+                                    saveResourceDataFromServer(resource, null, instance.getAttributes(),
+                                            TrackerController.getTrackedEntityAttributeValues(instance.getUid()), serverDateTime);
+                                }
+                            } catch (APIException e) {
+                                e.printStackTrace();
+                                //todo: could probably do something prettier here. This catch is done to prevent
+                                // stopping loading of the following program/orgUnit as throwing and exception would exit the loop..
+                            }
                         }
-                        /*try {
-                            getEventsDataFromServer(dhisApi, syncStrategy, organisationUnit.getId(),
-                                    program.getUid(), serverDateTime);
-                        } catch (APIException e) {
-                            e.printStackTrace();
-                            //todo: could probably do something prettier here. This catch is done
-                            // to prevent
-                            // stopping loading of the following program/orgUnit as throwing and
-                            // exception would exit the loop..
-                        }*/
                     }
                 }
             }
@@ -812,7 +818,10 @@ final class TrackerDataLoader extends ResourceController {
         Log.d(CLASS_TAG, "get tei1 " + uid);
 
         //need to save the TEI first to get a auto-increment id
-        DbOperation.save(trackedEntityInstance).getModel().save();
+        BaseModel model = DbOperation.save(trackedEntityInstance).getModel();
+        if(model != null){
+            model.save();
+        }
 
         List<DbOperation> operations = new ArrayList<>();
         if (trackedEntityInstance.getAttributes() != null) {

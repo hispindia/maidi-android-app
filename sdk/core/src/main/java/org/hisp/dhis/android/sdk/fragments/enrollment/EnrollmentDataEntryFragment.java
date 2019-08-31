@@ -243,6 +243,11 @@ public class EnrollmentDataEntryFragment extends DataEntryFragment<EnrollmentDat
     }
 
     @Override
+    public void onNothingSelected(AdapterView<?> adapterView) {
+
+    }
+
+    @Override
     protected HashMap<ErrorType, ArrayList<String>> getValidationErrors() {
         HashMap<ErrorType, ArrayList<String>> errors = new HashMap<>();
 
@@ -529,7 +534,7 @@ public class EnrollmentDataEntryFragment extends DataEntryFragment<EnrollmentDat
             }
         }
 
-        DhisService.updateData(getActivity(), form.getTrackedEntityInstance().getUid());
+        DhisService.updateData();
     }
 
     private void discardChanges() {

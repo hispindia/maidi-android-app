@@ -207,7 +207,7 @@ public final class DhisService extends Service {
         return job;
     }
 
-    public static void sendData() {
+    public static void sendEventData() {
         JobExecutor.enqueueJob(new NetworkJob<Object>(0,
                 null) {
             @Override
@@ -215,7 +215,7 @@ public final class DhisService extends Service {
                 try {
                     Dhis2Application.getEventBus().post(new UiEvent(UiEvent.UiEventType.START_SEND_DATA));
                     UiUtils.postProgressMessage("Sending data ...", LoadingMessageEvent.EventType.METADATA);
-                    //DhisController.sendData();
+                    DhisController.sendEventData();
                     Dhis2Application.getEventBus().post(new UiEvent(UiEvent.UiEventType.SUCCESS_SEND_DATA));
                 }catch (APIException ex){
                     Dhis2Application.getEventBus().post(new UiEvent(UiEvent.UiEventType.ERROR_SEND_DATA));
@@ -226,7 +226,7 @@ public final class DhisService extends Service {
         });
     }
 
-    public static void updateData(final Context context, final String trackedEntityInstanceId){
+    public static void updateData(){
         JobExecutor.enqueueJob(new NetworkJob<Object>(0,
                 null) {
             @Override

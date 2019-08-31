@@ -276,12 +276,17 @@ public final class DhisController {
     }
 
     public ObjectMapper getObjectMapper() {
-        if (objectMapper == null) {
-            objectMapper = new ObjectMapper();
-            objectMapper.registerModule(new JodaModule());
-
+        try {
+            if (objectMapper == null) {
+                objectMapper = new ObjectMapper();
+                objectMapper.registerModule(new JodaModule());
+            }
+            return objectMapper;
+        }catch(Exception ex){
+            Log.d("error", ex.toString());
         }
-        return objectMapper;
+
+        return null;
     }
 
     public SyncDateWrapper getSyncDateWrapper() {
@@ -308,5 +313,11 @@ public final class DhisController {
         // fetch meta data from disk
         readSession();
         return user;
+    }
+
+    // ADDED Functions - Aug 2019
+
+    static void sendEventData() throws APIException, IllegalStateException {
+        TrackerController.sendEventDatas(getInstance().getDhisApi());
     }
 }

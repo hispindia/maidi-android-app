@@ -253,4 +253,9 @@ public class EnrollmentDateFragment extends DataEntryFragment<EnrollmentDateFrag
     public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
 
     }
+
+    @Override
+    public void onNothingSelected(AdapterView<?> adapterView) {
+
+    }
 }

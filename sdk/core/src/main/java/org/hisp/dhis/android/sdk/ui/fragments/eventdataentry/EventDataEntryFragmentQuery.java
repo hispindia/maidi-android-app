@@ -61,6 +61,7 @@ import org.hisp.dhis.android.sdk.ui.adapters.rows.dataentry.IndicatorRow;
 import org.hisp.dhis.android.sdk.ui.adapters.rows.dataentry.Row;
 import org.hisp.dhis.android.sdk.ui.adapters.rows.dataentry.StatusRow;
 import org.hisp.dhis.android.sdk.ui.fragments.dataentry.DataEntryFragmentSection;
+import org.hisp.dhis.android.sdk.utils.Utils;
 import org.hisp.dhis.android.sdk.utils.api.ValueType;
 import org.hisp.dhis.android.sdk.utils.services.ProgramIndicatorService;
 import org.hisp.dhis.android.sdk.utils.support.DateUtils;
@@ -150,7 +151,7 @@ class EventDataEntryFragmentQuery implements Query<EventDataEntryFragmentForm> {
             }
             addEventDateRow(context, form, rows);
             addCoordinateRow(form, rows);
-            populateDataEntryRows(form, orgUnitId, stage.getProgramStageDataElements(), rows, username, context);
+            populateDataEntryRows(form, orgUnitId, programId, stage, stage.getProgramStageDataElements(), rows, username, context);
             populateIndicatorRows(form, stage.getProgramIndicators(), rows);
             form.getSections().add(new DataEntryFragmentSection(DEFAULT_SECTION, null, rows));
         } else {
@@ -169,7 +170,7 @@ class EventDataEntryFragmentQuery implements Query<EventDataEntryFragmentForm> {
                     addEventDateRow(context, form, rows);
                     addCoordinateRow(form, rows);
                 }
-                populateDataEntryRows(form, orgUnitId, section.getProgramStageDataElements(), rows, username, context);
+                populateDataEntryRows(form, orgUnitId, programId, stage, section.getProgramStageDataElements(), rows, username, context);
                 populateIndicatorRows(form, section.getProgramIndicators(), rows);
                 form.getSections().add(new DataEntryFragmentSection(section.getName(), section.getUid(), rows));
             }
@@ -220,7 +221,7 @@ class EventDataEntryFragmentQuery implements Query<EventDataEntryFragmentForm> {
         }
     }
 
-    private static void populateDataEntryRows(EventDataEntryFragmentForm form, String orgUnitId,
+    private static void populateDataEntryRows(EventDataEntryFragmentForm form, String orgUnitId, String programId, ProgramStage currentStage,
                                               List<ProgramStageDataElement> dataElements,
                                               List<Row> rows, String username, Context context) {
         for (ProgramStageDataElement stageDataElement : dataElements) {
@@ -243,6 +244,16 @@ class EventDataEntryFragmentQuery implements Query<EventDataEntryFragmentForm> {
                 if(!isRadioButton){
                     isRadioButton = stageDataElement.isRenderOptionsAsRadio();
                 }
+
+                // ---------- Add codes for showing element when on Workplan event
+                ProgramStage workplanStage = MetaDataController.getProgramStageByName(programId, Utils.WORKPLAN);
+                if(workplanStage != null && workplanStage.getUid().equals(currentStage.getUid())){
+                    Row row = DataEntryRowFactory.createWorkplanDataEntryView(context, orgUnitId, stageDataElement.getCompulsory(),
+                            dataElementName, dataValue, dataElement.getValueType(), true, false);
+                    rows.add(row);
+                    continue;
+                }
+
                 Row row = DataEntryRowFactory.createDataEntryView(context, orgUnitId, stageDataElement.getCompulsory(),
                         stageDataElement.getAllowFutureDate(), dataElement.getOptionSet(),
                         dataElementName, dataValue, dataElement.getValueType(), true, false,

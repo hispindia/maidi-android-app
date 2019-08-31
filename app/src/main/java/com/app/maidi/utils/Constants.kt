@@ -7,6 +7,8 @@ class Constants{
     companion object{
         //var DHIS2_SERVER_URL = "http://192.168.1.254:8080/dhis/"
 
+        val EXPORT_FOLDER_NAME = "Maidi_Export"
+        val SIMPLE_MONTH_YEAR_PATTERN = "MM/yyyy"
         val SIMPLE_DATE_PATTERN = "MM/dd/yyyy"
         val SIMPLE_SERVER_DATE_PATTERN = "yyyy-MM-dd"
         val FULL_DATE_PATTERN = "yyyy-MM-dd'T'hh:mm:ss.SSS"
@@ -15,11 +17,13 @@ class Constants{
         val DHIS2_SERVER_URL =
             if(BuildConfig.FLAVOR.equals("staging")) "https://maidi.icmr.org.in/dhis/api/"
             else if(BuildConfig.FLAVOR.equals("production")) "http://eeb52f31.ngrok.io/dhis/api/"
-            else "http://192.168.0.105:8080/dhis/api/"
+            else "http://192.168.1.231:8080/dhis/api/"
 
         val BENEFICIARY_CHILD_REGISTRATION = "Child registration"
         val IMMUNISATION = "Immunisation"
         val AEFI = "AEFI"
+        var SURVEY = "survey"
+        var WORKPLAN = "workplan"
         val GUEST_ROLE = "Guest role"
         val PHONE_NUMBER = "PHONE_NUMBER"
         val VERIFICATION_ID = "VERIFICATION_ID"

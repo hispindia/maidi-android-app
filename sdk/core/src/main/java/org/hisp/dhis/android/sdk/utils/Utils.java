@@ -57,6 +57,8 @@ import static android.text.TextUtils.isEmpty;
 public class Utils {
 
     private static final String CLASS_TAG = "Utils";
+    public static final String SURVEY = "survey";
+    public static final String WORKPLAN = "workplan";
     public static final String randomUUID = DhisController.QUEUED + UUID.randomUUID().toString();
 
     public static final int getDpPx(int dp, DisplayMetrics displayMetrics) {

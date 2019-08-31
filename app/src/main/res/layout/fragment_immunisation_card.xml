@@ -75,6 +75,7 @@
             >
 
         <androidx.cardview.widget.CardView
+                android:id="@+id/fragment_immunisation_card_cv_download"
                 android:layout_width="0dp"
                 android:layout_height="44dp"
                 android:layout_weight="0.5"

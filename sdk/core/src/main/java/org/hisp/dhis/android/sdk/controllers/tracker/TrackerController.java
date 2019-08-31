@@ -333,6 +333,14 @@ public final class TrackerController extends ResourceController {
         return events;
     }
 
+    public static List<Event> getEventEntries(String organisationUnitId, String programId) {
+        List<Event> events = new Select().from(Event.class).where(Condition.column
+                (Event$Table.ORGANISATIONUNITID).is(organisationUnitId))
+                .and(Condition.column(Event$Table.PROGRAMID).is(programId))
+                .orderBy(false, Event$Table.LASTUPDATED).queryList();
+        return events;
+    }
+
     /**
      * Returns an Event based on the given localId
      *
@@ -773,6 +781,9 @@ public final class TrackerController extends ResourceController {
                         LOCALTRACKEDENTITYINSTANCEID).isNot(value.getLocalTrackedEntityInstanceId())).count();
     }
 
+
+
+
     // ADD NEW FUNCTIONS - 2019
     public static Enrollment getEnrollmentByProgramAndTrackedEntityInstance(String program, String trackedEntityInstanceId){
         return new Select().from(Enrollment.class)
@@ -806,6 +817,12 @@ public final class TrackerController extends ResourceController {
                 .where(Condition.column(ProgramStage$Table.PROGRAM).is(programId))
                 .and(Condition.column(ProgramStage$Table.DISPLAYNAME).is(programStageName))
                 .querySingle();
+    }
+
+    public static List<ProgramStageSection> getProgramStageSections(String programsStageId){
+        return new Select().from(ProgramStageSection.class)
+                .where(Condition.column(ProgramStageSection$Table.PROGRAMSTAGE).is(programsStageId))
+                .queryList();
     }
 
     public static List<ProgramStageDataElement> getProgramStageDataElements(String programStageId){
@@ -916,5 +933,13 @@ public final class TrackerController extends ResourceController {
                 Condition.column(Event$Table.ORGANISATIONUNITID).is(organUnitId)).and(
                         Condition.column(Event$Table.LOCALENROLLMENTID).is(localEnrollmentId)).and(
                         Condition.column(Event$Table.STATUS).isNot(Event.STATUS_DELETED)).queryList();
+    }
+
+    public static void sendEventDatas(DhisApi dhisApi) throws APIException {
+        Log.d(CLASS_TAG, "sending local data");
+        TrackerDataSender.deleteLocallyDeletedEvents(dhisApi);
+        //TrackerDataSender.sendTrackedEntityInstanceChanges(dhisApi, false);
+        //TrackerDataSender.sendEnrollmentChanges(dhisApi, false);
+        TrackerDataSender.sendEventChanges(dhisApi);
     }
 }

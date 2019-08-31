@@ -101,12 +101,18 @@ public class EventSaveThread extends AsyncHelperThread {
         }
         saveEvent = false;
         event.setFromServer(false);
+
         Enrollment enrollment = TrackerController.getEnrollment(event.getEnrollment());
-        enrollment.setFromServer(false);
-        enrollment.save();
+        if(enrollment != null){
+            enrollment.setFromServer(false);
+            enrollment.save();
+        }
         TrackedEntityInstance trackedEntityInstance = TrackerController.getTrackedEntityInstance(event.getTrackedEntityInstance());
-        trackedEntityInstance.setFromServer(false);
-        trackedEntityInstance.save();
+        if(trackedEntityInstance != null){
+            trackedEntityInstance.setFromServer(false);
+            trackedEntityInstance.save();
+        }
+
         Event tempEvent = new Event();
         tempEvent.setLocalId(event.getLocalId());
         tempEvent.setEvent(event.getEvent());

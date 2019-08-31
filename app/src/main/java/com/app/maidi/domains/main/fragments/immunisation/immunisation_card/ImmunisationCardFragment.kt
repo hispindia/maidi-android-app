@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import butterknife.BindView
@@ -14,15 +15,22 @@ import com.app.maidi.domains.base.BaseFragment
 import com.app.maidi.domains.main.MainActivity
 import com.app.maidi.domains.main.MainPresenter
 import com.app.maidi.models.ImmunisationCard
+import com.app.maidi.models.Vaccine
 import com.app.maidi.utils.Constants
 import com.app.maidi.utils.LinearLayoutManagerWrapper
+import com.app.maidi.utils.Utils
+import com.app.maidi.widget.ExportPDF
 import org.hisp.dhis.android.sdk.controllers.metadata.MetaDataController
 import org.hisp.dhis.android.sdk.controllers.tracker.TrackerController
 import org.hisp.dhis.android.sdk.persistence.models.Constant
 import org.hisp.dhis.android.sdk.persistence.models.OrganisationUnit
 import org.hisp.dhis.android.sdk.persistence.models.Program
+import org.joda.time.DateTime
+import java.lang.StringBuilder
 
 class ImmunisationCardFragment : BaseFragment() {
+
+    val exportHeaders = arrayOf("#", "Vaccine's name", "Due Date")
 
     lateinit var mainActivity: MainActivity
     lateinit var mainPresenter: MainPresenter
@@ -31,6 +39,7 @@ class ImmunisationCardFragment : BaseFragment() {
     lateinit var currentProgram: Program
 
     lateinit var adapter: ImmunisationCardAdapter
+    lateinit var immunisationList: List<ImmunisationCard>
 
     @BindView(R.id.fragment_immunisation_card_rcv_list)
     lateinit var rcvList: RecyclerView
@@ -50,9 +59,21 @@ class ImmunisationCardFragment : BaseFragment() {
         return viewGroup
     }
 
+    override fun onResume() {
+        super.onResume()
+        mainActivity.solidActionBar(resources.getString(R.string.immunisation_card_title))
+        mainActivity.isSwipeForceSyncronizeEnabled(false)
+        mainPresenter.getImmunisationTrackedEntityInstances(currentUnit.id, currentProgram.uid)
+    }
+
     @OnClick(R.id.fragment_immunisation_card_cv_update)
     fun onUpdateButtonClicked(){
         transformToEventListFragment()
+    }
+
+    @OnClick(R.id.fragment_immunisation_card_cv_download)
+    fun onDownloadButtonClicked(){
+        mainActivity.checkStoragePermissions()
     }
 
     fun transformToEventListFragment(){
@@ -72,15 +93,72 @@ class ImmunisationCardFragment : BaseFragment() {
     }
 
     fun updateImmunisationCardList(immunisationList: List<ImmunisationCard>){
+        this.immunisationList = immunisationList
         adapter = ImmunisationCardAdapter(mainActivity, immunisationList)
         rcvList.adapter = adapter
     }
 
-    override fun onResume() {
-        super.onResume()
-        mainActivity.solidActionBar(resources.getString(R.string.immunisation_card_title))
-        mainActivity.isSwipeForceSyncronizeEnabled(false)
-        mainPresenter.getRemoteTrackedEntityInstances(currentUnit.id, currentProgram.uid)
+    fun exportDatasToPdf(){
+        try{
+            var pdf = ExportPDF(mainActivity)
+            var reportDate = DateTime.now().millis
+            var pdfFile = pdf.openDocument("Report_MAIDI_ImmunisationCards_" + reportDate + ".pdf")
+            pdf.addTitle("Mobile Application for Immunisation Datas of India",
+                "Children's Immunisation Cards",
+                Utils.simpleLocalDateFormat.format(DateTime.now().toDate())
+            )
+
+            for(item in immunisationList){
+                var builder = StringBuilder()
+
+                if(item.trackedEntityInstance != null && item.trackedEntityInstance.attributes != null) {
+                    var attributes = item.trackedEntityInstance.attributes
+                    for(attribute in attributes){
+                        if(attribute.displayName.contains("Name")){
+                            builder.append("Name of child: " + attribute.value + ", ")
+                            break
+                        }
+                    }
+
+                }
+
+                item.enrollment!!.let {
+                    if(Utils.isValidDateFollowPattern(it.incidentDate))
+                        builder.append("Birthday: " + Utils.convertServerDateToLocalDate(it.incidentDate) + ", ")
+                    else
+                        builder.append("Birthday: " + Utils.convertFromFullDateToSimpleDate(it.incidentDate) + ", ")
+                }
+
+                builder.append("Reg ID: " + item.trackedEntityInstance.uid)
+                pdf.addParagraph(builder.toString())
+                pdf.createTable(exportHeaders, vaccineList(item.vaccineList))
+            }
+
+            pdf.closeDocument()
+            mainActivity.openExportFolderDialog(pdfFile)
+            //Toast.makeText(mainActivity, resources.getString(R.string.export_pdf_file_success), Toast.LENGTH_LONG).show()
+        }catch (ex: Exception){
+            Toast.makeText(mainActivity, resources.getString(R.string.export_pdf_file_failed), Toast.LENGTH_LONG).show()
+        }
+    }
+
+    fun vaccineList(vaccines : List<Vaccine>) : ArrayList<Array<String>>{
+        var vaccineList = arrayListOf<Array<String>>()
+        var counter = 1
+        for(vaccine in vaccines){
+            var vaccineName = vaccine.dataElement.displayName
+            var vaccineDueDate = ""
+            if(vaccine.dueDate != null && !vaccine.dueDate.isEmpty()){
+                if(Utils.isValidDateFollowPattern(vaccine.dueDate))
+                    vaccineDueDate = Utils.convertServerDateToLocalDate(vaccine.dueDate)
+                else
+                    vaccineDueDate = Utils.convertFromFullDateToSimpleDate(vaccine.dueDate)
+            }
+            vaccineList.add(arrayOf(counter.toString(), vaccineName, vaccineDueDate))
+            counter++
+        }
+
+        return vaccineList
     }
 
     fun createPresenter() : MainPresenter{

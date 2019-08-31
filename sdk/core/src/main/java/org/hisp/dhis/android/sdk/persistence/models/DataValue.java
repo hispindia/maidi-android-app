@@ -36,12 +36,14 @@ import com.raizlabs.android.dbflow.annotation.Column;
 import com.raizlabs.android.dbflow.annotation.PrimaryKey;
 import com.raizlabs.android.dbflow.annotation.Table;
 import com.raizlabs.android.dbflow.sql.builder.Condition;
+import com.raizlabs.android.dbflow.sql.language.Select;
 import com.raizlabs.android.dbflow.sql.language.Update;
 
 import org.hisp.dhis.android.sdk.controllers.metadata.MetaDataController;
 import org.hisp.dhis.android.sdk.controllers.tracker.TrackerController;
 import org.hisp.dhis.android.sdk.persistence.Dhis2Database;
 import org.hisp.dhis.android.sdk.utils.Utils;
+import org.hisp.dhis.android.sdk.utils.api.ValueType;
 
 /**
  * @author Simen Skogly Russnes on 23.02.15.
@@ -174,6 +176,28 @@ public class DataValue extends BaseValue {
 
     public void setStoredBy(String storedBy) {
         this.storedBy = storedBy;
+    }
+
+    public String getDataValueName(){
+        String displayName = "";
+        if (dataElement != null) {
+            DataElement element = new Select().from(DataElement.class).where(
+                    Condition.column(DataElement$Table.ID).is(dataElement)).querySingle();
+            displayName = element.displayName != null ? element.displayName : "";
+        }
+
+        return displayName;
+    }
+
+    public ValueType getValueType(){
+        ValueType type = null;
+        if (dataElement != null) {
+            DataElement element = new Select().from(DataElement.class).where(
+                    Condition.column(DataElement$Table.ID).is(dataElement)).querySingle();
+            type = element.valueType != null ? element.valueType : null;
+        }
+
+        return type;
     }
 
     public void updateManually() {

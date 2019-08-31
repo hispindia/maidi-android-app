@@ -1,21 +1,33 @@
 package com.app.maidi.domains.main
 
+import android.Manifest
+import android.content.ActivityNotFoundException
 import android.content.Context
+import android.content.DialogInterface
 import android.content.Intent
 import android.content.pm.ActivityInfo
+import android.content.pm.PackageManager
 import android.content.res.ColorStateList
 import android.content.res.Configuration
 import android.graphics.Color
+import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.os.Environment
+import android.provider.Settings
 import android.util.Log
 import android.view.View
 import android.view.ViewGroup
 import android.view.WindowManager
 import android.widget.*
+import androidx.appcompat.app.AlertDialog
+import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
+import androidx.core.content.FileProvider
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import butterknife.BindView
 import butterknife.ButterKnife
+import com.app.maidi.BuildConfig
 import com.app.maidi.MainApplication
 import com.app.maidi.R
 import com.app.maidi.domains.base.BaseActivity
@@ -25,6 +37,8 @@ import com.app.maidi.domains.main.fragments.MainFragment
 import com.app.maidi.domains.main.fragments.aefi.RegisteredCasesFragment
 import com.app.maidi.domains.main.fragments.immunisation.immunisation_card.ImmunisationCardFragment
 import com.app.maidi.domains.main.fragments.immunisation.session_wise.SessionWiseDataListFragment
+import com.app.maidi.domains.main.fragments.survey.ListSurveyFragment
+import com.app.maidi.domains.main.fragments.workplan.MonthlyWorkplanDetailFragment
 import com.app.maidi.infrastructures.ActivityModules
 import com.app.maidi.models.Dose
 import com.app.maidi.models.ImmunisationCard
@@ -41,13 +55,20 @@ import org.hisp.dhis.android.sdk.events.UiEvent
 import org.hisp.dhis.android.sdk.network.APIException
 import org.hisp.dhis.android.sdk.persistence.Dhis2Application
 import org.hisp.dhis.android.sdk.persistence.models.DataElement
+import org.hisp.dhis.android.sdk.persistence.models.Event
 import org.hisp.dhis.android.sdk.persistence.models.TrackedEntityInstance
 import org.hisp.dhis.android.sdk.persistence.preferences.AppPreferences
+import org.hisp.dhis.android.sdk.ui.fragments.eventdataentry.EventDataEntryFragment
 import org.hisp.dhis.android.sdk.utils.UiUtils
+import java.io.File
 import javax.inject.Inject
 
 
 class MainActivity : BaseActivity<MainView, MainPresenter>(), View.OnClickListener, MainView{
+
+    companion object{
+        val STORAGE_PERMISSION_REQUEST = 1234
+    }
 
     @Inject
     lateinit var mainPresenter: MainPresenter
@@ -164,6 +185,7 @@ class MainActivity : BaseActivity<MainView, MainPresenter>(), View.OnClickListen
                     resources.getString(R.string.create_update_successful),
                     Toast.LENGTH_LONG
                 ).show()
+                onBackPressed()
             }
         }
     }
@@ -328,7 +350,7 @@ class MainActivity : BaseActivity<MainView, MainPresenter>(), View.OnClickListen
         return mainPresenter
     }
 
-    // ******************* Main View functions *****************
+    // ******************* MainView functions *****************
 
     override fun getAefiTrackedEntityInstances(trackedEntityInstances: List<TrackedEntityInstance>) {
         runOnUiThread {
@@ -373,12 +395,42 @@ class MainActivity : BaseActivity<MainView, MainPresenter>(), View.OnClickListen
         }
     }
 
+    override fun getSurveyEvents(events: List<Event>) {
+        runOnUiThread {
+            if(isCurrentFragment<ListSurveyFragment>(R.id.activity_main_fl_content)){
+                getCurrentFragment<ListSurveyFragment>(R.id.activity_main_fl_content).getEventsListSuccess(events)
+            }
+            hideHUD()
+        }
+    }
+
+    override fun getWorkplanEvents(events: List<Event>) {
+        runOnUiThread {
+            if(isCurrentFragment<MonthlyWorkplanDetailFragment>(R.id.activity_main_fl_content)){
+                getCurrentFragment<MonthlyWorkplanDetailFragment>(R.id.activity_main_fl_content).getWorkplanList(events)
+            }
+            hideHUD()
+        }
+    }
+
     override fun getApiFailed(exception: APIException) {
         runOnUiThread {
             Log.e(MainActivity::class.simpleName, exception.toString())
             hideHUD()
         }
     }
+
+    override fun onBackPressed() {
+        if(isCurrentFragment<EventDataEntryFragment>(R.id.activity_main_fl_content)){
+            var handled = getCurrentFragment<EventDataEntryFragment>(R.id.activity_main_fl_content).onBackPressed()
+            if(handled)
+                super.onBackPressed()
+        }else {
+            super.onBackPressed()
+        }
+    }
+
+    // *******************THE END - MainView functions *****************
 
     override fun onConfigurationChanged(newConfig: Configuration?) {
         super.onConfigurationChanged(newConfig)
@@ -389,5 +441,91 @@ class MainActivity : BaseActivity<MainView, MainPresenter>(), View.OnClickListen
                     or View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY
                     or View.SYSTEM_UI_FLAG_HIDE_NAVIGATION)
         }
+    }
+
+    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
+        when (requestCode) {
+            STORAGE_PERMISSION_REQUEST -> {
+                // If request is cancelled, the result arrays are empty.
+                if (grantResults.isNotEmpty()
+                        && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    exportSurveyToPdf()
+                    exportImmunisationListToPdf()
+                } else {
+                    showFailedPermissionToast()
+                }
+                return
+            }
+        }
+    }
+
+    fun checkStoragePermissions(){
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+
+            /*if (ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
+                showFailedPermissionToast()
+            } else {*/
+            ActivityCompat.requestPermissions(
+                this,
+                arrayOf(
+                    Manifest.permission.WRITE_EXTERNAL_STORAGE),
+                STORAGE_PERMISSION_REQUEST)
+            //}
+        } else {
+            exportSurveyToPdf()
+            exportImmunisationListToPdf()
+        }
+    }
+
+    fun showFailedPermissionToast(){
+        Toast.makeText(this, resources.getString(R.string.write_storage_permission), Toast.LENGTH_LONG).show()
+        openAppPermissionSettingScreen()
+        finish()
+    }
+
+    fun openAppPermissionSettingScreen(){
+        var intent = Intent()
+        intent.setAction(Settings.ACTION_APPLICATION_DETAILS_SETTINGS)
+        var uri = Uri.fromParts("package", getPackageName(), null)
+        intent.setData(uri)
+        startActivity(intent)
+    }
+
+    fun exportSurveyToPdf(){
+        runOnUiThread {
+            if(isCurrentFragment<ListSurveyFragment>(R.id.activity_main_fl_content)){
+                getCurrentFragment<ListSurveyFragment>(R.id.activity_main_fl_content).exportSurveyToPdf()
+            }
+            hideHUD()
+        }
+    }
+
+    fun exportImmunisationListToPdf(){
+        runOnUiThread {
+            if(isCurrentFragment<ImmunisationCardFragment>(R.id.activity_main_fl_content)){
+                getCurrentFragment<ImmunisationCardFragment>(R.id.activity_main_fl_content).exportDatasToPdf()
+            }
+            hideHUD()
+        }
+    }
+
+    fun openExportFolderDialog(file: File){
+        AlertDialog.Builder(this)
+            .setTitle("Export files successful")
+            .setMessage(resources.getString(R.string.export_pdf_file_success))
+            .setPositiveButton("Open file", object : DialogInterface.OnClickListener {
+                override fun onClick(p0: DialogInterface?, p1: Int) {
+                    var intent = Intent(Intent.ACTION_VIEW)
+                    intent.setFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
+                    var uri = FileProvider.getUriForFile(this@MainActivity, BuildConfig.APPLICATION_ID, file)
+                    intent.setDataAndType(uri, "application/pdf");
+                    var pm = getPackageManager()
+                    if (intent.resolveActivity(pm) != null) {
+                        startActivity(intent);
+                    }
+                }
+            })
+            .create()
+            .show()
     }
 }

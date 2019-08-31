@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              xmlns:app="http://schemas.android.com/apk/res-auto"
+              android:orientation="vertical"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:background="@color/light_gray_background_color">
+
+    <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="19.2dp"
+            android:paddingLeft="28.8dp"
+            android:paddingRight="28.8dp">
+
+        <com.google.android.material.textfield.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+            <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/fragment_monthly_workplan_detail_et_selected_month"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="12/2019"
+                    android:textSize="15.4dp"
+                    android:textColor="@android:color/black"
+                    android:textColorHint="@color/dark_gray"
+                    android:hint="@string/select_a_year_and_a_month_to_update_the_workplan"
+                    android:drawableEnd="@drawable/ic_gray_calendar"
+                    android:editable="false"
+            />
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <FrameLayout
+                android:id="@+id/fragment_monthly_workplan_detail_v_selected_month"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"/>
+
+    </FrameLayout>
+
+    <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:background="@android:color/white">
+        
+        <com.google.android.material.tabs.TabLayout
+                android:id="@+id/fragment_monthly_workplan_tbl_tabs"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:tabTextColor="@color/dark_blue"
+                app:tabIndicatorColor="@color/dark_blue"/>
+
+        <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="@color/dark_gray"/>
+
+        <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="61.4dp"
+                android:paddingLeft="28.8dp"
+                android:paddingRight="25dp">
+
+            <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="DAY"
+                    android:textSize="15.4dp"
+                    android:textColor="@color/dark_gray"
+                    android:layout_alignParentLeft="true"
+                    android:layout_centerVertical="true"
+                    />
+
+            <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="VILLAGE"
+                    android:textSize="15.4dp"
+                    android:textColor="@color/dark_gray"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
+            />
+
+        </RelativeLayout>
+
+        <androidx.viewpager.widget.ViewPager
+                android:id="@+id/fragment_monthly_workplan_vp_pagers"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"/>
+
+    </LinearLayout>
+
+</LinearLayout>

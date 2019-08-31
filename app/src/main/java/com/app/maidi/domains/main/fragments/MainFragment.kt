@@ -12,6 +12,8 @@ import com.app.maidi.domains.child_registration.ChildRegistrationActivity
 import com.app.maidi.domains.main.MainActivity
 import com.app.maidi.domains.main.fragments.aefi.RegisteredCasesFragment
 import com.app.maidi.domains.main.fragments.immunisation.immunisation_card.ImmunisationChooseFragment
+import com.app.maidi.domains.main.fragments.survey.ListSurveyFragment
+import com.app.maidi.domains.main.fragments.workplan.MonthlyWorkplanChooseFragment
 import com.app.maidi.utils.Constants
 import org.hisp.dhis.android.sdk.controllers.metadata.MetaDataController
 import org.hisp.dhis.android.sdk.persistence.models.OrganisationUnit
@@ -39,16 +41,21 @@ class MainFragment : BaseFragment() {
 
     @OnClick(R.id.activity_main_fl_child_registration)
     fun onChildRegistrationModuleClicked(){
-        var bundle = Bundle()
-        bundle.putString(ChildRegistrationActivity.ORGANISATION_UNIT, Constants.IMMUNISATION)
-        mainActivity.transformActivity(mainActivity, ChildRegistrationActivity::class.java, false, bundle)
+        if(MetaDataController.getProgramByName(Constants.IMMUNISATION) != null) {
+            var bundle = Bundle()
+            bundle.putString(ChildRegistrationActivity.ORGANISATION_UNIT, Constants.IMMUNISATION)
+            mainActivity.transformActivity(mainActivity, ChildRegistrationActivity::class.java, false, bundle)
+        }
     }
 
     @OnClick(R.id.activity_main_fl_immunization_card)
     fun onMyImmunisationModuleClicked(){
-        mainActivity.transformFragment(R.id.activity_main_fl_content,
-            ImmunisationChooseFragment()
-        )
+        if(MetaDataController.getProgramByName(Constants.IMMUNISATION) != null) {
+            mainActivity.transformFragment(
+                R.id.activity_main_fl_content,
+                ImmunisationChooseFragment()
+            )
+        }
     }
 
     @OnClick(R.id.activity_main_fl_aefi)
@@ -57,6 +64,26 @@ class MainFragment : BaseFragment() {
             mainActivity.transformFragment(
                 R.id.activity_main_fl_content,
                 RegisteredCasesFragment()
+            )
+        }
+    }
+
+    @OnClick(R.id.activity_main_fl_survey)
+    fun onSurveyModuleClicked(){
+        if(MetaDataController.getProgramByName(Constants.SURVEY) != null) {
+            mainActivity.transformFragment(
+                R.id.activity_main_fl_content,
+                ListSurveyFragment()
+            )
+        }
+    }
+
+    @OnClick(R.id.activity_main_fl_monthly_workplan)
+    fun onMonthlyWorkplanModuleClicked(){
+        if(MetaDataController.getProgramByName(Constants.WORKPLAN) != null) {
+            mainActivity.transformFragment(
+                R.id.activity_main_fl_content,
+                MonthlyWorkplanChooseFragment()
             )
         }
     }
