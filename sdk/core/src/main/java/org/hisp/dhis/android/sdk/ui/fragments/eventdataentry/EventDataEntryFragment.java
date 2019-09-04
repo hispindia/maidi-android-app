@@ -110,6 +110,9 @@ public class EventDataEntryFragment extends DataEntryFragment<EventDataEntryFrag
     private boolean isFinish = false;
     private boolean isExistedValueChanged = false;
     private boolean isCreateNewEvent = false;
+    private boolean isSetSpecificDate = false;
+    private boolean isAllowFutureDate = false;
+    private String specificDate = "";
     private ImageView previousSectionButton;
     private ImageView nextSectionButton;
     private View spinnerContainer;
@@ -153,6 +156,48 @@ public class EventDataEntryFragment extends DataEntryFragment<EventDataEntryFrag
         fragment.setArguments(args);
         fragment.isCreateNewEvent = true;
         fragment.isShowSpinnerButton = true;
+        return fragment;
+    }
+
+    public static EventDataEntryFragment newWorkplanEventInstance(String unitId, String programId, String programStageId) {
+        EventDataEntryFragment fragment = new EventDataEntryFragment();
+        Bundle args = new Bundle();
+        args.putString(ORG_UNIT_ID, unitId);
+        args.putString(PROGRAM_ID, programId);
+        args.putString(PROGRAM_STAGE_ID, programStageId);
+        fragment.setArguments(args);
+        fragment.isCreateNewEvent = true;
+        fragment.isShowSpinnerButton = true;
+        fragment.isAllowFutureDate = true;
+        return fragment;
+    }
+
+    public static EventDataEntryFragment newWorkplanEventInstanceWithSpecificDate(String unitId, String programId, String programStageId, String date) {
+        EventDataEntryFragment fragment = new EventDataEntryFragment();
+        Bundle args = new Bundle();
+        args.putString(ORG_UNIT_ID, unitId);
+        args.putString(PROGRAM_ID, programId);
+        args.putString(PROGRAM_STAGE_ID, programStageId);
+        fragment.setArguments(args);
+        fragment.isCreateNewEvent = true;
+        fragment.isShowSpinnerButton = true;
+        fragment.isSetSpecificDate = true;
+        fragment.specificDate = date;
+        fragment.isAllowFutureDate = true;
+        return fragment;
+    }
+
+    public static EventDataEntryFragment newWorkplanEventInstance(String unitId, String programId, String programStageId,
+                                                                long eventId) {
+        EventDataEntryFragment fragment = new EventDataEntryFragment();
+        Bundle args = new Bundle();
+        args.putString(ORG_UNIT_ID, unitId);
+        args.putString(PROGRAM_ID, programId);
+        args.putString(PROGRAM_STAGE_ID, programStageId);
+        args.putLong(EVENT_ID, eventId);
+        fragment.setArguments(args);
+        fragment.isShowSpinnerButton = true;
+        fragment.isAllowFutureDate = true;
         return fragment;
     }
 
@@ -287,7 +332,10 @@ public class EventDataEntryFragment extends DataEntryFragment<EventDataEntryFrag
                     fragmentArguments.getString(PROGRAM_ID),
                     fragmentArguments.getString(PROGRAM_STAGE_ID),
                     fragmentArguments.getLong(EVENT_ID, -1),
-                    fragmentArguments.getLong(ENROLLMENT_ID, -1)
+                    fragmentArguments.getLong(ENROLLMENT_ID, -1),
+                    isAllowFutureDate,
+                    isSetSpecificDate,
+                    specificDate
             )
             );
         }

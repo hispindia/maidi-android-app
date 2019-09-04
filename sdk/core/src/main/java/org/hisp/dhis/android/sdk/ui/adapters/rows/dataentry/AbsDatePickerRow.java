@@ -95,7 +95,7 @@ public abstract class AbsDatePickerRow extends Row {
                     calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH),
                     calendar.get(Calendar.DAY_OF_MONTH));
             if(!allowDatesInFuture) {
-            picker.getDatePicker().setMaxDate(DateTime.now().getMillis());
+                picker.getDatePicker().setMaxDate(DateTime.now().getMillis());
             }
 
             picker.show();

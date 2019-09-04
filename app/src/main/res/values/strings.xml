@@ -98,6 +98,7 @@
     <string name="surveys">Surveys</string>
     <string name="house_to_house_survey">House to house survey</string>
     <string name="monthly_workplan_update">Monthly Workplan - Update</string>
+    <string name="monthly_workplan_create_new_event">Monthly Workplan - Create New Event</string>
 
     <!--- *************** Days of week ************* -->
     <string name="monday">Monday</string>

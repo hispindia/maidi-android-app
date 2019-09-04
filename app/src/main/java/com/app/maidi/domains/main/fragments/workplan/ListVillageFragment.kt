@@ -76,7 +76,8 @@ class ListVillageFragment : BaseFragment, OnItemClickListener {
     override fun onItemClicked(position: Int) {
         var eventId = eventMaps.keys.toList().get(position)
         mainActivity.transformFragment(R.id.activity_main_fl_content,
-            EventDataEntryFragment.newSurveyEventInstance(currentUnit.id, currentProgram.uid, programStage.uid, eventId))
+            EventDataEntryFragment.newWorkplanEventInstance(currentUnit.id, currentProgram.uid, programStage.uid, eventId))
+        mainActivity.solidActionBar(resources.getString(R.string.monthly_workplan_update))
     }
 
     fun getVillageListByDate(){
@@ -101,14 +102,7 @@ class ListVillageFragment : BaseFragment, OnItemClickListener {
 
     override fun onResume() {
         super.onResume()
-
-        var createButtonListener = View.OnClickListener {
-            mainActivity.transformFragment(R.id.activity_main_fl_content,
-                EventDataEntryFragment.newEventInstance(currentUnit.id, currentProgram.uid, programStage.uid))
-            mainActivity.solidActionBar(resources.getString(R.string.monthly_workplan_update))
-        }
-
-        mainActivity.solidActionBar(resources.getString(R.string.monthly_workplan_update), createButtonListener)
+        mainActivity.solidActionBar(resources.getString(R.string.monthly_workplan_update))
         mainActivity.isSwipeForceSyncronizeEnabled(false)
     }
 

@@ -22,6 +22,7 @@ import org.hisp.dhis.android.sdk.persistence.models.Event
 import org.hisp.dhis.android.sdk.persistence.models.OrganisationUnit
 import org.hisp.dhis.android.sdk.persistence.models.Program
 import org.hisp.dhis.android.sdk.persistence.models.ProgramStage
+import org.hisp.dhis.android.sdk.ui.fragments.eventdataentry.EventDataEntryFragment
 import org.joda.time.LocalDate
 import java.lang.StringBuilder
 
@@ -31,6 +32,10 @@ class WeeklyWorkplanFragment : BaseFragment{
 
     lateinit var mainActivity: MainActivity
     lateinit var mainPresenter: MainPresenter
+
+    lateinit var currentUnit: OrganisationUnit
+    lateinit var currentProgram: Program
+    lateinit var programStage: ProgramStage
 
     private var dayList: ArrayList<LocalDate>
     private var workplanList: List<Event>
@@ -49,6 +54,10 @@ class WeeklyWorkplanFragment : BaseFragment{
 
         mainActivity = activity as MainActivity
         createPresenter()
+
+        currentUnit = MetaDataController.getTopAssignedOrganisationUnit()
+        currentProgram = MetaDataController.getProgramByName(Constants.WORKPLAN)
+        programStage = MetaDataController.getProgramStageByName(currentProgram.uid, Constants.WORKPLAN)
 
         var viewGroup = inflater.inflate(R.layout.fragment_weekly_workplan, container, false)
         ButterKnife.bind(this, viewGroup)
@@ -81,28 +90,45 @@ class WeeklyWorkplanFragment : BaseFragment{
                     var builder = StringBuilder()
                     for(event in workplanList){
                         var eventDate: String?
-                        if(Utils.isValidDateFollowPattern(event.eventDate))
-                            eventDate = Utils.convertServerDateToLocalDate(event.eventDate)
-                        else
-                            eventDate = Utils.convertFromFullDateToSimpleDate(event.eventDate)
+                        if(event.eventDate != null) {
+                            if (Utils.isValidDateFollowPattern(event.eventDate))
+                                eventDate = Utils.convertServerDateToLocalDate(event.eventDate)
+                            else
+                                eventDate = Utils.convertFromFullDateToSimpleDate(event.eventDate)
 
-                        if(eventDate.equals(date)){
-                            var values = TrackerController.getDataValue(event.event)
-                            for(value in values){
-                                var organUnit = MetaDataController.getOrganisationUnitById(value.value)
-                                if(organUnit != null) {
-                                    builder.append(organUnit!!.displayName + " ")
+                            if (eventDate.equals(date)) {
+                                var values = TrackerController.getDataValue(event.event)
+                                for (value in values) {
+                                    var organUnit = MetaDataController.getOrganisationUnitById(value.value)
+                                    if (organUnit != null) {
+                                        builder.append(organUnit!!.displayName + " ")
+                                    }
                                 }
                             }
                         }
                     }
                     tvVillages.text = builder.toString().trim()
                     if(isEditMode){
-                        llContent.setOnClickListener {
-                            mainActivity.transformFragment(R.id.activity_main_fl_content,
-                                ListVillageFragment(tvPlanDate.text.toString(), workplanList)
-                            )
-                        }
+                        llContent.setOnClickListener(
+                            object : View.OnClickListener{
+                                override fun onClick(p0: View?) {
+                                    if(workplanList != null && workplanList.size > 0) {
+                                        if(checkDateHasWorkplan(tvPlanDate.text.toString())){
+                                            mainActivity.transformFragment(
+                                                R.id.activity_main_fl_content,
+                                                ListVillageFragment(tvPlanDate.text.toString(), workplanList)
+                                            )
+                                            return
+                                        }
+                                    }
+
+                                    mainActivity.transformFragment(R.id.activity_main_fl_content,
+                                        EventDataEntryFragment.newWorkplanEventInstanceWithSpecificDate(
+                                            currentUnit.id, currentProgram.uid, programStage.uid,
+                                            Utils.convertLocalDateToServerDate(tvPlanDate.text.toString())))
+                                    mainActivity.solidActionBar(resources.getString(R.string.monthly_workplan_create_new_event))
+                                }
+                        })
                     }
                     break
                 }
@@ -127,5 +153,23 @@ class WeeklyWorkplanFragment : BaseFragment{
 
     fun setDayList(dayList: ArrayList<LocalDate>){
         this.dayList = dayList
+    }
+
+    fun checkDateHasWorkplan(chooseDate: String) : Boolean{
+        if(workplanList != null) {
+            for (event in workplanList) {
+                var date: String?
+                if (Utils.isValidDateFollowPattern(event.eventDate))
+                    date = Utils.convertServerDateToLocalDate(event.eventDate)
+                else
+                    date = Utils.convertFromFullDateToSimpleDate(event.eventDate)
+
+                if (date.equals(chooseDate)) {
+                    return true
+                }
+            }
+        }
+
+        return false
     }
 }

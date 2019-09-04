@@ -62,22 +62,26 @@ final class UserController {
     public UserAccount logInUser(HttpUrl serverUrl, Credentials credentials) throws APIException {
         final Map<String, String> QUERY_PARAMS = new HashMap<>();
 
-        UserAccount userAccount = new UserAccount();
+        UserAccount userAccount = null;
 
         QUERY_PARAMS.put("fields", "id,created,lastUpdated,name,displayName," +
                 "firstName,surname,gender,birthday,introduction," +
                 "education,employer,interests,jobTitle,languages,email,phoneNumber," +
                 "teiSearchOrganisationUnits[id],organisationUnits[id], userCredentials");
         try {
-            userAccount = dhisApi.getCurrentUserAccount(QUERY_PARAMS).execute().body();
-            Session session = new Session(serverUrl, credentials);
-            LastUpdatedManager.getInstance().put(session);
-
-            /* save user account details */
-            userAccount.save();
+            Response<UserAccount> response = dhisApi.getCurrentUserAccount(QUERY_PARAMS).execute();
+            Log.d("", "");
+            userAccount = response.body();
         }catch (IOException ex) {
             Log.e("Exception", ex.toString());
         }
+
+        Session session = new Session(serverUrl, credentials);
+        LastUpdatedManager.getInstance().put(session);
+
+        /* save user account details */
+        userAccount.save();
+
         return userAccount;
     }
 

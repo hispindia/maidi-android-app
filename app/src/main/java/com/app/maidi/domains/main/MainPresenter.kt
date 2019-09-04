@@ -51,20 +51,6 @@ class MainPresenter : BasePresenter<MainView> {
 
                     trackedEntityInstances = TrackerController.queryLocalTrackedEntityInstances(orgUnitId, programId)
 
-                    /*trackedEntityInstances = TrackerController.queryTrackedEntityInstancesDataFromServer(
-                        DhisController.getInstance().dhisApi,
-                        orgUnitId,
-                        programId, ""
-                    )*/
-
-                    /*for(trackedEntityInstance in trackedEntityInstances){
-
-                        TrackerController.getEnrollmentDataFromServer(
-                            DhisController.getInstance().dhisApi,
-                            trackedEntityInstance,
-                            null)
-                    }*/
-
                     if(isViewAttached)
                         view.getAefiTrackedEntityInstances(trackedEntityInstances)
 

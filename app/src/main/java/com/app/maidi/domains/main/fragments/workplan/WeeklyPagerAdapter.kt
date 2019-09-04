@@ -21,7 +21,7 @@ class WeeklyPagerAdapter : FragmentStatePagerAdapter {
     }
 
     override fun getItemPosition(`object`: Any): Int {
-        return PagerAdapter.POSITION_NONE
+        return POSITION_NONE
     }
 
     override fun getItem(position: Int): Fragment {
@@ -36,5 +36,11 @@ class WeeklyPagerAdapter : FragmentStatePagerAdapter {
 
     override fun getPageTitle(position: Int): CharSequence? {
         return weekList.keys.toList().get(position)
+    }
+
+    fun setData(weekList: HashMap<String, ArrayList<LocalDate>>, workplanList: List<Event>){
+        this.weekList = weekList
+        this.workplanList = workplanList
+        notifyDataSetChanged()
     }
 }

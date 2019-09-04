@@ -73,6 +73,10 @@ class MonthlyWorkplanDetailFragment : BaseFragment, MonthPickerDialog.OnDateSetL
         ButterKnife.bind(this, viewGroup)
 
         etSelectedMonth.setText(Utils.convertCalendarToMonthString(Calendar.getInstance().time))
+        weeklyPagerAdapter = WeeklyPagerAdapter(childFragmentManager!!, weekList, workplanList, isEditMode)
+        vpPagers.adapter = weeklyPagerAdapter
+        //vpPagers.offscreenPageLimit = weekList.size
+        tblTabs.setupWithViewPager(vpPagers)
 
         return viewGroup
     }
@@ -80,10 +84,16 @@ class MonthlyWorkplanDetailFragment : BaseFragment, MonthPickerDialog.OnDateSetL
     override fun onResume() {
         super.onResume()
 
+        var createButtonListener = View.OnClickListener {
+            mainActivity.transformFragment(R.id.activity_main_fl_content,
+                EventDataEntryFragment.newWorkplanEventInstance(currentUnit.id, currentProgram.uid, programStage.uid))
+            mainActivity.solidActionBar(resources.getString(R.string.monthly_workplan_create_new_event))
+        }
+
         if(isEditMode){
-            mainActivity.solidActionBar(resources.getString(R.string.monthly_workplan_update))
+            mainActivity.solidActionBar(resources.getString(R.string.monthly_workplan_update), createButtonListener)
         }else{
-            mainActivity.solidActionBar(resources.getString(R.string.monthly_workplan))
+            mainActivity.solidActionBar(resources.getString(R.string.monthly_workplan), createButtonListener)
         }
 
         mainActivity.isSwipeForceSyncronizeEnabled(false)
@@ -110,11 +120,7 @@ class MonthlyWorkplanDetailFragment : BaseFragment, MonthPickerDialog.OnDateSetL
     fun initWeekPager(monthDate: String){
         etSelectedMonth.setText(monthDate)
         getWeekList(monthDate)
-
-        weeklyPagerAdapter = WeeklyPagerAdapter(childFragmentManager!!, weekList, workplanList, isEditMode)
-        vpPagers.adapter = weeklyPagerAdapter
-        vpPagers.offscreenPageLimit = weekList.size
-        tblTabs.setupWithViewPager(vpPagers)
+        weeklyPagerAdapter.setData(weekList, workplanList)
     }
 
     fun getWeekList(monthDate: String){

@@ -83,13 +83,19 @@ class EventDataEntryFragmentQuery implements Query<EventDataEntryFragmentForm> {
     private final String programStageId;
     private final long eventId;
     private final long enrollmentId;
+    private final boolean isAllowFutureDate;
+    private final boolean isSetSpecificDate;
+    private final String specificDate;
 
-    EventDataEntryFragmentQuery(String orgUnitId, String programId, String programStageId, long eventId, long enrollmentId) {
+    EventDataEntryFragmentQuery(String orgUnitId, String programId, String programStageId, long eventId, long enrollmentId, boolean isAllowFutureDate, boolean isSetSpecificDate, String specificDate) {
         this.orgUnitId = orgUnitId;
         this.programId = programId;
         this.programStageId = programStageId;
         this.eventId = eventId;
         this.enrollmentId = enrollmentId;
+        this.isAllowFutureDate = isAllowFutureDate;
+        this.isSetSpecificDate = isSetSpecificDate;
+        this.specificDate = specificDate;
     }
 
     @Override
@@ -143,13 +149,13 @@ class EventDataEntryFragmentQuery implements Query<EventDataEntryFragmentForm> {
 
         if (stage.getProgramStageSections() == null || stage.getProgramStageSections().isEmpty()) {
             List<Row> rows = new ArrayList<>();
-            addStatusRow(context, form, rows);
+            //addStatusRow(context, form, rows);
             if(form.getEnrollment() != null) {
                 if(! (form.getStage().isHideDueDate()) ) {
                     addDueDateRow(context, form, rows);
                 }
             }
-            addEventDateRow(context, form, rows);
+            addEventDateRow(context, form, rows, isAllowFutureDate);
             addCoordinateRow(form, rows);
             populateDataEntryRows(form, orgUnitId, programId, stage, stage.getProgramStageDataElements(), rows, username, context);
             populateIndicatorRows(form, stage.getProgramIndicators(), rows);
@@ -163,11 +169,11 @@ class EventDataEntryFragmentQuery implements Query<EventDataEntryFragmentForm> {
 
                 List<Row> rows = new ArrayList<>();
                 if (i == 0) {
-                    addStatusRow(context, form, rows);
+                    //addStatusRow(context, form, rows);
                     if(form.getEnrollment() != null) {
                         addDueDateRow(context, form, rows);
                     }
-                    addEventDateRow(context, form, rows);
+                    addEventDateRow(context, form, rows, isAllowFutureDate);
                     addCoordinateRow(form, rows);
                 }
                 populateDataEntryRows(form, orgUnitId, programId, stage, section.getProgramStageDataElements(), rows, username, context);
@@ -208,10 +214,10 @@ class EventDataEntryFragmentQuery implements Query<EventDataEntryFragmentForm> {
     }
 
     private static void addEventDateRow(Context context, EventDataEntryFragmentForm form,
-                                        List<Row> rows) {
+                                        List<Row> rows, boolean isAllowFutureDate) {
         String reportDateDescription = form.getStage().getExecutionDateLabel()== null ?
                 context.getString(R.string.report_date) : form.getStage().getExecutionDateLabel();
-        rows.add(new EventDatePickerRow(reportDateDescription, form.getEvent(), false));
+        rows.add(new EventDatePickerRow(reportDateDescription, form.getEvent(), isAllowFutureDate));
     }
 
     private static void addCoordinateRow(EventDataEntryFragmentForm form, List<Row> rows) {
@@ -293,6 +299,11 @@ class EventDataEntryFragmentQuery implements Query<EventDataEntryFragmentForm> {
                     LocalDate dueDate = new LocalDate(DateUtils.parseDate(enrollment.getEnrollmentDate())).plusDays(programStage.getMinDaysFromStart());
                     event.setDueDate(dueDate.toString());
                 }
+            }
+
+            if(isSetSpecificDate){
+                LocalDate eventDate = new LocalDate(DateUtils.parseDate(specificDate));
+                event.setEventDate(eventDate.toString());
             }
 
             List<DataValue> dataValues = new ArrayList<>();

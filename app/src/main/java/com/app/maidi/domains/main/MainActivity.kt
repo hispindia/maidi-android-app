@@ -79,6 +79,7 @@ class MainActivity : BaseActivity<MainView, MainPresenter>(), View.OnClickListen
 
     lateinit var llRestore: LinearLayout
     lateinit var llSignOut: LinearLayout
+    lateinit var tvAccountName: TextView
 
     lateinit var userRoleId: String
     lateinit var ivMenu: ImageView
@@ -113,9 +114,14 @@ class MainActivity : BaseActivity<MainView, MainPresenter>(), View.OnClickListen
 
         llRestore = resideMenu.leftMenuView.findViewById(R.id.layout_main_menu_ll_restore)
         llSignOut = resideMenu.leftMenuView.findViewById(R.id.layout_main_menu_ll_signout)
+        tvAccountName = resideMenu.leftMenuView.findViewById(R.id.layout_main_menu_tv_account_name)
 
         llRestore.setOnClickListener(this)
         llSignOut.setOnClickListener(this)
+        var userAccount = MetaDataController.getUserAccount()
+        if(userAccount != null && userAccount.displayName != null){
+            tvAccountName.text = userAccount.displayName
+        }
 
         ivMenu = actionbar.findViewById(R.id.layout_actionbar_iv_action)
         ivCreate = actionbar.findViewById(R.id.layout_actionbar_iv_create)

@@ -200,7 +200,7 @@ public final class DhisController {
         return signInUser(getInstance().session.getServerUrl(), credentials);
     }
 
-    static UserAccount signInUser(HttpUrl serverUrl, Credentials credentials) throws APIException {
+    /*static UserAccount signInUser(HttpUrl serverUrl, Credentials credentials) throws APIException {
         DhisApi dhisApi = RepoManager
                 .createService(serverUrl, credentials);
         UserAccount user = (new UserController(dhisApi)
@@ -209,9 +209,9 @@ public final class DhisController {
         // fetch meta data from disk
         readSession();
         return user;
-    }
+    }*/
 
-    /*static UserAccount signInUser(HttpUrl serverUrl, Credentials credentials) throws APIException {
+    static UserAccount signInUser(HttpUrl serverUrl, Credentials credentials) throws APIException {
         final DhisApi dhisApi = RepoManager
                 .createService(serverUrl, credentials);
         try {
@@ -229,11 +229,11 @@ public final class DhisController {
 
         UserAccount user = (new UserController(dhisApi)
                 .logInUser(serverUrl, credentials));
-
+        appPreferences.storeUserRole(user.getUserCredentials().getUserRoles().get(0).getId());
         // fetch meta data from disk
         readSession();
         return user;
-    }*/
+    }
 
     static void logOutUser(Context context) throws APIException {
         (new UserController(getInstance().dhisApi)).logOut();
