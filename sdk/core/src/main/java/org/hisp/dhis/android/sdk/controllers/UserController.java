@@ -111,6 +111,9 @@ final class UserController {
             Session session = new Session(serverUrl, credentials);
             LastUpdatedManager.getInstance().put(session);
 
+            //Store phone number into user account's info
+            userAccount.setPhoneNumber(phoneNumber);
+
             /* save user account details */
             userAccount.save();
         }catch (IOException ex) {
@@ -126,9 +129,6 @@ final class UserController {
         *//* save user credentials *//*
         Session session = new Session(serverUrl, credentials);
         LastUpdatedManager.getInstance().put(session);
-
-        //Store phone number into user account's info
-        userAccount.setPhoneNumber(phoneNumber);
 
         *//* save user account details *//*
         userAccount.save();

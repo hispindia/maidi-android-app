@@ -104,7 +104,7 @@ class ImmunisationCardFragment : BaseFragment() {
             var reportDate = DateTime.now().millis
             var pdfFile = pdf.openDocument("Report_MAIDI_ImmunisationCards_" + reportDate + ".pdf")
             pdf.addTitle("Mobile Application for Immunisation Datas of India",
-                "Children's Immunisation Cards",
+                "Immunisation Records",
                 Utils.simpleLocalDateFormat.format(DateTime.now().toDate())
             )
 
@@ -119,14 +119,13 @@ class ImmunisationCardFragment : BaseFragment() {
                             break
                         }
                     }
-
                 }
 
                 item.enrollment!!.let {
                     if(Utils.isValidDateFollowPattern(it.incidentDate))
-                        builder.append("Birthday: " + Utils.convertServerDateToLocalDate(it.incidentDate) + ", ")
+                        builder.append("Date of Birth: " + Utils.convertServerDateToLocalDate(it.incidentDate) + ", ")
                     else
-                        builder.append("Birthday: " + Utils.convertFromFullDateToSimpleDate(it.incidentDate) + ", ")
+                        builder.append("Date of Birth: " + Utils.convertFromFullDateToSimpleDate(it.incidentDate) + ", ")
                 }
 
                 builder.append("Reg ID: " + item.trackedEntityInstance.uid)

@@ -39,7 +39,7 @@ class SessionWiseChooseDateFragment : BaseFragment(), SingleDateAndTimePicker.On
         ButterKnife.bind(this, viewGroup)
 
         datePicker.addOnDateChangedListener(this)
-        etDateOfBirth.setText(Utils.convertCalendarToString(DateTime.now().toDate()))
+        etDateOfBirth.setText(Utils.convertCalendarToDayOfWeekString(DateTime.now().toDate()))
 
         return viewGroup
     }
@@ -48,33 +48,27 @@ class SessionWiseChooseDateFragment : BaseFragment(), SingleDateAndTimePicker.On
         super.onResume()
         mainActivity.solidActionBar(resources.getString(R.string.session_wise_vaccination_due))
         mainActivity.isSwipeForceSyncronizeEnabled(false)
+        datePicker.selectDate(Utils.convertDayWeekStringToCalendar(etDateOfBirth.text.toString()))
     }
 
     override fun onDateChanged(displayed: String?, date: Date?) {
         date!!.let {
-            etDateOfBirth.setText(Utils.convertCalendarToString(date))
+            etDateOfBirth.setText(Utils.convertCalendarToDayOfWeekString(date))
         }
     }
 
     @OnClick(R.id.fragment_session_wise_choose_date_btn_ok)
     fun onOkButtonClicked(){
-
-        if(datePicker.visibility == View.VISIBLE){
-            mainActivity.showHUD()
-            //Utils.showHideDateContainer(etDateOfBirth, datePicker, 500)
-            Handler().postDelayed({
-                gotoSessionWiseDataFragment()
-                mainActivity.hideHUD()
-            }, 600)
-            return
-        }
-
-        gotoSessionWiseDataFragment()
+        mainActivity.showHUD()
+        Handler().postDelayed({
+            gotoSessionWiseDataFragment()
+            mainActivity.hideHUD()
+        }, 500)
     }
 
     fun gotoSessionWiseDataFragment(){
         var bundle = Bundle()
-        bundle.putString(SessionWiseDataListFragment.SESSION_DATE, Utils.convertLocalDateToServerDate(etDateOfBirth.text.toString()))
+        bundle.putString(SessionWiseDataListFragment.SESSION_DATE, Utils.convertDayOfWeekDateToServerDate(etDateOfBirth.text.toString()))
         var sessionWiseDataListFragment = SessionWiseDataListFragment()
         sessionWiseDataListFragment.arguments = bundle
         mainActivity.transformFragment(R.id.activity_main_fl_content, sessionWiseDataListFragment)

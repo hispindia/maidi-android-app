@@ -55,6 +55,7 @@ import org.hisp.dhis.android.sdk.utils.UiUtils;
 import org.hisp.dhis.android.sdk.utils.api.ProgramType;
 import org.hisp.dhis.android.sdk.utils.support.DateUtils;
 import org.joda.time.DateTime;
+import org.joda.time.LocalDate;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -195,6 +196,12 @@ public final class TrackerController extends ResourceController {
     public static Enrollment getEnrollment(long localEnrollmentId) {
         return new Select().from(Enrollment.class).where(Condition.column(Enrollment$Table.LOCALID).
                 is(localEnrollmentId)).querySingle();
+    }
+
+    public static Enrollment getEnrollment(String programId, TrackedEntityInstance trackedEntityInstance) {
+        return new Select().from(Enrollment.class)
+                .where(Condition.column(Enrollment$Table.LOCALTRACKEDENTITYINSTANCEID).is(trackedEntityInstance.getLocalId()))
+                .and(Condition.column(Enrollment$Table.PROGRAM).is(programId)).querySingle();
     }
 
     /**
@@ -876,26 +883,38 @@ public final class TrackerController extends ResourceController {
                 .queryList();
     }
 
-    public static List<TrackedEntityInstance> queryLocalTrackedEntityInstances(TrackedEntityAttributeValue birthdayValue, TrackedEntityAttributeValue phoneValue){
+    public static List<TrackedEntityInstance> queryLocalTrackedEntityInstances(String programId, String birthday, TrackedEntityAttributeValue phoneValue){
 
         List<TrackedEntityInstance> instances = new ArrayList<>();
 
         List<TrackedEntityAttributeValue> trackedEntityValues =
-                TrackerController.searchLocalTrackedEntityAttributeValuesFollowBirthday(birthdayValue.getValue());
+                TrackerController.searchLocalTrackedEntityAttributeValuesFollowPhoneNumber(phoneValue.getValue());
 
         for(TrackedEntityAttributeValue value : trackedEntityValues){
             TrackedEntityInstance instance = TrackerController.getLocalTrackedEntityInstanceWithAttribute(value.getTrackedEntityInstanceId());
+
             if(instance != null) {
-                instances.add(instance);
+
+                Enrollment enrollment = TrackerController.getEnrollment(programId, instance);
+
+                if(enrollment != null) {
+
+                    LocalDate incidentDate = new LocalDate(DateUtils.parseDate(enrollment.getIncidentDate()));
+                    LocalDate birthDate = new LocalDate(DateUtils.parseDate(birthday));
+
+                    if (incidentDate.isEqual(birthDate)) {
+                        instances.add(instance);
+                    }
+                }
             }
         }
 
         return instances;
     }
 
-    public static List<TrackedEntityAttributeValue> searchLocalTrackedEntityAttributeValuesFollowBirthday(String birthday){
+    public static List<TrackedEntityAttributeValue> searchLocalTrackedEntityAttributeValuesFollowPhoneNumber(String phoneNumber){
         return new Select().distinct().from(TrackedEntityAttributeValue.class)
-                .where(Condition.column(TrackedEntityAttributeValue$Table.VALUE).is(birthday))
+                .where(Condition.column(TrackedEntityAttributeValue$Table.VALUE).is(phoneNumber))
                 .groupBy(TrackedEntityAttributeValue$Table.TRACKEDENTITYINSTANCEID)
                 .queryList();
     }

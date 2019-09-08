@@ -12,6 +12,7 @@ class Constants{
         val SIMPLE_DATE_PATTERN = "MM/dd/yyyy"
         val SIMPLE_SERVER_DATE_PATTERN = "yyyy-MM-dd"
         val FULL_DATE_PATTERN = "yyyy-MM-dd'T'hh:mm:ss.SSS"
+        val SIMPLE_DATE_WITH_DAY_OF_WEEK_PATTERN = "EEE, dd MMM yyyy"
         val SERVER_DATE_PATTERN = "^(([^01][0-9]|19|[2-9][0-9])\\d\\d)-(0?[1-9]|1[012])-(0?[1-9]|[12][0-9]|3[01])\$"
 
         val DHIS2_SERVER_URL =

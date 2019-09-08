@@ -19,7 +19,7 @@ class ListMyRegistrationPresenter : BasePresenter<ListMyRegistrationView> {
     @Inject
     constructor(){}
 
-    fun queryListMyRegistration(orgUnitId: String, programId: String, queryString : String, detailedSearch : Boolean, birthdayValue: TrackedEntityAttributeValue, phoneValue: TrackedEntityAttributeValue){
+    fun queryListMyRegistration(programId: String, birthday: String, phoneValue: TrackedEntityAttributeValue){
 
         if(isViewAttached)
             view.showLoading()
@@ -48,7 +48,8 @@ class ListMyRegistrationPresenter : BasePresenter<ListMyRegistrationView> {
                         )
                     }*/
 
-                    var trackedEntityInstancesQueryResult = TrackerController.queryLocalTrackedEntityInstances(birthdayValue, phoneValue)
+                    var trackedEntityInstancesQueryResult
+                            = TrackerController.queryLocalTrackedEntityInstances(programId, birthday, phoneValue)
 
                     /*if(trackedEntityInstancesQueryResult != null){
                         searchTrackedEntityInstanceLists.addAll(trackedEntityInstancesQueryResult)

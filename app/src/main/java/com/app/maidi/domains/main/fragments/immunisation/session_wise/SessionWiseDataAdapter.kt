@@ -16,10 +16,23 @@ class SessionWiseDataAdapter : RecyclerView.Adapter<SessionWiseDataAdapter.Sessi
 
     var context: Context
     var immunisationList: List<ImmunisationCard>
+    var listener: LoadViewListener
 
-    constructor(context: Context, immunisationList : List<ImmunisationCard>){
+    constructor(context: Context, immunisationList : List<ImmunisationCard>, listener: LoadViewListener){
         this.context = context
         this.immunisationList = immunisationList
+        this.listener = listener
+        setHasStableIds(true)
+    }
+
+    override fun getItemId(position: Int): Long {
+        return position.toLong()
+    }
+
+    override fun onViewAttachedToWindow(holder: SessionWiseDataHolder) {
+        super.onViewAttachedToWindow(holder)
+        if(holder.itemId == immunisationList.lastIndex.toLong())
+            listener.onLoadSuccess()
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): SessionWiseDataHolder {
@@ -97,5 +110,9 @@ class SessionWiseDataAdapter : RecyclerView.Adapter<SessionWiseDataAdapter.Sessi
             tvRegId = contentView.findViewById(R.id.item_session_wise_data_tv_reg_id)
             llVaccineList = contentView.findViewById(R.id.item_session_wise_data_ll_vaccine)
         }
+    }
+
+    public interface LoadViewListener{
+        fun onLoadSuccess()
     }
 }

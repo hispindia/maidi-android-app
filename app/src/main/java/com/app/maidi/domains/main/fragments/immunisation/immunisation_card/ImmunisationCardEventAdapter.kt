@@ -40,17 +40,28 @@ class ImmunisationCardEventAdapter : RecyclerView.Adapter<ImmunisationCardEventA
     override fun onBindViewHolder(holder: ImmunisationCardEventHolder, position: Int) {
         var event = events.get(position)
         holder.tvCounter.text = (position + 1).toString()
+
+        if(position % 2 == 0)
+            holder.llHeader.setBackgroundColor(context.resources.getColor(R.color.lighter_gray_background_color))
+        else
+            holder.llHeader.setBackgroundColor(context.resources.getColor(android.R.color.white))
+
         holder.setOnClickListener(listener)
         try {
-            if (event.organisationUnitId != null) {
-                var organUnit = MetaDataController.getOrganisationUnit(event.organisationUnitId)
-                holder.tvOrganUnit.text = organUnit.label
+            if (event.eventDate != null) {
+                var eventDate: String
+                if(Utils.isValidDateFollowPattern(event.eventDate)) {
+                    eventDate = Utils.convertServerDateToLocalDate(event.eventDate)
+                } else {
+                    eventDate = Utils.convertFromFullDateToSimpleDate(event.eventDate)
+                }
+                holder.tvEventDate.text = eventDate
             }
 
             if (event.dueDate != null) {
                 var dueDate: String
                 if(Utils.isValidDateFollowPattern(event.dueDate)) {
-                    dueDate = event.dueDate
+                    dueDate = Utils.convertServerDateToLocalDate(event.dueDate)
                 } else {
                     dueDate = Utils.convertFromFullDateToSimpleDate(event.dueDate)
                 }
@@ -64,7 +75,7 @@ class ImmunisationCardEventAdapter : RecyclerView.Adapter<ImmunisationCardEventA
     class ImmunisationCardEventHolder : RecyclerView.ViewHolder {
 
         var llHeader: LinearLayout
-        var tvOrganUnit: TextView
+        var tvEventDate: TextView
         var tvCounter: TextView
         var tvDueDate: TextView
 
@@ -73,7 +84,7 @@ class ImmunisationCardEventAdapter : RecyclerView.Adapter<ImmunisationCardEventA
         constructor(contentView: View) : super(contentView){
             llHeader = contentView.item_immunisation_card_event_ll_header
             tvCounter = contentView.item_immunisation_card_event_tv_counter
-            tvOrganUnit = contentView.item_immunisation_card_event_tv_organ_unit
+            tvEventDate = contentView.item_immunisation_card_event_tv_event_date
             tvDueDate = contentView.item_immunisation_card_event_tv_due_date
 
             llHeader.setOnClickListener {

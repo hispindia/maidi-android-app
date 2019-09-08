@@ -80,10 +80,10 @@ class ImmunisationCardEventFragment: BaseFragment(), OnItemClickListener {
             var enrollment = TrackerController.getEnrollmentByProgramAndTrackedEntityInstance(currentProgram.uid, trackedEntityInstanceId)
             mainActivity.transformFragment(R.id.activity_main_fl_content,
                 EventDataEntryFragment.newInstanceWithEnrollment(currentUnit.id, currentProgram.uid, programStage.uid, enrollment.localId))
-            mainActivity.solidActionBar(resources.getString(R.string.immunisation_card_update_title))
+            mainActivity.solidActionBar(resources.getString(R.string.immunisation_card_create_new_title))
         }
 
-        mainActivity.solidActionBar(resources.getString(R.string.immunisation_card_update_title), createButtonListener)
+        mainActivity.solidActionBar(resources.getString(R.string.immunisation_card_events_title), createButtonListener)
         mainActivity.isSwipeForceSyncronizeEnabled(false)
     }
 

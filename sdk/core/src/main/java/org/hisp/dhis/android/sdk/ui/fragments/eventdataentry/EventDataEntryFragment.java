@@ -222,6 +222,7 @@ public class EventDataEntryFragment extends DataEntryFragment<EventDataEntryFrag
         args.putString(PROGRAM_ID, programId);
         args.putString(PROGRAM_STAGE_ID, programStageId);
         args.putLong(ENROLLMENT_ID, enrollmentId);
+        fragment.isCreateNewEvent = true;
         fragment.setArguments(args);
         return fragment;
     }

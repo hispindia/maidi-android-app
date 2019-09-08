@@ -25,7 +25,7 @@ import org.hisp.dhis.android.sdk.persistence.models.DataElement
 import org.hisp.dhis.android.sdk.persistence.models.OrganisationUnit
 import org.hisp.dhis.android.sdk.persistence.models.Program
 
-class SessionWiseDataListFragment : BaseFragment(){
+class SessionWiseDataListFragment : BaseFragment(), SessionWiseDataAdapter.LoadViewListener{
 
     companion object{
         val SESSION_DATE = "SEARCH_DATE"
@@ -79,6 +79,10 @@ class SessionWiseDataListFragment : BaseFragment(){
         mainPresenter.getSessionWiseDatas(currentUnit.id, currentProgram.uid, sessionDate)
     }
 
+    override fun onLoadSuccess() {
+        mainActivity.hideLoading()
+    }
+
     fun getProgramDataElements(dataElements : List<DataElement>){
         this.dataElements = dataElements
         for(dataElement in dataElements){
@@ -112,9 +116,8 @@ class SessionWiseDataListFragment : BaseFragment(){
     }
 
     fun getSessionWiseDataList(sessionWiseList: List<ImmunisationCard>){
-        adapter = SessionWiseDataAdapter(mainActivity, sessionWiseList)
+        adapter = SessionWiseDataAdapter(mainActivity, sessionWiseList, this)
         rcvChildList.adapter = adapter
-        mainActivity.hideHUD()
     }
 
     fun createPresenter() : MainPresenter{

@@ -51,6 +51,9 @@ class ImmunisationVaccineAdapter : RecyclerView.Adapter<ImmunisationVaccineAdapt
         if(vaccine.isInjected){
             holder.cbInjected.isChecked = true
             holder.cbInjected.isEnabled = false
+
+            holder.tvVaccineDueDate.visibility = View.GONE
+            holder.cbInjected.visibility = View.VISIBLE
         }
     }
 

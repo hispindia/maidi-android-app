@@ -28,6 +28,7 @@
     <string name="organisation_unit">Organisation Unit</string>
     <string name="event">Event</string>
     <string name="due_date">Due date</string>
+    <string name="visit_date">Visit date</string>
     <string name="data_entry">Data Entry</string>
     <string name="view">View</string>
 
@@ -91,7 +92,9 @@
     <!--- *************** Fragments of Main Screen's titles ************* -->
     <string name="my_immunisation_title">My Immunisation</string>
     <string name="immunisation_card_title">Immunisation Card</string>
-    <string name="immunisation_card_update_title">Immunisation Card - Update</string>
+    <string name="immunisation_card_events_title">Immunisation Card - Events</string>
+    <string name="immunisation_card_create_new_title">Immunisation Card - Create New Event</string>
+    <string name="immunisation_card_update_title">Immunisation Card - Update Event</string>
     <string name="session_wise_vaccination_due">Session wise Vaccination due</string>
     <string name="registered_case">Registered Cases</string>
     <string name="adverse_event_information">Adverse Event Information</string>

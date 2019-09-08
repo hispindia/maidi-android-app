@@ -60,9 +60,11 @@ class ImmunisationDetailActivity : BaseActivity<ImmunisationDetailView, Immunisa
         }
 
         var organUnit = MetaDataController.getTopAssignedOrganisationUnit()
-        var program = MetaDataController.getProgramByName(Constants.BENEFICIARY_CHILD_REGISTRATION)
+        var program = MetaDataController.getProgramByName(Constants.IMMUNISATION)
 
         rcvList.layoutManager = LinearLayoutManager(this)
+
+        immunisationDetailPresenter.queryImmunisationInfo(organUnit.id, program.uid, trackedEntityInstance)
 
         /*if(trackedEntityInstance.isFromServer) {
             immunisationDetailPresenter.queryImmunisationInfo(organUnit.id, program.uid, trackedEntityInstance)
@@ -70,7 +72,7 @@ class ImmunisationDetailActivity : BaseActivity<ImmunisationDetailView, Immunisa
             immunisationDetailPresenter.queryLocalImmunisationInfo(program.uid)
         }*/
 
-        immunisationDetailPresenter.queryLocalImmunisationInfo(program.uid)
+        //immunisationDetailPresenter.queryLocalImmunisationInfo(program.uid)
     }
 
     override fun onResume() {

@@ -11,6 +11,7 @@ open class Vaccine {
     var dataValue: DataValue?
     var dueDate: String
     var isInjected: Boolean
+    var isShowed: Boolean = false
 
     constructor(dataElement: DataElement, dataValue: DataValue?, dueDate : String, isInjected : Boolean){
         this.dataElement = dataElement

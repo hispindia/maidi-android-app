@@ -102,7 +102,14 @@ class ListVillageFragment : BaseFragment, OnItemClickListener {
 
     override fun onResume() {
         super.onResume()
-        mainActivity.solidActionBar(resources.getString(R.string.monthly_workplan_update))
+
+        var createButtonListener = View.OnClickListener {
+            mainActivity.transformFragment(R.id.activity_main_fl_content,
+                EventDataEntryFragment.newWorkplanEventInstance(currentUnit.id, currentProgram.uid, programStage.uid))
+            mainActivity.solidActionBar(resources.getString(R.string.monthly_workplan_create_new_event))
+        }
+
+        mainActivity.solidActionBar(resources.getString(R.string.monthly_workplan_update), createButtonListener)
         mainActivity.isSwipeForceSyncronizeEnabled(false)
     }
 

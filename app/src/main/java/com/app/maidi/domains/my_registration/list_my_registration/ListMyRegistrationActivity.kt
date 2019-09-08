@@ -87,25 +87,20 @@ class ListMyRegistrationActivity : BaseActivity<ListMyRegistrationView, ListMyRe
         rcvList.adapter = adapter
 
         orgUnit = MetaDataController.getTopAssignedOrganisationUnit()
-        program = MetaDataController.getProgramByName(Constants.BENEFICIARY_CHILD_REGISTRATION)
+        program = MetaDataController.getProgramByName(Constants.IMMUNISATION)
         userAccount = MetaDataController.getUserAccount()
-        dateAttribute = MetaDataController.getDateOfBirthAttribute()
         phoneNumberAttribute = MetaDataController.getPhoneNumberAttribute()
 
         queryListTrackedInstances()
     }
 
     fun queryListTrackedInstances(){
-        var birthdayAttributeValue = TrackedEntityAttributeValue()
         var phoneAttributeValue = TrackedEntityAttributeValue()
-
-        birthdayAttributeValue.trackedEntityAttributeId = dateAttribute.uid
-        birthdayAttributeValue.value = birthDate
 
         phoneAttributeValue.trackedEntityAttributeId = phoneNumberAttribute.uid
         phoneAttributeValue.value = userAccount.phoneNumber
 
-        listMyRegistrationPresenter.queryListMyRegistration(orgUnit.id, program.uid, "", true,  birthdayAttributeValue, phoneAttributeValue)
+        listMyRegistrationPresenter.queryListMyRegistration(program.uid, birthDate, phoneAttributeValue)
     }
 
     override fun onResume() {
