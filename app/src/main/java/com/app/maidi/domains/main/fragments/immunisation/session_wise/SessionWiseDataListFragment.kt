@@ -116,6 +116,8 @@ class SessionWiseDataListFragment : BaseFragment(), SessionWiseDataAdapter.LoadV
     }
 
     fun getSessionWiseDataList(sessionWiseList: List<ImmunisationCard>){
+        if(sessionWiseList.size <= 0)
+            mainActivity.hideLoading()
         adapter = SessionWiseDataAdapter(mainActivity, sessionWiseList, this)
         rcvChildList.adapter = adapter
     }
