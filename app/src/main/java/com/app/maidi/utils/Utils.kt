@@ -78,11 +78,8 @@ class Utils {
             return LocalDate.parse(dateString, DateTimeFormat.forPattern(Constants.SIMPLE_MONTH_YEAR_PATTERN))
         }
 
-        fun convertDayWeekStringToCalendar(dateString: String): Calendar{
-            var date = simpleDateWithDayOfWeek.parse(dateString)
-            var cal = Calendar.getInstance()
-            cal.time = date
-            return cal
+        fun convertDayWeekStringToCalendar(dateString: String): LocalDate{
+            return LocalDate.parse(dateString, DateTimeFormat.forPattern(Constants.SIMPLE_DATE_WITH_DAY_OF_WEEK_PATTERN))
         }
 
         fun convertStringToCalendar(dateString: String) : Calendar{

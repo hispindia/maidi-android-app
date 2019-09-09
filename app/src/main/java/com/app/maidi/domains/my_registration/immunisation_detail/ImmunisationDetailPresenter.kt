@@ -61,7 +61,7 @@ class ImmunisationDetailPresenter : BasePresenter<ImmunisationDetailView> {
                                 for(dataValue in dataValues){
                                     var dataElement = TrackerController.getDataElement(dataValue.dataElement)
                                     if (vaccine.dataElement.uid.equals(dataElement.uid)) {
-                                        vaccine.isInjected = true
+                                        vaccine.isInjected = if(dataValue.value.equals("true")) true else false
                                         vaccine.dueDate = event.dueDate
                                         vaccine.isShowed = true
                                         isHasValue = true

@@ -2,12 +2,14 @@ package com.app.maidi.domains.main.fragments
 
 import android.animation.Animator
 import android.animation.ValueAnimator
+import android.app.DatePickerDialog
 import android.os.Bundle
 import android.os.Handler
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.animation.DecelerateInterpolator
+import android.widget.DatePicker
 import butterknife.BindView
 import butterknife.ButterKnife
 import butterknife.OnClick
@@ -19,15 +21,16 @@ import com.app.maidi.domains.my_registration.list_my_registration.ListMyRegistra
 import com.app.maidi.utils.Utils
 import com.github.florent37.singledateandtimepicker.SingleDateAndTimePicker
 import com.google.android.material.textfield.TextInputEditText
+import org.joda.time.LocalDate
 import java.util.*
 
-class MyRegistrationFragment : BaseFragment(){
+class MyRegistrationFragment : BaseFragment(), DatePickerDialog.OnDateSetListener{
 
     lateinit var mainActivity: MainActivity
     lateinit var mainPresenter: MainPresenter
 
-    @BindView(R.id.fragment_my_registration_picker)
-    lateinit var singleDateAndTimePicker : SingleDateAndTimePicker
+    /*@BindView(R.id.fragment_my_registration_picker)
+    lateinit var singleDateAndTimePicker : SingleDateAndTimePicker*/
 
     @BindView(R.id.fragment_my_registration_et_date_of_birth)
     lateinit var etDateOfBirth : TextInputEditText
@@ -50,15 +53,23 @@ class MyRegistrationFragment : BaseFragment(){
         mainActivity.isSwipeForceSyncronizeEnabled(false)
     }
 
+    override fun onDateSet(view : DatePicker, year: Int, monthOfYear : Int, dayOfMonth: Int) {
+        val date = LocalDate(year, monthOfYear + 1, dayOfMonth)
+        etDateOfBirth.setText(Utils.convertCalendarToString(date.toDate()))
+    }
+
     @OnClick(R.id.fragment_my_registration_v_date_of_birth)
     fun onDateOfBirthClicked(){
-        controlPicker(500)
+        var chooseDate = Utils.convertStringToLocalDate(etDateOfBirth.text.toString())
+        var dateDialog = DatePickerDialog(context, this, chooseDate.getYear(), chooseDate.getMonthOfYear() - 1, chooseDate.getDayOfMonth())
+        dateDialog.show()
+        //controlPicker(500)
     }
 
     @OnClick(R.id.fragment_my_registration_btn_search)
     fun onSearchButtonClicked(){
 
-        if(singleDateAndTimePicker.visibility == View.VISIBLE){
+        /*if(singleDateAndTimePicker.visibility == View.VISIBLE){
             mainActivity.showHUD()
             controlPicker(500)
             Handler().postDelayed({
@@ -66,7 +77,7 @@ class MyRegistrationFragment : BaseFragment(){
                 mainActivity.hideHUD()
             }, 600)
             return
-        }
+        }*/
 
         gotoListRegistrationScreen()
 
@@ -82,7 +93,7 @@ class MyRegistrationFragment : BaseFragment(){
         mainPresenter = mainActivity.mainPresenter
     }
 
-    fun controlPicker(duration: Int) {
+    /*fun controlPicker(duration: Int) {
         val expand = singleDateAndTimePicker.visibility != View.VISIBLE
         val prevHeight = singleDateAndTimePicker.height
         var height = 0
@@ -124,5 +135,5 @@ class MyRegistrationFragment : BaseFragment(){
         valueAnimator.interpolator = DecelerateInterpolator()
         valueAnimator.duration = duration.toLong()
         valueAnimator.start()
-    }
+    }*/
 }

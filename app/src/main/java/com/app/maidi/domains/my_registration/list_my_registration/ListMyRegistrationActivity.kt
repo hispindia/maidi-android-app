@@ -69,6 +69,11 @@ class ListMyRegistrationActivity : BaseActivity<ListMyRegistrationView, ListMyRe
 
         birthDate = intent.extras.getString(SEARCH_DATE)
 
+        orgUnit = MetaDataController.getTopAssignedOrganisationUnit()
+        program = MetaDataController.getProgramByName(Constants.IMMUNISATION)
+        userAccount = MetaDataController.getUserAccount()
+        phoneNumberAttribute = MetaDataController.getPhoneNumberAttribute()
+
         title = actionBar.findViewById(R.id.layout_actionbar_tv_title)
         title.text = birthDate
 
@@ -81,15 +86,10 @@ class ListMyRegistrationActivity : BaseActivity<ListMyRegistrationView, ListMyRe
 
         dividerItemDecoration = DividerItemDecoration(this, DividerItemDecoration.VERTICAL)
         dividerItemDecoration.setDrawable(resources.getDrawable(R.drawable.bg_divider))
-        adapter = ListMyRegistrationAdapter(this, arrayListOf(), this)
+        adapter = ListMyRegistrationAdapter(this, program.uid, arrayListOf(), this)
         rcvList.layoutManager = LinearLayoutManager(this)
         rcvList.addItemDecoration(dividerItemDecoration)
         rcvList.adapter = adapter
-
-        orgUnit = MetaDataController.getTopAssignedOrganisationUnit()
-        program = MetaDataController.getProgramByName(Constants.IMMUNISATION)
-        userAccount = MetaDataController.getUserAccount()
-        phoneNumberAttribute = MetaDataController.getPhoneNumberAttribute()
 
         queryListTrackedInstances()
     }
@@ -125,7 +125,7 @@ class ListMyRegistrationActivity : BaseActivity<ListMyRegistrationView, ListMyRe
     override fun getListMyRegistrationSuccess(trackedEntityInstances: List<TrackedEntityInstance>) {
         runOnUiThread{
             this.trackedEntityInstances = trackedEntityInstances
-            adapter = ListMyRegistrationAdapter(this, this.trackedEntityInstances, this)
+            adapter = ListMyRegistrationAdapter(this, program.uid, this.trackedEntityInstances, this)
             rcvList.adapter = adapter
             if(srlRefresh != null && srlRefresh.isRefreshing)
                 srlRefresh.isRefreshing = false

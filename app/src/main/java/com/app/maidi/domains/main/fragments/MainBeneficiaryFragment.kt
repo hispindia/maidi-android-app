@@ -11,6 +11,7 @@ import com.app.maidi.domains.base.BaseFragment
 import com.app.maidi.domains.child_registration.ChildRegistrationActivity
 import com.app.maidi.domains.main.MainActivity
 import com.app.maidi.utils.Constants
+import org.hisp.dhis.android.sdk.controllers.metadata.MetaDataController
 
 class MainBeneficiaryFragment : BaseFragment(){
 
@@ -38,6 +39,8 @@ class MainBeneficiaryFragment : BaseFragment(){
 
     @OnClick(R.id.activity_main_fl_my_immunisation)
     fun onMyImmunisationModuleClicked(){
-        mainActivity.transformFragment(R.id.activity_main_fl_content, MyRegistrationFragment())
+        if(MetaDataController.getProgramByName(Constants.IMMUNISATION) != null) {
+            mainActivity.transformFragment(R.id.activity_main_fl_content, MyRegistrationFragment())
+        }
     }
 }

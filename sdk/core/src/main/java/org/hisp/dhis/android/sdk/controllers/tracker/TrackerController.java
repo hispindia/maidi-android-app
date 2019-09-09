@@ -200,7 +200,7 @@ public final class TrackerController extends ResourceController {
 
     public static Enrollment getEnrollment(String programId, TrackedEntityInstance trackedEntityInstance) {
         return new Select().from(Enrollment.class)
-                .where(Condition.column(Enrollment$Table.LOCALTRACKEDENTITYINSTANCEID).is(trackedEntityInstance.getLocalId()))
+                .where(Condition.column(Enrollment$Table.TRACKEDENTITYINSTANCE).is(trackedEntityInstance.getTrackedEntityInstance()))
                 .and(Condition.column(Enrollment$Table.PROGRAM).is(programId)).querySingle();
     }
 

@@ -58,6 +58,7 @@
                 app:picker_displayDaysOfMonth="true"
                 app:picker_displayMonth="true"
                 app:picker_displayYears="true"
+                android:visibility="gone"
         />
 
         <LinearLayout

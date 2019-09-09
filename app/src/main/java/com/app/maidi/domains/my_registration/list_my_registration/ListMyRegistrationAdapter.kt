@@ -12,6 +12,7 @@ import com.app.maidi.R
 import com.app.maidi.utils.Constants
 import com.app.maidi.utils.Utils
 import de.hdodenhof.circleimageview.CircleImageView
+import org.hisp.dhis.android.sdk.controllers.tracker.TrackerController
 import org.hisp.dhis.android.sdk.persistence.models.Enrollment
 import org.hisp.dhis.android.sdk.persistence.models.TrackedEntityInstance
 import java.util.regex.Pattern
@@ -19,11 +20,13 @@ import java.util.regex.Pattern
 class ListMyRegistrationAdapter : RecyclerView.Adapter<ListMyRegistrationAdapter.ListMyRegistrationHolder> {
 
     var context: Context
+    var programId: String
     var trackedEntityInstances: List<TrackedEntityInstance>
     var listener: OnItemClickListener
 
-    constructor(context: Context, trackedEntityInstances: List<TrackedEntityInstance>, listener: OnItemClickListener) {
+    constructor(context: Context, programId: String, trackedEntityInstances: List<TrackedEntityInstance>, listener: OnItemClickListener) {
         this.context = context
+        this.programId = programId
         this.trackedEntityInstances = trackedEntityInstances
         this.listener = listener
     }
@@ -40,16 +43,13 @@ class ListMyRegistrationAdapter : RecyclerView.Adapter<ListMyRegistrationAdapter
     override fun onBindViewHolder(holder: ListMyRegistrationHolder, position: Int) {
         var trackedInstance = trackedEntityInstances.get(position)
         var name = ""
-        var dateOfBirth = ""
         var mother = ""
         var stringBuilder = StringBuilder()
 
+        var enrollment = TrackerController.getEnrollment(programId, trackedInstance)
+
         if (trackedInstance.attributes != null) {
             for (attribute in trackedInstance.attributes) {
-                if (attribute.displayName.contains("Date of Birth")) {
-                    dateOfBirth = attribute.value
-                    continue
-                }
 
                 if (attribute.displayName.contains("Mother")) {
                     mother = attribute.value
@@ -63,10 +63,12 @@ class ListMyRegistrationAdapter : RecyclerView.Adapter<ListMyRegistrationAdapter
             }
         }
 
-        if(Utils.isValidDateFollowPattern(dateOfBirth)) {
-            stringBuilder.append(dateOfBirth)
-        } else {
-            stringBuilder.append(Utils.convertFromFullDateToSimpleDate(dateOfBirth))
+        if(enrollment != null && enrollment.incidentDate != null) {
+            if (Utils.isValidDateFollowPattern(enrollment.incidentDate)) {
+                stringBuilder.append(enrollment.incidentDate)
+            } else {
+                stringBuilder.append(Utils.convertFromFullDateToSimpleDate(enrollment.incidentDate))
+            }
         }
 
         if (!mother.isEmpty())

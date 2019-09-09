@@ -1,11 +1,13 @@
 package com.app.maidi.domains.main.fragments.immunisation.session_wise
 
 import android.animation.Animator
+import android.app.DatePickerDialog
 import android.os.Bundle
 import android.os.Handler
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.DatePicker
 import butterknife.BindView
 import butterknife.ButterKnife
 import butterknife.OnClick
@@ -18,9 +20,10 @@ import com.app.maidi.utils.Utils
 import com.github.florent37.singledateandtimepicker.SingleDateAndTimePicker
 import com.google.android.material.textfield.TextInputEditText
 import org.joda.time.DateTime
+import org.joda.time.LocalDate
 import java.util.*
 
-class SessionWiseChooseDateFragment : BaseFragment(), SingleDateAndTimePicker.OnDateChangedListener {
+class SessionWiseChooseDateFragment : BaseFragment(), DatePickerDialog.OnDateSetListener/*, SingleDateAndTimePicker.OnDateChangedListener*/ {
 
     lateinit var mainActivity: MainActivity
     lateinit var mainPresenter: MainPresenter
@@ -28,8 +31,8 @@ class SessionWiseChooseDateFragment : BaseFragment(), SingleDateAndTimePicker.On
     @BindView(R.id.fragment_session_wise_choose_date_et_date_of_birth)
     lateinit var etDateOfBirth: TextInputEditText
 
-    @BindView(R.id.fragment_session_wise_choose_date_picker)
-    lateinit var datePicker: SingleDateAndTimePicker
+    /*@BindView(R.id.fragment_session_wise_choose_date_picker)
+    lateinit var datePicker: SingleDateAndTimePicker*/
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         mainActivity = activity as MainActivity
@@ -38,7 +41,7 @@ class SessionWiseChooseDateFragment : BaseFragment(), SingleDateAndTimePicker.On
         var viewGroup = inflater.inflate(R.layout.fragment_session_wise_choose_date, container, false)
         ButterKnife.bind(this, viewGroup)
 
-        datePicker.addOnDateChangedListener(this)
+        //datePicker.addOnDateChangedListener(this)
         etDateOfBirth.setText(Utils.convertCalendarToDayOfWeekString(DateTime.now().toDate()))
 
         return viewGroup
@@ -48,14 +51,26 @@ class SessionWiseChooseDateFragment : BaseFragment(), SingleDateAndTimePicker.On
         super.onResume()
         mainActivity.solidActionBar(resources.getString(R.string.session_wise_vaccination_due))
         mainActivity.isSwipeForceSyncronizeEnabled(false)
-        datePicker.selectDate(Utils.convertDayWeekStringToCalendar(etDateOfBirth.text.toString()))
+        //datePicker.selectDate(Utils.convertDayWeekStringToCalendar(etDateOfBirth.text.toString()))
     }
 
-    override fun onDateChanged(displayed: String?, date: Date?) {
+    @OnClick(R.id.fragment_session_wise_choose_date_v_date_of_birth)
+    fun onDateChooseClicked(){
+        var chooseDate = Utils.convertDayWeekStringToCalendar(etDateOfBirth.text.toString())
+        var dateDialog = DatePickerDialog(context, this, chooseDate.getYear(), chooseDate.getMonthOfYear() - 1, chooseDate.getDayOfMonth())
+        dateDialog.show()
+    }
+
+    override fun onDateSet(view : DatePicker, year: Int, monthOfYear : Int, dayOfMonth: Int) {
+        val date = LocalDate(year, monthOfYear + 1, dayOfMonth)
+        etDateOfBirth.setText(Utils.convertCalendarToDayOfWeekString(date.toDate()))
+    }
+
+    /*override fun onDateChanged(displayed: String?, date: Date?) {
         date!!.let {
             etDateOfBirth.setText(Utils.convertCalendarToDayOfWeekString(date))
         }
-    }
+    }*/
 
     @OnClick(R.id.fragment_session_wise_choose_date_btn_ok)
     fun onOkButtonClicked(){
