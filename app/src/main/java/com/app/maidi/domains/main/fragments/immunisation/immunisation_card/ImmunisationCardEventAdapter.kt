@@ -10,10 +10,8 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.app.maidi.R
 import com.app.maidi.domains.main.fragments.listener.OnItemClickListener
-import com.app.maidi.utils.Constants
-import com.app.maidi.utils.Utils
+import com.app.maidi.utils.DateUtils
 import kotlinx.android.synthetic.main.item_immunisation_card_event.view.*
-import org.hisp.dhis.android.sdk.controllers.metadata.MetaDataController
 import org.hisp.dhis.android.sdk.persistence.models.Event
 
 class ImmunisationCardEventAdapter : RecyclerView.Adapter<ImmunisationCardEventAdapter.ImmunisationCardEventHolder> {
@@ -50,20 +48,20 @@ class ImmunisationCardEventAdapter : RecyclerView.Adapter<ImmunisationCardEventA
         try {
             if (event.eventDate != null) {
                 var eventDate: String
-                if(Utils.isValidDateFollowPattern(event.eventDate)) {
-                    eventDate = Utils.convertServerDateToLocalDate(event.eventDate)
+                if(DateUtils.isValidDateFollowPattern(event.eventDate)) {
+                    eventDate = DateUtils.convertServerDateToLocalDate(event.eventDate)
                 } else {
-                    eventDate = Utils.convertFromFullDateToSimpleDate(event.eventDate)
+                    eventDate = DateUtils.convertFromFullDateToSimpleDate(event.eventDate)
                 }
                 holder.tvEventDate.text = eventDate
             }
 
             if (event.dueDate != null) {
                 var dueDate: String
-                if(Utils.isValidDateFollowPattern(event.dueDate)) {
-                    dueDate = Utils.convertServerDateToLocalDate(event.dueDate)
+                if(DateUtils.isValidDateFollowPattern(event.dueDate)) {
+                    dueDate = DateUtils.convertServerDateToLocalDate(event.dueDate)
                 } else {
-                    dueDate = Utils.convertFromFullDateToSimpleDate(event.dueDate)
+                    dueDate = DateUtils.convertFromFullDateToSimpleDate(event.dueDate)
                 }
                 holder.tvDueDate.text = dueDate
             }

@@ -10,7 +10,7 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.app.maidi.R
 import com.app.maidi.models.ImmunisationCard
-import com.app.maidi.utils.Utils
+import com.app.maidi.utils.DateUtils
 
 class SessionWiseDataAdapter : RecyclerView.Adapter<SessionWiseDataAdapter.SessionWiseDataHolder>{
 
@@ -64,10 +64,10 @@ class SessionWiseDataAdapter : RecyclerView.Adapter<SessionWiseDataAdapter.Sessi
         }
 
         immunisationCard.enrollment!!.let {
-            if(Utils.isValidDateFollowPattern(it.incidentDate))
-                holder.tvDateOfBirth.text = Utils.convertServerDateToLocalDate(it.incidentDate)
+            if(DateUtils.isValidDateFollowPattern(it.incidentDate))
+                holder.tvDateOfBirth.text = DateUtils.convertServerDateToLocalDate(it.incidentDate)
             else
-                holder.tvDateOfBirth.text = Utils.convertFromFullDateToSimpleDate(it.incidentDate)
+                holder.tvDateOfBirth.text = DateUtils.convertFromFullDateToSimpleDate(it.incidentDate)
 
         }
         holder.tvRegId.text = immunisationCard.trackedEntityInstance.uid

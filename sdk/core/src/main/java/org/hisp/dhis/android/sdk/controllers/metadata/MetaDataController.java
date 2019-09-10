@@ -834,8 +834,10 @@ public final class MetaDataController extends ResourceController {
         List<DbOperation> operations = ProgramWrapper.setReferences(updatedProgram);
         DbUtils.applyBatch(operations);
         operations.clear();
-        for(ProgramIndicator programIndicator:updatedProgram.getProgramIndicators()) {
-            operations.add(DbOperation.save(programIndicator));
+        if(updatedProgram.getProgramIndicators() != null) {
+            for (ProgramIndicator programIndicator : updatedProgram.getProgramIndicators()) {
+                operations.add(DbOperation.save(programIndicator));
+            }
         }
         DbUtils.applyBatch(operations);
 

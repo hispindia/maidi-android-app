@@ -11,8 +11,7 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.app.maidi.R
 import com.app.maidi.models.Vaccine
-import com.app.maidi.utils.Utils
-import org.hisp.dhis.android.sdk.utils.api.ValueType
+import com.app.maidi.utils.DateUtils
 
 class ImmunisationVaccineAdapter : RecyclerView.Adapter<ImmunisationVaccineAdapter.ImmunisationVaccineHolder>{
 
@@ -39,10 +38,10 @@ class ImmunisationVaccineAdapter : RecyclerView.Adapter<ImmunisationVaccineAdapt
         holder.tvVaccineName.text = vaccine.dataElement.displayName
 
         if(vaccine.dueDate != null && !vaccine.dueDate.isEmpty()){
-            if(Utils.isValidDateFollowPattern(vaccine.dueDate))
-                holder.tvVaccineDueDate.text = Utils.convertServerDateToLocalDate(vaccine.dueDate)
+            if(DateUtils.isValidDateFollowPattern(vaccine.dueDate))
+                holder.tvVaccineDueDate.text = DateUtils.convertServerDateToLocalDate(vaccine.dueDate)
             else
-                holder.tvVaccineDueDate.text = Utils.convertFromFullDateToSimpleDate(vaccine.dueDate)
+                holder.tvVaccineDueDate.text = DateUtils.convertFromFullDateToSimpleDate(vaccine.dueDate)
 
             holder.tvVaccineDueDate.visibility = View.VISIBLE
             holder.cbInjected.visibility = View.GONE

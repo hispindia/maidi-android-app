@@ -15,7 +15,7 @@ import com.app.maidi.domains.base.BaseActivity
 import com.app.maidi.domains.login.fragments.LoginMainFragment
 import com.app.maidi.infrastructures.ActivityModules
 import com.app.maidi.models.database.User
-import com.app.maidi.utils.Utils.Companion.setupEditTextKeyboard
+import com.app.maidi.utils.MethodUtils.Companion.setupEditTextKeyboard
 import com.google.firebase.FirebaseApp
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException
@@ -35,7 +35,6 @@ import org.hisp.dhis.android.sdk.persistence.preferences.AppPreferences
 import org.hisp.dhis.android.sdk.persistence.preferences.ResourceType
 import org.hisp.dhis.android.sdk.services.StartPeriodicSynchronizerService
 import org.hisp.dhis.android.sdk.utils.Utils
-import org.json.JSONObject
 import javax.inject.Inject
 import kotlin.Exception
 

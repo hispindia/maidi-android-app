@@ -1,10 +1,5 @@
 package com.app.maidi.domains.main.fragments.aefi
 
-import android.app.Activity
-import android.app.ActivityOptions
-import android.content.Context
-import android.content.Intent
-import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -14,12 +9,10 @@ import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.RecyclerView
 import com.app.maidi.R
-import com.app.maidi.domains.aefi.AdverseEventInformationActivity
 import com.app.maidi.domains.main.fragments.listener.OnItemClickListener
-import com.app.maidi.utils.Constants
-import com.app.maidi.utils.Utils
+import com.app.maidi.utils.DateUtils
+import com.app.maidi.utils.MethodUtils
 import org.hisp.dhis.android.sdk.controllers.metadata.MetaDataController
-import org.hisp.dhis.android.sdk.controllers.tracker.TrackerController
 import org.hisp.dhis.android.sdk.persistence.models.TrackedEntityInstance
 
 class RegisteredCaseAdapter : RecyclerView.Adapter<RegisteredCaseAdapter.RegisteredCaseHolder>{
@@ -54,7 +47,7 @@ class RegisteredCaseAdapter : RecyclerView.Adapter<RegisteredCaseAdapter.Registe
 
             holder.tvCounter.text = (position + 1).toString()
             holder.tvRegId.text = trackedEntityInstance.uid
-            holder.tvRegDate.text = Utils.convertFromFullDateToSimpleDate(trackedEntityInstance.created)
+            holder.tvRegDate.text = DateUtils.convertFromFullDateToSimpleDate(trackedEntityInstance.created)
 
             var attributes = trackedEntityInstance.attributes
             for (attribute in attributes) {
@@ -63,10 +56,10 @@ class RegisteredCaseAdapter : RecyclerView.Adapter<RegisteredCaseAdapter.Registe
                 }
 
                 if (attribute.displayName.contains("Date of Birth")) {
-                    if(Utils.isValidDateFollowPattern(attribute.value)) {
+                    if(DateUtils.isValidDateFollowPattern(attribute.value)) {
                         holder.tvDob.text = attribute.value
                     } else {
-                        holder.tvDob.text = Utils.convertFromFullDateToSimpleDate(attribute.value)
+                        holder.tvDob.text = DateUtils.convertFromFullDateToSimpleDate(attribute.value)
                     }
                 }
 
@@ -84,7 +77,7 @@ class RegisteredCaseAdapter : RecyclerView.Adapter<RegisteredCaseAdapter.Registe
             }
 
             holder.llHeader.setOnClickListener {
-                Utils.showHideContainer(holder.llChildInfo, 500)
+                MethodUtils.showHideContainer(holder.llChildInfo, 500)
             }
 
             holder.llChildInfo.setOnClickListener {

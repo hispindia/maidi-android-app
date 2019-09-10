@@ -60,7 +60,8 @@ class MainFragment : BaseFragment() {
 
     @OnClick(R.id.activity_main_fl_aefi)
     fun onMyAefiModuleClicked(){
-        if(MetaDataController.getProgramByName(Constants.AEFI) != null) {
+        if(MetaDataController.getProgramByName(Constants.AEFI) != null
+            && MetaDataController.getProgramByName(Constants.IMMUNISATION) != null) {
             mainActivity.transformFragment(
                 R.id.activity_main_fl_content,
                 RegisteredCasesFragment()

@@ -1,13 +1,9 @@
 package com.app.maidi.domains.main.fragments.immunisation.immunisation_card
 
-import android.animation.Animator
-import android.animation.ValueAnimator
 import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.view.animation.DecelerateInterpolator
-import android.widget.CheckBox
 import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -16,10 +12,7 @@ import com.app.maidi.R
 import com.app.maidi.domains.main.fragments.listener.OnItemClickListener
 import com.app.maidi.models.ImmunisationCard
 import com.app.maidi.models.Vaccine
-import com.app.maidi.utils.Utils
-import com.thoughtbot.expandablerecyclerview.ExpandableRecyclerViewAdapter
-import com.thoughtbot.expandablerecyclerview.models.ExpandableGroup
-import com.thoughtbot.expandablerecyclerview.viewholders.ChildViewHolder
+import com.app.maidi.utils.DateUtils
 import com.thoughtbot.expandablerecyclerview.viewholders.GroupViewHolder
 
 class ImmunisationCardAdapter : RecyclerView.Adapter<ImmunisationCardAdapter.ImmunisationHeaderHolder>,
@@ -67,10 +60,10 @@ class ImmunisationCardAdapter : RecyclerView.Adapter<ImmunisationCardAdapter.Imm
         }
 
         immunisationCard.enrollment!!.let {
-            if(Utils.isValidDateFollowPattern(it.incidentDate))
-                holder.tvDob.text = Utils.convertServerDateToLocalDate(it.incidentDate)
+            if(DateUtils.isValidDateFollowPattern(it.incidentDate))
+                holder.tvDob.text = DateUtils.convertServerDateToLocalDate(it.incidentDate)
             else
-                holder.tvDob.text = Utils.convertFromFullDateToSimpleDate(it.incidentDate)
+                holder.tvDob.text = DateUtils.convertFromFullDateToSimpleDate(it.incidentDate)
         }
         holder.tvRegId.text = immunisationCard.trackedEntityInstance.uid
 

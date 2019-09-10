@@ -11,21 +11,17 @@ import butterknife.BindView
 import butterknife.ButterKnife
 import com.app.maidi.R
 import com.app.maidi.domains.base.BaseFragment
-import com.app.maidi.domains.child_registration.ChildRegistrationActivity
 import com.app.maidi.domains.main.MainActivity
 import com.app.maidi.domains.main.MainPresenter
-import com.app.maidi.domains.main.fragments.listener.OnItemClickListener
 import com.app.maidi.domains.main.fragments.listener.OnSurveyItemClickListener
 import com.app.maidi.utils.Constants
 import com.app.maidi.utils.LinearLayoutManagerWrapper
-import com.app.maidi.utils.Utils
-import org.hisp.dhis.android.sdk.utils.Utils.*
+import com.app.maidi.utils.DateUtils
 import com.app.maidi.widget.ExportPDF
 import org.hisp.dhis.android.sdk.controllers.metadata.MetaDataController
 import org.hisp.dhis.android.sdk.controllers.tracker.TrackerController
 import org.hisp.dhis.android.sdk.persistence.models.*
 import org.hisp.dhis.android.sdk.ui.fragments.eventdataentry.EventDataEntryFragment
-import org.hisp.dhis.android.sdk.utils.api.ValueType
 import org.joda.time.DateTime
 
 class ListSurveyFragment : BaseFragment(), OnSurveyItemClickListener{
@@ -101,14 +97,14 @@ class ListSurveyFragment : BaseFragment(), OnSurveyItemClickListener{
 
             pdf.addTitle("Mobile Application for Immunisation Datas of India",
                 "Survey Form",
-                Utils.simpleLocalDateFormat.format(DateTime.now().toDate())
+                DateUtils.simpleLocalDateFormat.format(DateTime.now().toDate())
             )
 
             event!!.let {
-                if(Utils.isValidDateFollowPattern(it.eventDate))
-                    eventDate = Utils.convertServerDateToLocalDate(it.eventDate)
+                if(DateUtils.isValidDateFollowPattern(it.eventDate))
+                    eventDate = DateUtils.convertServerDateToLocalDate(it.eventDate)
                 else
-                    eventDate = Utils.convertFromFullDateToSimpleDate(it.eventDate)
+                    eventDate = DateUtils.convertFromFullDateToSimpleDate(it.eventDate)
             }
 
             pdf.addRightParagraph("Survey date: " + eventDate)

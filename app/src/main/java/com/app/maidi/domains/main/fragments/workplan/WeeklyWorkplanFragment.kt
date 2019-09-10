@@ -1,7 +1,6 @@
 package com.app.maidi.domains.main.fragments.workplan
 
 import android.os.Bundle
-import android.util.TypedValue
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -12,9 +11,8 @@ import com.app.maidi.R
 import com.app.maidi.domains.base.BaseFragment
 import com.app.maidi.domains.main.MainActivity
 import com.app.maidi.domains.main.MainPresenter
-import com.app.maidi.domains.main.fragments.immunisation.session_wise.SessionWiseChooseDateFragment
 import com.app.maidi.utils.Constants
-import com.app.maidi.utils.Utils
+import com.app.maidi.utils.DateUtils
 import kotlinx.android.synthetic.main.item_workplan_day_of_week.view.*
 import org.hisp.dhis.android.sdk.controllers.metadata.MetaDataController
 import org.hisp.dhis.android.sdk.controllers.tracker.TrackerController
@@ -85,16 +83,16 @@ class WeeklyWorkplanFragment : BaseFragment{
             tvDayName.setText(resources.getString(days_of_week[i]))
             for(day in dayList){
                 if(day.dayOfWeek == i + 1){
-                    var date = Utils.convertCalendarToString(day.toDate())
+                    var date = DateUtils.convertCalendarToString(day.toDate())
                     tvPlanDate.text = date
                     var builder = StringBuilder()
                     for(event in workplanList){
                         var eventDate: String?
                         if(event.eventDate != null) {
-                            if (Utils.isValidDateFollowPattern(event.eventDate))
-                                eventDate = Utils.convertServerDateToLocalDate(event.eventDate)
+                            if (DateUtils.isValidDateFollowPattern(event.eventDate))
+                                eventDate = DateUtils.convertServerDateToLocalDate(event.eventDate)
                             else
-                                eventDate = Utils.convertFromFullDateToSimpleDate(event.eventDate)
+                                eventDate = DateUtils.convertFromFullDateToSimpleDate(event.eventDate)
 
                             if (eventDate.equals(date)) {
                                 var values = TrackerController.getDataValue(event.event)
@@ -125,7 +123,7 @@ class WeeklyWorkplanFragment : BaseFragment{
                                     mainActivity.transformFragment(R.id.activity_main_fl_content,
                                         EventDataEntryFragment.newWorkplanEventInstanceWithSpecificDate(
                                             currentUnit.id, currentProgram.uid, programStage.uid,
-                                            Utils.convertLocalDateToServerDate(tvPlanDate.text.toString())))
+                                            DateUtils.convertLocalDateToServerDate(tvPlanDate.text.toString())))
                                     mainActivity.solidActionBar(resources.getString(R.string.monthly_workplan_create_new_event))
                                 }
                         })
@@ -159,10 +157,10 @@ class WeeklyWorkplanFragment : BaseFragment{
         if(workplanList != null) {
             for (event in workplanList) {
                 var date: String?
-                if (Utils.isValidDateFollowPattern(event.eventDate))
-                    date = Utils.convertServerDateToLocalDate(event.eventDate)
+                if (DateUtils.isValidDateFollowPattern(event.eventDate))
+                    date = DateUtils.convertServerDateToLocalDate(event.eventDate)
                 else
-                    date = Utils.convertFromFullDateToSimpleDate(event.eventDate)
+                    date = DateUtils.convertFromFullDateToSimpleDate(event.eventDate)
 
                 if (date.equals(chooseDate)) {
                     return true

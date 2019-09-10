@@ -31,7 +31,8 @@ class RegisteredCasesFragment : BaseFragment(), OnItemClickListener{
     lateinit var mainPresenter: MainPresenter
 
     lateinit var currentUnit: OrganisationUnit
-    lateinit var currentProgram: Program
+    lateinit var aefiProgram: Program
+    lateinit var immunisationProgram: Program
 
     lateinit var adapter: RegisteredCaseAdapter
     lateinit var trackedEntityInstances: List<TrackedEntityInstance>
@@ -45,7 +46,8 @@ class RegisteredCasesFragment : BaseFragment(), OnItemClickListener{
         createPresenter()
 
         currentUnit = MetaDataController.getTopAssignedOrganisationUnit()
-        currentProgram = MetaDataController.getProgramByName(Constants.AEFI)
+        aefiProgram = MetaDataController.getProgramByName(Constants.AEFI)
+        immunisationProgram = MetaDataController.getProgramByName(Constants.IMMUNISATION)
 
         var viewGroup = inflater.inflate(R.layout.fragment_registered_cases, container, false)
         ButterKnife.bind(this, viewGroup)
@@ -79,7 +81,7 @@ class RegisteredCasesFragment : BaseFragment(), OnItemClickListener{
 
         mainActivity.solidActionBar(resources.getString(R.string.registered_case), createButtonListener)
         mainActivity.isSwipeForceSyncronizeEnabled(false)
-        mainPresenter.getAefiTrackedEntityInstances(currentUnit.id, currentProgram.uid)
+        mainPresenter.getAefiTrackedEntityInstances(currentUnit.id, aefiProgram.uid, immunisationProgram.uid)
     }
 
     fun createPresenter() : MainPresenter{

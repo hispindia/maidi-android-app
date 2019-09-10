@@ -1,26 +1,28 @@
 package com.app.maidi.domains.aefi
 
+import android.app.Dialog
 import android.content.Context
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
-import android.widget.ImageView
-import android.widget.LinearLayout
-import android.widget.RelativeLayout
-import android.widget.TextView
+import android.view.Window
+import android.widget.*
 import butterknife.BindView
 import butterknife.ButterKnife
 import com.app.maidi.R
 import com.app.maidi.custom.MaidiCrashManagerListener
-import com.app.maidi.domains.child_registration.ChildRegistrationActivity
 import com.app.maidi.utils.Constants
-import com.app.maidi.utils.Utils
+import com.app.maidi.utils.DateUtils
+import com.app.maidi.utils.MethodUtils
+import com.squareup.otto.Subscribe
 import net.hockeyapp.android.CrashManager
 import org.hisp.dhis.android.sdk.controllers.metadata.MetaDataController
 import org.hisp.dhis.android.sdk.controllers.tracker.TrackerController
+import org.hisp.dhis.android.sdk.events.LoadingMessageEvent
+import org.hisp.dhis.android.sdk.events.UiEvent
+import org.hisp.dhis.android.sdk.persistence.Dhis2Application
 import org.hisp.dhis.android.sdk.persistence.models.*
 import org.hisp.dhis.android.sdk.ui.fragments.eventdataentry.EventDataEntryFragment
-import org.joda.time.DateTime
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper
 import java.lang.Exception
 
@@ -44,15 +46,17 @@ class AdverseEventInformationActivity : AppCompatActivity() {
     lateinit var enrollment: Enrollment
 
     lateinit var trackedEntityInstanceId: String
-
     lateinit var eventDataEntryFragment: EventDataEntryFragment
+
+    private var progressDialogLoading: Dialog? = null
+    private var tvMessage: TextView? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_adverse_event_information)
         ButterKnife.bind(this)
 
-        Utils.setupEditTextKeyboard(llContent, this)
+        MethodUtils.setupEditTextKeyboard(llContent, this)
 
         try{
             if(intent.hasExtra(TRACKED_ENTITY_INSTANCE_ID)){
@@ -81,12 +85,73 @@ class AdverseEventInformationActivity : AppCompatActivity() {
         }
     }
 
+    @Subscribe
+    fun updateUiEvent(uiEvent: UiEvent){
+        when(uiEvent.eventType){
+            UiEvent.UiEventType.START_SEND_DATA -> showHUD()
+            UiEvent.UiEventType.ERROR_SEND_DATA -> hideHUD()
+            UiEvent.UiEventType.SUCCESS_SEND_DATA -> {
+                hideHUD()
+                Toast.makeText(
+                    this,
+                    resources.getString(R.string.create_update_successful),
+                    Toast.LENGTH_LONG
+                ).show()
+                onBackPressed()
+            }
+        }
+    }
+
+    @Subscribe
+    fun loadingEvent(loadingMessageEvent: LoadingMessageEvent){
+        updateText(loadingMessageEvent.message)
+    }
+
     override fun onResume() {
         super.onResume()
         CrashManager.register(this, MaidiCrashManagerListener())
+        Dhis2Application.bus.register(this)
+    }
+
+    override fun onPause() {
+        super.onPause()
+        Dhis2Application.bus.unregister(this)
     }
 
     override fun attachBaseContext(newBase: Context?) {
         super.attachBaseContext(CalligraphyContextWrapper.wrap(newBase))
+    }
+
+    fun showHUD() {
+        if (progressDialogLoading != null && progressDialogLoading!!.isShowing()) {
+        } else {
+            val view = layoutInflater.inflate(R.layout.layout_progress_loading_ball_spin, null)
+            tvMessage = view.findViewById<TextView>(R.id.layout_loading_tv_message)
+            progressDialogLoading = Dialog(this)
+            progressDialogLoading!!.requestWindowFeature(Window.FEATURE_NO_TITLE)
+            progressDialogLoading!!.setContentView(view)
+            progressDialogLoading!!.setCancelable(false)
+            progressDialogLoading!!.setCanceledOnTouchOutside(false)
+
+            val window = progressDialogLoading!!.getWindow()
+            if (window != null) {
+                window!!.setBackgroundDrawableResource(R.drawable.bg_layout_loading)
+            }
+            progressDialogLoading!!.show()
+        }
+    }
+
+    fun hideHUD() {
+        if (progressDialogLoading != null && progressDialogLoading!!.isShowing()) {
+            progressDialogLoading!!.dismiss()
+        }
+    }
+
+    fun updateText(text: String){
+        try {
+            tvMessage!!.text = text
+        }catch (exception : Exception){
+            Log.d("Null Exception", exception.toString())
+        }
     }
 }

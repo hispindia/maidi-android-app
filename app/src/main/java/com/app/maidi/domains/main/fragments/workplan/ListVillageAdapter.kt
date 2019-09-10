@@ -4,14 +4,12 @@ import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.app.maidi.R
 import com.app.maidi.domains.main.fragments.listener.OnItemClickListener
-import com.app.maidi.utils.Utils
-import kotlinx.android.synthetic.main.item_survey.view.*
+import com.app.maidi.utils.DateUtils
 import kotlinx.android.synthetic.main.item_workplan_event.view.*
 import org.hisp.dhis.android.sdk.controllers.tracker.TrackerController
 
@@ -42,10 +40,10 @@ class ListVillageAdapter : RecyclerView.Adapter<ListVillageAdapter.ListWorkplanV
         var event = TrackerController.getEvent(eventId)
         var eventDate: String?
 
-        if(Utils.isValidDateFollowPattern(event.eventDate))
-            eventDate = Utils.convertServerDateToLocalDate(event.eventDate)
+        if(DateUtils.isValidDateFollowPattern(event.eventDate))
+            eventDate = DateUtils.convertServerDateToLocalDate(event.eventDate)
         else
-            eventDate = Utils.convertFromFullDateToSimpleDate(event.eventDate)
+            eventDate = DateUtils.convertFromFullDateToSimpleDate(event.eventDate)
 
         if(position % 2 == 0)
             holder.llHeader.setBackgroundColor(context.resources.getColor(R.color.lighter_gray_background_color))

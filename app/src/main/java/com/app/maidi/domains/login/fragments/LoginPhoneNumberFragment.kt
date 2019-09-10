@@ -1,8 +1,6 @@
 package com.app.maidi.domains.login.fragments
 
-import android.app.Activity
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -14,10 +12,9 @@ import com.app.maidi.R
 import com.app.maidi.domains.base.BaseFragment
 import com.app.maidi.domains.login.LoginActivity
 import com.app.maidi.domains.login.LoginPresenter
-import com.app.maidi.domains.login.LoginView
 import com.app.maidi.utils.Constants
-import com.app.maidi.utils.Utils
-import com.app.maidi.utils.Utils.Companion.hideKeyBoard
+import com.app.maidi.utils.DateUtils
+import com.app.maidi.utils.MethodUtils.Companion.hideKeyBoard
 import com.google.android.material.textfield.TextInputEditText
 import com.google.firebase.FirebaseException
 import com.google.firebase.auth.PhoneAuthCredential
@@ -68,7 +65,7 @@ class LoginPhoneNumberFragment : BaseFragment(){
     fun onNext(){
         hideKeyBoard(loginActivity)
         if(!etPhoneNumber.text!!.isEmpty()){
-            if(Utils.isValidPhoneNumber(etPhoneNumber.text.toString())){
+            if(DateUtils.isValidPhoneNumber(etPhoneNumber.text.toString())){
                 var phoneNumberWithPrefix = Constants.PHONE_NUMBER_PREFIX + etPhoneNumber.text.toString()
                 loginPresenter.sendVerifyRequest(loginActivity, phoneNumberWithPrefix, verificationChangeListener)
                 return

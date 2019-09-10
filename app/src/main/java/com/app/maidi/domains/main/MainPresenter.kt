@@ -1,6 +1,5 @@
 package com.app.maidi.domains.main
 
-import android.util.Log
 import com.app.maidi.domains.base.BasePresenter
 import com.app.maidi.models.Dose
 import com.app.maidi.models.ImmunisationCard
@@ -8,18 +7,15 @@ import com.app.maidi.models.Vaccine
 import com.app.maidi.networks.NetworkProvider
 import com.app.maidi.services.account.AccountService
 import com.app.maidi.utils.Constants
-import com.app.maidi.utils.Utils
-import com.hannesdorfmann.mosby3.mvp.MvpPresenter
+import com.app.maidi.utils.DateUtils
+import com.app.maidi.utils.MethodUtils
 import io.reactivex.disposables.Disposable
-import org.hisp.dhis.android.sdk.controllers.DhisController
-import org.hisp.dhis.android.sdk.controllers.metadata.MetaDataController
 import org.hisp.dhis.android.sdk.controllers.tracker.TrackerController
 import org.hisp.dhis.android.sdk.job.JobExecutor
 import org.hisp.dhis.android.sdk.job.NetworkJob
 import org.hisp.dhis.android.sdk.network.APIException
 import org.hisp.dhis.android.sdk.network.ResponseHolder
 import org.hisp.dhis.android.sdk.persistence.models.*
-import org.hisp.dhis.android.sdk.utils.support.DateUtils
 import org.joda.time.DateTime
 import org.joda.time.Days
 import org.joda.time.LocalDate
@@ -39,7 +35,7 @@ class MainPresenter : BasePresenter<MainView> {
     }
 
     // AEFI MODULE
-    fun getAefiTrackedEntityInstances(orgUnitId: String, programId: String){
+    fun getAefiTrackedEntityInstances(orgUnitId: String, aefiProgramId: String, immunisationProgramId: String){
         if(isViewAttached){
             view.showLoading()
         }
@@ -49,9 +45,14 @@ class MainPresenter : BasePresenter<MainView> {
 
                 @Throws(APIException::class)
                 override fun execute(): Any {
-                    var trackedEntityInstances = listOf<TrackedEntityInstance>()
+                    var trackedEntityInstances = arrayListOf<TrackedEntityInstance>()
+                    var aefiInstances = listOf<TrackedEntityInstance>()
+                    var immunisationInstances = listOf<TrackedEntityInstance>()
 
-                    trackedEntityInstances = TrackerController.queryLocalTrackedEntityInstances(orgUnitId, programId)
+                    aefiInstances = TrackerController.queryLocalTrackedEntityInstances(orgUnitId, aefiProgramId)
+                    immunisationInstances = TrackerController.queryLocalTrackedEntityInstances(orgUnitId, immunisationProgramId)
+                    trackedEntityInstances.addAll(aefiInstances)
+                    trackedEntityInstances.addAll(immunisationInstances)
 
                     if(isViewAttached)
                         view.getAefiTrackedEntityInstances(trackedEntityInstances)
@@ -83,12 +84,6 @@ class MainPresenter : BasePresenter<MainView> {
 
                     trackedEntityInstances = TrackerController.queryLocalTrackedEntityInstances(orgUnitId, programId)
 
-                    /*trackedEntityInstances = TrackerController.queryTrackedEntityInstancesDataFromServer(
-                        DhisController.getInstance().dhisApi,
-                        orgUnitId,
-                        programId, ""
-                    )*/
-
                     var programStage = TrackerController.getProgramStageByName(programId, Constants.IMMUNISATION)
                     var programDataElements = TrackerController.getProgramStageDataElements(programStage.uid)
                     var assignedDataElements = arrayListOf<DataElement>()
@@ -112,11 +107,6 @@ class MainPresenter : BasePresenter<MainView> {
 
                         var enrollments = TrackerController.getEnrollments(trackedEntityInstance)
 
-                        /*var enrollments = TrackerController.getEnrollmentDataFromServer(
-                            DhisController.getInstance().dhisApi,
-                            trackedEntityInstance,
-                            null)*/
-
                         for(enrollment in enrollments){
                             if(enrollment.trackedEntityInstance.equals(trackedEntityInstance.uid)){
                                 var events = enrollment.getEventThoughOrganisationUnit(orgUnitId)
@@ -137,62 +127,10 @@ class MainPresenter : BasePresenter<MainView> {
                                                                     true
                                                                 )
                                                                 injectedVaccineList.add(item)
-                                                                isHasValue = true
                                                             }
                                                         }
                                                         break
                                                     }
-                                                }
-
-                                                if(!isHasValue){
-
-                                                    /*if(LocalDate(DateUtils.parseDate(enrollment.incidentDate))
-                                                            .isEqual(LocalDate(DateUtils.parseDate("2019-07-24")))){*/
-                                                        var isExistedOnList = false
-                                                        for(injectedVaccine in injectedVaccineList){
-                                                            if(injectedVaccine.dataElement.displayName.equals(vaccine.dataElement.displayName)
-                                                                && (LocalDate(DateUtils.parseDate(injectedVaccine.dueDate))
-                                                                        .isEqual(LocalDate(DateUtils.parseDate(event.dueDate))))
-                                                                && !injectedVaccine.isInjected){
-                                                                isExistedOnList = true
-                                                                break
-                                                            }
-                                                        }
-
-                                                        if(!isExistedOnList){
-                                                            if (event.eventDate != null && !event.eventDate.isEmpty()) {
-                                                                if (Utils.checkVaccineReachDueDate(
-                                                                        vaccine.dataElement.displayName,
-                                                                        LocalDate(DateUtils.parseDate(enrollment.incidentDate)),
-                                                                        LocalDate(DateUtils.parseDate(event.eventDate))
-                                                                    )
-                                                                ) {
-                                                                    var item = Vaccine(
-                                                                        vaccine.dataElement,
-                                                                        null,
-                                                                        event.dueDate,
-                                                                        false
-                                                                    )
-                                                                    injectedVaccineList.add(item)
-                                                                }
-                                                            }else{
-                                                                if (Utils.checkVaccineReachDueDate(
-                                                                        vaccine.dataElement.displayName,
-                                                                        LocalDate(DateUtils.parseDate(enrollment.incidentDate)),
-                                                                        LocalDate.now()
-                                                                    )
-                                                                ) {
-                                                                    var item = Vaccine(
-                                                                        vaccine.dataElement,
-                                                                        null,
-                                                                        event.dueDate,
-                                                                        false
-                                                                    )
-                                                                    injectedVaccineList.add(item)
-                                                                }
-                                                            }
-                                                        }
-                                                    //}
                                                 }
                                             }
                                         }
@@ -204,8 +142,15 @@ class MainPresenter : BasePresenter<MainView> {
 
                         }
 
+                        var scheduleVaccineList = MethodUtils.createScheduleVaccineList(
+                            LocalDate(org.hisp.dhis.android.sdk.utils.support.DateUtils.parseDate(immunisationCard.enrollment.incidentDate)),
+                            LocalDate.now(),
+                            injectedVaccineList,
+                            vaccineList
+                        )
+
                         immunisationCard.trackedEntityInstance = trackedEntityInstance
-                        immunisationCard.vaccineList = injectedVaccineList//.subList(0, 6)
+                        immunisationCard.vaccineList = scheduleVaccineList//.subList(0, 6)
 
                         immunisationCardList.add(immunisationCard)
 
@@ -376,7 +321,7 @@ class MainPresenter : BasePresenter<MainView> {
     fun checkDateInOnSessionOrNot(sessionDate: String, dueDate: String) : Boolean{
         var sessionDateTime = DateTime.parse(sessionDate, DateTimeFormat.forPattern(Constants.SIMPLE_SERVER_DATE_PATTERN))
         var dueDateTime: DateTime? = null
-        if(Utils.isValidDateFollowPattern(dueDate)){
+        if(DateUtils.isValidDateFollowPattern(dueDate)){
             dueDateTime = DateTime.parse(dueDate, DateTimeFormat.forPattern(Constants.SIMPLE_SERVER_DATE_PATTERN))
         }else{
             dueDateTime = DateTime.parse(dueDate /*DateTimeFormat.forPattern(Constants.FULL_DATE_PATTERN)*/)

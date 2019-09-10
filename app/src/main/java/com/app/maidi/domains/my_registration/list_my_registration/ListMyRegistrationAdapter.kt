@@ -5,17 +5,13 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.FrameLayout
-import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.app.maidi.R
-import com.app.maidi.utils.Constants
-import com.app.maidi.utils.Utils
+import com.app.maidi.utils.DateUtils
 import de.hdodenhof.circleimageview.CircleImageView
 import org.hisp.dhis.android.sdk.controllers.tracker.TrackerController
-import org.hisp.dhis.android.sdk.persistence.models.Enrollment
 import org.hisp.dhis.android.sdk.persistence.models.TrackedEntityInstance
-import java.util.regex.Pattern
 
 class ListMyRegistrationAdapter : RecyclerView.Adapter<ListMyRegistrationAdapter.ListMyRegistrationHolder> {
 
@@ -64,10 +60,10 @@ class ListMyRegistrationAdapter : RecyclerView.Adapter<ListMyRegistrationAdapter
         }
 
         if(enrollment != null && enrollment.incidentDate != null) {
-            if (Utils.isValidDateFollowPattern(enrollment.incidentDate)) {
+            if (DateUtils.isValidDateFollowPattern(enrollment.incidentDate)) {
                 stringBuilder.append(enrollment.incidentDate)
             } else {
-                stringBuilder.append(Utils.convertFromFullDateToSimpleDate(enrollment.incidentDate))
+                stringBuilder.append(DateUtils.convertFromFullDateToSimpleDate(enrollment.incidentDate))
             }
         }
 

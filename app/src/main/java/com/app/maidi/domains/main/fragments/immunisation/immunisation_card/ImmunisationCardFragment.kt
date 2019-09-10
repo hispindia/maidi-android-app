@@ -18,11 +18,9 @@ import com.app.maidi.models.ImmunisationCard
 import com.app.maidi.models.Vaccine
 import com.app.maidi.utils.Constants
 import com.app.maidi.utils.LinearLayoutManagerWrapper
-import com.app.maidi.utils.Utils
+import com.app.maidi.utils.DateUtils
 import com.app.maidi.widget.ExportPDF
 import org.hisp.dhis.android.sdk.controllers.metadata.MetaDataController
-import org.hisp.dhis.android.sdk.controllers.tracker.TrackerController
-import org.hisp.dhis.android.sdk.persistence.models.Constant
 import org.hisp.dhis.android.sdk.persistence.models.OrganisationUnit
 import org.hisp.dhis.android.sdk.persistence.models.Program
 import org.joda.time.DateTime
@@ -105,7 +103,7 @@ class ImmunisationCardFragment : BaseFragment() {
             var pdfFile = pdf.openDocument("Report_MAIDI_ImmunisationCards_" + reportDate + ".pdf")
             pdf.addTitle("Mobile Application for Immunisation Datas of India",
                 "Immunisation Records",
-                Utils.simpleLocalDateFormat.format(DateTime.now().toDate())
+                DateUtils.simpleLocalDateFormat.format(DateTime.now().toDate())
             )
 
             for(item in immunisationList){
@@ -122,10 +120,10 @@ class ImmunisationCardFragment : BaseFragment() {
                 }
 
                 item.enrollment!!.let {
-                    if(Utils.isValidDateFollowPattern(it.incidentDate))
-                        builder.append("Date of Birth: " + Utils.convertServerDateToLocalDate(it.incidentDate) + ", ")
+                    if(DateUtils.isValidDateFollowPattern(it.incidentDate))
+                        builder.append("Date of Birth: " + DateUtils.convertServerDateToLocalDate(it.incidentDate) + ", ")
                     else
-                        builder.append("Date of Birth: " + Utils.convertFromFullDateToSimpleDate(it.incidentDate) + ", ")
+                        builder.append("Date of Birth: " + DateUtils.convertFromFullDateToSimpleDate(it.incidentDate) + ", ")
                 }
 
                 builder.append("Reg ID: " + item.trackedEntityInstance.uid)
@@ -148,10 +146,10 @@ class ImmunisationCardFragment : BaseFragment() {
             var vaccineName = vaccine.dataElement.displayName
             var vaccineDueDate = ""
             if(vaccine.dueDate != null && !vaccine.dueDate.isEmpty()){
-                if(Utils.isValidDateFollowPattern(vaccine.dueDate))
-                    vaccineDueDate = Utils.convertServerDateToLocalDate(vaccine.dueDate)
+                if(DateUtils.isValidDateFollowPattern(vaccine.dueDate))
+                    vaccineDueDate = DateUtils.convertServerDateToLocalDate(vaccine.dueDate)
                 else
-                    vaccineDueDate = Utils.convertFromFullDateToSimpleDate(vaccine.dueDate)
+                    vaccineDueDate = DateUtils.convertFromFullDateToSimpleDate(vaccine.dueDate)
             }
             vaccineList.add(arrayOf(counter.toString(), vaccineName, vaccineDueDate))
             counter++

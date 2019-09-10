@@ -9,8 +9,8 @@ import com.app.maidi.R
 import com.app.maidi.custom.MaidiCrashManagerListener
 import com.app.maidi.domains.base.BaseActivity
 import com.app.maidi.infrastructures.ActivityModules
-import com.app.maidi.utils.Utils
-import com.app.maidi.utils.Utils.Companion.setupEditTextKeyboard
+import com.app.maidi.utils.DateUtils
+import com.app.maidi.utils.MethodUtils.Companion.setupEditTextKeyboard
 import com.squareup.otto.Subscribe
 import net.hockeyapp.android.CrashManager
 import org.hisp.dhis.android.sdk.controllers.metadata.MetaDataController
@@ -59,8 +59,8 @@ class ChildRegistrationActivity : BaseActivity<ChildRegistrationView, ChildRegis
             currentProgram = MetaDataController.getProgramByName(intent.extras.getString(ORGANISATION_UNIT))
         }
 
-        var enrollmentDate = Utils.convertCalendarToServerString(DateTime.now().toDate())
-        var incidentDate = Utils.convertCalendarToServerString(DateTime.now().toDate())
+        var enrollmentDate = DateUtils.convertCalendarToServerString(DateTime.now().toDate())
+        var incidentDate = DateUtils.convertCalendarToServerString(DateTime.now().toDate())
 
         enrollmentDataEntryFragment = EnrollmentDataEntryFragment.newInstance(topUnit.id, currentProgram.uid, enrollmentDate, incidentDate)
 

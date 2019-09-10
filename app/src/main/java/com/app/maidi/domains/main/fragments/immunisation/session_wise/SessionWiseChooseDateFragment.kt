@@ -1,6 +1,5 @@
 package com.app.maidi.domains.main.fragments.immunisation.session_wise
 
-import android.animation.Animator
 import android.app.DatePickerDialog
 import android.os.Bundle
 import android.os.Handler
@@ -15,13 +14,10 @@ import com.app.maidi.R
 import com.app.maidi.domains.base.BaseFragment
 import com.app.maidi.domains.main.MainActivity
 import com.app.maidi.domains.main.MainPresenter
-import com.app.maidi.domains.my_registration.list_my_registration.ListMyRegistrationActivity
-import com.app.maidi.utils.Utils
-import com.github.florent37.singledateandtimepicker.SingleDateAndTimePicker
+import com.app.maidi.utils.DateUtils
 import com.google.android.material.textfield.TextInputEditText
 import org.joda.time.DateTime
 import org.joda.time.LocalDate
-import java.util.*
 
 class SessionWiseChooseDateFragment : BaseFragment(), DatePickerDialog.OnDateSetListener/*, SingleDateAndTimePicker.OnDateChangedListener*/ {
 
@@ -42,7 +38,7 @@ class SessionWiseChooseDateFragment : BaseFragment(), DatePickerDialog.OnDateSet
         ButterKnife.bind(this, viewGroup)
 
         //datePicker.addOnDateChangedListener(this)
-        etDateOfBirth.setText(Utils.convertCalendarToDayOfWeekString(DateTime.now().toDate()))
+        etDateOfBirth.setText(DateUtils.convertCalendarToDayOfWeekString(DateTime.now().toDate()))
 
         return viewGroup
     }
@@ -51,24 +47,24 @@ class SessionWiseChooseDateFragment : BaseFragment(), DatePickerDialog.OnDateSet
         super.onResume()
         mainActivity.solidActionBar(resources.getString(R.string.session_wise_vaccination_due))
         mainActivity.isSwipeForceSyncronizeEnabled(false)
-        //datePicker.selectDate(Utils.convertDayWeekStringToCalendar(etDateOfBirth.text.toString()))
+        //datePicker.selectDate(DateUtils.convertDayWeekStringToCalendar(etDateOfBirth.text.toString()))
     }
 
     @OnClick(R.id.fragment_session_wise_choose_date_v_date_of_birth)
     fun onDateChooseClicked(){
-        var chooseDate = Utils.convertDayWeekStringToCalendar(etDateOfBirth.text.toString())
+        var chooseDate = DateUtils.convertDayWeekStringToCalendar(etDateOfBirth.text.toString())
         var dateDialog = DatePickerDialog(context, this, chooseDate.getYear(), chooseDate.getMonthOfYear() - 1, chooseDate.getDayOfMonth())
         dateDialog.show()
     }
 
     override fun onDateSet(view : DatePicker, year: Int, monthOfYear : Int, dayOfMonth: Int) {
         val date = LocalDate(year, monthOfYear + 1, dayOfMonth)
-        etDateOfBirth.setText(Utils.convertCalendarToDayOfWeekString(date.toDate()))
+        etDateOfBirth.setText(DateUtils.convertCalendarToDayOfWeekString(date.toDate()))
     }
 
     /*override fun onDateChanged(displayed: String?, date: Date?) {
         date!!.let {
-            etDateOfBirth.setText(Utils.convertCalendarToDayOfWeekString(date))
+            etDateOfBirth.setText(DateUtils.convertCalendarToDayOfWeekString(date))
         }
     }*/
 
@@ -83,7 +79,7 @@ class SessionWiseChooseDateFragment : BaseFragment(), DatePickerDialog.OnDateSet
 
     fun gotoSessionWiseDataFragment(){
         var bundle = Bundle()
-        bundle.putString(SessionWiseDataListFragment.SESSION_DATE, Utils.convertDayOfWeekDateToServerDate(etDateOfBirth.text.toString()))
+        bundle.putString(SessionWiseDataListFragment.SESSION_DATE, DateUtils.convertDayOfWeekDateToServerDate(etDateOfBirth.text.toString()))
         var sessionWiseDataListFragment = SessionWiseDataListFragment()
         sessionWiseDataListFragment.arguments = bundle
         mainActivity.transformFragment(R.id.activity_main_fl_content, sessionWiseDataListFragment)

@@ -1,22 +1,19 @@
 package com.app.maidi.domains.main.fragments.workplan
 
-import android.app.DatePickerDialog
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.DatePicker
 import androidx.viewpager.widget.ViewPager
 import butterknife.BindView
 import butterknife.ButterKnife
 import butterknife.OnClick
-import com.app.maidi.BuildConfig
 import com.app.maidi.R
 import com.app.maidi.domains.base.BaseFragment
 import com.app.maidi.domains.main.MainActivity
 import com.app.maidi.domains.main.MainPresenter
 import com.app.maidi.utils.Constants
-import com.app.maidi.utils.Utils
+import com.app.maidi.utils.DateUtils
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.textfield.TextInputEditText
 import com.whiteelephant.monthpicker.MonthPickerDialog
@@ -25,7 +22,6 @@ import org.hisp.dhis.android.sdk.persistence.models.Event
 import org.hisp.dhis.android.sdk.persistence.models.OrganisationUnit
 import org.hisp.dhis.android.sdk.persistence.models.Program
 import org.hisp.dhis.android.sdk.persistence.models.ProgramStage
-import org.hisp.dhis.android.sdk.ui.fragments.eventdataentry.EventDataEntryFragment
 import org.joda.time.DateTimeConstants
 import org.joda.time.LocalDate
 import java.util.*
@@ -72,7 +68,7 @@ class MonthlyWorkplanDetailFragment : BaseFragment, MonthPickerDialog.OnDateSetL
         var viewGroup = inflater.inflate(R.layout.fragment_monthly_workplan_detail, container, false)
         ButterKnife.bind(this, viewGroup)
 
-        etSelectedMonth.setText(Utils.convertCalendarToMonthString(Calendar.getInstance().time))
+        etSelectedMonth.setText(DateUtils.convertCalendarToMonthString(Calendar.getInstance().time))
         weeklyPagerAdapter = WeeklyPagerAdapter(childFragmentManager!!, weekList, workplanList, isEditMode)
         vpPagers.adapter = weeklyPagerAdapter
         //vpPagers.offscreenPageLimit = weekList.size
@@ -84,16 +80,10 @@ class MonthlyWorkplanDetailFragment : BaseFragment, MonthPickerDialog.OnDateSetL
     override fun onResume() {
         super.onResume()
 
-        var createButtonListener = View.OnClickListener {
-            mainActivity.transformFragment(R.id.activity_main_fl_content,
-                EventDataEntryFragment.newWorkplanEventInstance(currentUnit.id, currentProgram.uid, programStage.uid))
-            mainActivity.solidActionBar(resources.getString(R.string.monthly_workplan_create_new_event))
-        }
-
         if(isEditMode){
-            mainActivity.solidActionBar(resources.getString(R.string.monthly_workplan_update), createButtonListener)
+            mainActivity.solidActionBar(resources.getString(R.string.monthly_workplan_update))
         }else{
-            mainActivity.solidActionBar(resources.getString(R.string.monthly_workplan), createButtonListener)
+            mainActivity.solidActionBar(resources.getString(R.string.monthly_workplan))
         }
 
         mainActivity.isSwipeForceSyncronizeEnabled(false)
@@ -108,7 +98,7 @@ class MonthlyWorkplanDetailFragment : BaseFragment, MonthPickerDialog.OnDateSetL
 
     @OnClick(R.id.fragment_monthly_workplan_detail_v_selected_month)
     fun openMonthChooser(){
-        var monthDate = Utils.convertMonthStringToCalendar(etSelectedMonth.text.toString())
+        var monthDate = DateUtils.convertMonthStringToCalendar(etSelectedMonth.text.toString())
         mainActivity.showSelectMonthChooseDialog(this, monthDate)
     }
 
@@ -125,7 +115,7 @@ class MonthlyWorkplanDetailFragment : BaseFragment, MonthPickerDialog.OnDateSetL
 
     fun getWeekList(monthDate: String){
         weekList = hashMapOf()
-        var firstDay = Utils.convertMonthStringToLocalDate(monthDate).withDayOfMonth(1)
+        var firstDay = DateUtils.convertMonthStringToLocalDate(monthDate).withDayOfMonth(1)
         var checkDay = firstDay
         var currentWeek = 1
         var weekName = "Week " + currentWeek

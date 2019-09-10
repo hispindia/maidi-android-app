@@ -4,7 +4,6 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import butterknife.BindView
@@ -14,12 +13,9 @@ import com.app.maidi.domains.base.BaseFragment
 import com.app.maidi.domains.main.MainActivity
 import com.app.maidi.domains.main.MainPresenter
 import com.app.maidi.domains.main.fragments.listener.OnItemClickListener
-import com.app.maidi.domains.main.fragments.listener.OnSurveyItemClickListener
-import com.app.maidi.domains.main.fragments.survey.ListSurveyAdapter
 import com.app.maidi.utils.Constants
 import com.app.maidi.utils.LinearLayoutManagerWrapper
-import com.app.maidi.utils.Utils
-import com.app.maidi.widget.ExportPDF
+import com.app.maidi.utils.DateUtils
 import org.hisp.dhis.android.sdk.controllers.metadata.MetaDataController
 import org.hisp.dhis.android.sdk.controllers.tracker.TrackerController
 import org.hisp.dhis.android.sdk.persistence.models.Event
@@ -27,7 +23,6 @@ import org.hisp.dhis.android.sdk.persistence.models.OrganisationUnit
 import org.hisp.dhis.android.sdk.persistence.models.Program
 import org.hisp.dhis.android.sdk.persistence.models.ProgramStage
 import org.hisp.dhis.android.sdk.ui.fragments.eventdataentry.EventDataEntryFragment
-import org.joda.time.DateTime
 
 class ListVillageFragment : BaseFragment, OnItemClickListener {
 
@@ -83,10 +78,10 @@ class ListVillageFragment : BaseFragment, OnItemClickListener {
     fun getVillageListByDate(){
         for(event in eventList){
             var date: String?
-            if(Utils.isValidDateFollowPattern(event.eventDate))
-                date = Utils.convertServerDateToLocalDate(event.eventDate)
+            if(DateUtils.isValidDateFollowPattern(event.eventDate))
+                date = DateUtils.convertServerDateToLocalDate(event.eventDate)
             else
-                date = Utils.convertFromFullDateToSimpleDate(event.eventDate)
+                date = DateUtils.convertFromFullDateToSimpleDate(event.eventDate)
 
             if(date.equals(eventDate)){
                 var values = TrackerController.getDataValue(event.event)
@@ -103,13 +98,7 @@ class ListVillageFragment : BaseFragment, OnItemClickListener {
     override fun onResume() {
         super.onResume()
 
-        var createButtonListener = View.OnClickListener {
-            mainActivity.transformFragment(R.id.activity_main_fl_content,
-                EventDataEntryFragment.newWorkplanEventInstance(currentUnit.id, currentProgram.uid, programStage.uid))
-            mainActivity.solidActionBar(resources.getString(R.string.monthly_workplan_create_new_event))
-        }
-
-        mainActivity.solidActionBar(resources.getString(R.string.monthly_workplan_update), createButtonListener)
+        mainActivity.solidActionBar(resources.getString(R.string.monthly_workplan_update))
         mainActivity.isSwipeForceSyncronizeEnabled(false)
     }
 

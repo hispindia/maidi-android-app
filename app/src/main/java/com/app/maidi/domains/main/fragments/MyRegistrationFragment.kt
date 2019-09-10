@@ -1,14 +1,10 @@
 package com.app.maidi.domains.main.fragments
 
-import android.animation.Animator
-import android.animation.ValueAnimator
 import android.app.DatePickerDialog
 import android.os.Bundle
-import android.os.Handler
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.view.animation.DecelerateInterpolator
 import android.widget.DatePicker
 import butterknife.BindView
 import butterknife.ButterKnife
@@ -18,8 +14,7 @@ import com.app.maidi.domains.base.BaseFragment
 import com.app.maidi.domains.main.MainActivity
 import com.app.maidi.domains.main.MainPresenter
 import com.app.maidi.domains.my_registration.list_my_registration.ListMyRegistrationActivity
-import com.app.maidi.utils.Utils
-import com.github.florent37.singledateandtimepicker.SingleDateAndTimePicker
+import com.app.maidi.utils.DateUtils
 import com.google.android.material.textfield.TextInputEditText
 import org.joda.time.LocalDate
 import java.util.*
@@ -42,7 +37,7 @@ class MyRegistrationFragment : BaseFragment(), DatePickerDialog.OnDateSetListene
         var viewGroup = inflater.inflate(R.layout.fragment_my_registration, container, false)
         ButterKnife.bind(this, viewGroup)
 
-        etDateOfBirth.setText(Utils.convertCalendarToString(Calendar.getInstance().time))
+        etDateOfBirth.setText(DateUtils.convertCalendarToString(Calendar.getInstance().time))
 
         return viewGroup
     }
@@ -55,12 +50,12 @@ class MyRegistrationFragment : BaseFragment(), DatePickerDialog.OnDateSetListene
 
     override fun onDateSet(view : DatePicker, year: Int, monthOfYear : Int, dayOfMonth: Int) {
         val date = LocalDate(year, monthOfYear + 1, dayOfMonth)
-        etDateOfBirth.setText(Utils.convertCalendarToString(date.toDate()))
+        etDateOfBirth.setText(DateUtils.convertCalendarToString(date.toDate()))
     }
 
     @OnClick(R.id.fragment_my_registration_v_date_of_birth)
     fun onDateOfBirthClicked(){
-        var chooseDate = Utils.convertStringToLocalDate(etDateOfBirth.text.toString())
+        var chooseDate = DateUtils.convertStringToLocalDate(etDateOfBirth.text.toString())
         var dateDialog = DatePickerDialog(context, this, chooseDate.getYear(), chooseDate.getMonthOfYear() - 1, chooseDate.getDayOfMonth())
         dateDialog.show()
         //controlPicker(500)
@@ -85,7 +80,7 @@ class MyRegistrationFragment : BaseFragment(), DatePickerDialog.OnDateSetListene
 
     fun gotoListRegistrationScreen(){
         var bundle = Bundle()
-        bundle.putString(ListMyRegistrationActivity.SEARCH_DATE, Utils.convertLocalDateToServerDate(etDateOfBirth.text.toString()))
+        bundle.putString(ListMyRegistrationActivity.SEARCH_DATE, DateUtils.convertLocalDateToServerDate(etDateOfBirth.text.toString()))
         mainActivity.transformActivity(mainActivity, ListMyRegistrationActivity::class.java, false, bundle)
     }
 
@@ -117,7 +112,7 @@ class MyRegistrationFragment : BaseFragment(), DatePickerDialog.OnDateSetListene
             override fun onAnimationEnd(p0: Animator?) {
                 if (!expand) {
                     singleDateAndTimePicker.visibility = View.INVISIBLE
-                    etDateOfBirth.setText(Utils.convertCalendarToString(singleDateAndTimePicker.date))
+                    etDateOfBirth.setText(DateUtils.convertCalendarToString(singleDateAndTimePicker.date))
                 }
             }
 
@@ -128,7 +123,7 @@ class MyRegistrationFragment : BaseFragment(), DatePickerDialog.OnDateSetListene
             override fun onAnimationStart(p0: Animator?) {
                 if (expand) {
                     singleDateAndTimePicker.visibility = View.VISIBLE
-                    singleDateAndTimePicker.selectDate(Utils.convertStringToCalendar(etDateOfBirth.text.toString()))
+                    singleDateAndTimePicker.selectDate(DateUtils.convertStringToCalendar(etDateOfBirth.text.toString()))
                 }
             }
         })
