@@ -25,7 +25,7 @@ import org.hisp.dhis.android.sdk.persistence.models.DataElement
 import org.hisp.dhis.android.sdk.persistence.models.OrganisationUnit
 import org.hisp.dhis.android.sdk.persistence.models.Program
 
-class SessionWiseDataListFragment : BaseFragment(), SessionWiseDataAdapter.LoadViewListener{
+class SessionWiseDataListFragment : BaseFragment(){
 
     companion object{
         val SESSION_DATE = "SEARCH_DATE"
@@ -61,15 +61,19 @@ class SessionWiseDataListFragment : BaseFragment(), SessionWiseDataAdapter.LoadV
             }
         }
 
-        //mainActivity.requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE
-
         currentUnit = MetaDataController.getTopAssignedOrganisationUnit()
         currentProgram = MetaDataController.getProgramByName(Constants.IMMUNISATION)
 
         var viewGroup = inflater.inflate(R.layout.fragment_session_wise_data_list, container, false)
         ButterKnife.bind(this, viewGroup)
 
-        rcvChildList.layoutManager = LinearLayoutManager(mainActivity)
+        var layoutManager = object : LinearLayoutManager(mainActivity, VERTICAL, false){
+            override fun onLayoutCompleted(state: RecyclerView.State?) {
+                super.onLayoutCompleted(state)
+                mainActivity.hideLoading()
+            }
+        }
+        rcvChildList.layoutManager = layoutManager
 
         return viewGroup
     }
@@ -77,10 +81,6 @@ class SessionWiseDataListFragment : BaseFragment(), SessionWiseDataAdapter.LoadV
     override fun onResume() {
         super.onResume()
         mainPresenter.getSessionWiseDatas(currentUnit.id, currentProgram.uid, sessionDate)
-    }
-
-    override fun onLoadSuccess() {
-        mainActivity.hideLoading()
     }
 
     fun getProgramDataElements(dataElements : List<DataElement>){
@@ -118,7 +118,7 @@ class SessionWiseDataListFragment : BaseFragment(), SessionWiseDataAdapter.LoadV
     fun getSessionWiseDataList(sessionWiseList: List<ImmunisationCard>){
         if(sessionWiseList.size <= 0)
             mainActivity.hideLoading()
-        adapter = SessionWiseDataAdapter(mainActivity, sessionWiseList, this)
+        adapter = SessionWiseDataAdapter(mainActivity, sessionWiseList)
         rcvChildList.adapter = adapter
     }
 

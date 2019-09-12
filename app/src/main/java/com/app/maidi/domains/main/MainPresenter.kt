@@ -66,6 +66,8 @@ class MainPresenter : BasePresenter<MainView> {
         }
     }
 
+
+
     // IMMUNISATION SUB-MODULE
     fun getImmunisationTrackedEntityInstances(orgUnitId: String, programId: String){
 
@@ -105,41 +107,38 @@ class MainPresenter : BasePresenter<MainView> {
                             vaccineList.add(Vaccine(dataElement, null,"", false))
                         }
 
-                        var enrollments = TrackerController.getEnrollments(trackedEntityInstance)
+                        var enrollment = TrackerController.getEnrollment(programId, trackedEntityInstance)
 
-                        for(enrollment in enrollments){
-                            if(enrollment.trackedEntityInstance.equals(trackedEntityInstance.uid)){
-                                var events = enrollment.getEventThoughOrganisationUnit(orgUnitId)
-                                if(events != null){
-                                    for(event in events){
-                                        if(event.programStageId.equals(programStage.uid)){
-                                            var dataValues = event.dataValues
-                                            for(vaccine in vaccineList){
-                                                var isHasValue = false
-                                                for(dataValue in dataValues){
-                                                    if(dataValue.dataElement.equals(vaccine.dataElement.uid)){
-                                                        if(!vaccine.dataElement.displayName.contains("Show")) {
-                                                            if(!dataValue.value.isEmpty()){
-                                                                var item = Vaccine(
-                                                                    vaccine.dataElement,
-                                                                    dataValue,
-                                                                    event.dueDate,
-                                                                    true
-                                                                )
+                        if(enrollment != null){
+                            var events = enrollment.getEventThoughOrganisationUnit(orgUnitId)
+                            if(events != null){
+                                for(event in events){
+                                    if(event.programStageId.equals(programStage.uid)){
+                                        var dataValues = event.dataValues
+                                        for(vaccine in vaccineList){
+                                            for(dataValue in dataValues){
+                                                if(dataValue.dataElement.equals(vaccine.dataElement.uid)){
+                                                    if(!vaccine.dataElement.displayName.contains("Show")) {
+                                                        if(!dataValue.value.isEmpty()){
+                                                            var item = Vaccine(
+                                                                vaccine.dataElement,
+                                                                dataValue,
+                                                                event.dueDate,
+                                                                if(dataValue.value.equals("true")) true else false
+                                                            )
+                                                            if(item.isInjected)
                                                                 injectedVaccineList.add(item)
-                                                            }
                                                         }
-                                                        break
                                                     }
+                                                    break
                                                 }
                                             }
                                         }
                                     }
                                 }
-
-                                immunisationCard.enrollment = enrollment
                             }
 
+                            immunisationCard.enrollment = enrollment
                         }
 
                         var scheduleVaccineList = MethodUtils.createScheduleVaccineList(
@@ -169,6 +168,8 @@ class MainPresenter : BasePresenter<MainView> {
 
     }
 
+
+
     // ------- SESSION WISE SUB-MODULE ----------- //
     fun getSessionWiseDatas(orgUnitId: String, programId: String, sessionDate: String){
         if(isViewAttached){
@@ -182,28 +183,32 @@ class MainPresenter : BasePresenter<MainView> {
                 override fun execute(): Any {
 
                     var allDataElements = getProgramDataElement(programId)
-                    var doseList = arrayListOf<Dose>()
-                    var filtedDataElements = arrayListOf<DataElement>()
+                    var trackedEntityInstances = TrackerController.queryLocalTrackedEntityInstances(orgUnitId, programId)
+                    var filtedTrackedEntityInstances = arrayListOf<TrackedEntityInstance>()
 
-                    for(element in allDataElements){
-                        var total = getTotalDosesForVaccine(element, sessionDate)
-                        if(total > 0) {
-                            doseList.add(Dose(element.uid, total))
-                            filtedDataElements.add(element)
+                    for(instance in trackedEntityInstances){
+                        var enrollment = TrackerController.getEnrollment(programId, instance)
+                        if(enrollment != null){
+                            var incidentLocalDate = LocalDate(org.hisp.dhis.android.sdk.utils.support.DateUtils.parseDate(enrollment.incidentDate))
+                            var sessionLocalDate = LocalDate(org.hisp.dhis.android.sdk.utils.support.DateUtils.parseDate(sessionDate))
+                            if(sessionLocalDate.isAfter(incidentLocalDate)){
+                                filtedTrackedEntityInstances.add(instance)
+                            }
                         }
                     }
 
-                    if(isViewAttached)
-                        view.getProgramDataElements(filtedDataElements)
+                    var sessionDataElements = getListDataElementForSession(orgUnitId, programId, sessionDate, filtedTrackedEntityInstances, allDataElements)
+                    var immunisationCardList = getSessionWiseDataList(orgUnitId, programId, sessionDate, filtedTrackedEntityInstances, sessionDataElements, allDataElements)
+                    var doseList = getTotalDoseList(orgUnitId, programId, sessionDataElements, immunisationCardList)
 
-                    var immunisationCardList = getSessionWiseDataList(orgUnitId, programId, sessionDate, filtedDataElements)
+                    if(isViewAttached)
+                        view.getProgramDataElements(sessionDataElements)
 
                     if(isViewAttached)
                         view.getSessionWiseDataListSuccess(immunisationCardList)
 
                     if(isViewAttached) {
                         view.getTotalDoseList(doseList)
-                        //view.hideLoading()
                     }
 
                     return Any()
@@ -232,103 +237,192 @@ class MainPresenter : BasePresenter<MainView> {
         return assignedDataElements
     }
 
-    fun getSessionWiseDataList(orgUnitId: String, programId: String, sessionDate: String, assignedDataElements: List<DataElement>) : List<ImmunisationCard>{
-
-        var immunisationCardList = arrayListOf<ImmunisationCard>()
-        var trackedEntityInstances = TrackerController.queryLocalTrackedEntityInstances(orgUnitId, programId)
-
-        /*trackedEntityInstances = TrackerController.queryTrackedEntityInstancesDataFromServer(
-            DhisController.getInstance().dhisApi,
-            orgUnitId,
-            programId, ""
-        )*/
-
-        //var assignedDataElements = getProgramDataElement(programId)
+    fun getListDataElementForSession(
+        orgUnitId: String,
+        programId: String,
+        sessionDate: String,
+        trackedEntityInstances: List<TrackedEntityInstance>,
+        assignedDataElements: List<DataElement>) : List<DataElement>{
+        var sessionDataElements = arrayListOf<DataElement>()
 
         for(trackedEntityInstance in trackedEntityInstances){
 
-            var isHasVaccineOnSession = false
-            var immunisationCard = ImmunisationCard()
             var vaccineList = arrayListOf<Vaccine>()
+            var injectedVaccineList = arrayListOf<Vaccine>()
+            var scheduleVaccineList = arrayListOf<Vaccine>()
 
             for(dataElement in assignedDataElements){
                 vaccineList.add(Vaccine(dataElement, null,"", false))
             }
 
-            var enrollments = TrackerController.getEnrollments(trackedEntityInstance)
+            var enrollment = TrackerController.getEnrollment(programId, trackedEntityInstance)
 
-            /*var enrollments = TrackerController.getEnrollmentDataFromServer(
-                DhisController.getInstance().dhisApi,
-                trackedEntityInstance,
-                null)*/
-
-            for(enrollment in enrollments){
-                if(enrollment.trackedEntityInstance.equals(trackedEntityInstance.uid)){
-                    var events = enrollment.getEvents(true)
-                    if(events != null){
-                        for(event in events){
-                            var dataValues = event.dataValues
-                            if(dataValues != null){
-                                for(dataValue in dataValues){
-                                    for(vaccine in vaccineList){
-                                        if(dataValue.dataElement.equals(vaccine.dataElement.uid)){
-                                            if(checkDateInOnSessionOrNot(sessionDate, event.dueDate)) {
-                                                if(!isHasVaccineOnSession)
-                                                    isHasVaccineOnSession = true
-                                                vaccine.dueDate = event.dueDate
-                                                vaccine.isInjected = true
-                                                break
-                                            }
-                                        }
+            if(enrollment != null){
+                var events = enrollment.getEvents(true)
+                if(events != null){
+                    for(event in events){
+                        var dataValues = event.dataValues
+                        if(dataValues != null){
+                            for(dataValue in dataValues){
+                                for(vaccine in vaccineList){
+                                    if(dataValue.dataElement.equals(vaccine.dataElement.uid)){
+                                        vaccine.isInjected = if(dataValue.value.equals("true")) true else false
+                                        break
                                     }
-
                                 }
                             }
                         }
                     }
-
-                    immunisationCard.enrollment = enrollment
                 }
 
+                for(vaccine in vaccineList){
+                    if(vaccine.isInjected)
+                        injectedVaccineList.add(vaccine)
+                }
+
+                scheduleVaccineList = MethodUtils.createScheduleVaccineList(
+                    LocalDate(org.hisp.dhis.android.sdk.utils.support.DateUtils.parseDate(enrollment.incidentDate)),
+                    LocalDate.now(),
+                    //LocalDate(org.hisp.dhis.android.sdk.utils.support.DateUtils.parseDate(sessionDate)).plusDays(3),
+                    injectedVaccineList,
+                    vaccineList
+                )
+
+                var outSessionVaccineList = arrayListOf<Vaccine>()
+                for(vaccine in scheduleVaccineList){
+                    if(!isVaccineDueDateOnSession(sessionDate, vaccine.dueDate))
+                        outSessionVaccineList.add(vaccine)
+                }
+
+                scheduleVaccineList.removeAll(outSessionVaccineList)
+
+                for(vaccine in scheduleVaccineList){
+                    var hasElementOnSessionList = false
+                    for(dataElement in sessionDataElements){
+                        if(vaccine.dataElement.displayName.equals(dataElement.displayName)) {
+                            hasElementOnSessionList = true
+                            break
+                        }
+                    }
+
+                    if(!hasElementOnSessionList)
+                        sessionDataElements.add(vaccine.dataElement)
+                }
+            }
+        }
+
+        return sessionDataElements
+    }
+
+    fun getSessionWiseDataList(
+        orgUnitId: String,
+        programId: String,
+        sessionDate: String,
+        trackedEntityInstances: List<TrackedEntityInstance>,
+        sessionDataElements: List<DataElement>,
+        totalDataElements: List<DataElement>) : List<ImmunisationCard>{
+
+        var immunisationCardList = arrayListOf<ImmunisationCard>()
+
+        for(trackedEntityInstance in trackedEntityInstances){
+
+            var immunisationCard = ImmunisationCard()
+            var vaccineList = arrayListOf<Vaccine>()
+            var sessionVaccineList = arrayListOf<Vaccine>()
+            var injectedVaccineList = arrayListOf<Vaccine>()
+            var scheduleVaccineList = arrayListOf<Vaccine>()
+
+            for(dataElement in totalDataElements){
+                vaccineList.add(Vaccine(dataElement, null,"", false))
             }
 
-            immunisationCard.trackedEntityInstance = trackedEntityInstance
-            immunisationCard.vaccineList = vaccineList
+            for(dataElement in sessionDataElements){
+                sessionVaccineList.add(Vaccine(dataElement, null,"", false))
+            }
 
-            if(isHasVaccineOnSession)
+            var enrollment = TrackerController.getEnrollment(programId, trackedEntityInstance)
+
+            if(enrollment != null){
+
+                var events = enrollment.getEvents(true)
+                if(events != null){
+                    for(event in events){
+                        var dataValues = event.dataValues
+                        if(dataValues != null){
+                            for(dataValue in dataValues){
+                                for(vaccine in vaccineList){
+                                    if(dataValue.dataElement.equals(vaccine.dataElement.uid)){
+                                        vaccine.isInjected = if(dataValue.value.equals("true")) true else false
+                                        break
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+
+                for(vaccine in vaccineList){
+                    if(vaccine.isInjected)
+                        injectedVaccineList.add(vaccine)
+                }
+
+                scheduleVaccineList = MethodUtils.createScheduleVaccineList(
+                    LocalDate(org.hisp.dhis.android.sdk.utils.support.DateUtils.parseDate(enrollment.incidentDate)),
+                    //LocalDate.now(),
+                    LocalDate(org.hisp.dhis.android.sdk.utils.support.DateUtils.parseDate(sessionDate)).plusDays(3),
+                    injectedVaccineList,
+                    sessionVaccineList
+                )
+
+                scheduleVaccineList.removeAll(injectedVaccineList)
+
+                for(scheduleVaccine in scheduleVaccineList){
+                    for(vaccine in sessionVaccineList){
+                        if(vaccine.dataElement.uid.equals(scheduleVaccine.dataElement.uid)){
+                            vaccine.isInjected = true
+                            break
+                        }
+                    }
+                }
+
+                immunisationCard.enrollment = enrollment
+                immunisationCard.trackedEntityInstance = trackedEntityInstance
+                immunisationCard.vaccineList = sessionVaccineList
                 immunisationCardList.add(immunisationCard)
-
+            }
         }
 
         return immunisationCardList
     }
 
-    fun getTotalDosesForVaccine(dataElement: DataElement, sessionDate: String) : Int{
-        var doseLists = TrackerController.getDataValuesFollowElement(dataElement.uid)
-        var filterDoseList = arrayListOf<DataValue>()
-        if(doseLists != null){
-            for(item in doseLists){
-                var event = TrackerController.getEventByUid(item.event)
-                if(checkDateInOnSessionOrNot(sessionDate, event.dueDate)){
-                    filterDoseList.add(item)
+    fun getTotalDoseList(
+        orgUnitId: String,
+        programId: String,
+        sessionDataElements: List<DataElement>,
+        immunisationCardList: List<ImmunisationCard>) : List<Dose>{
+        var totalDose = arrayListOf<Dose>()
+        for(sessionElement in sessionDataElements){
+            var doseCount = 0
+            for(immunisationCard in immunisationCardList){
+                for(vaccine in immunisationCard.vaccineList){
+                    if(vaccine.dataElement.uid.equals(sessionElement.uid)
+                        && vaccine.isInjected){
+                            doseCount++
+                            break
+                    }
                 }
             }
+            totalDose.add(Dose(sessionElement.uid, doseCount))
         }
-
-        return filterDoseList.size
+        return totalDose
     }
 
-    fun checkDateInOnSessionOrNot(sessionDate: String, dueDate: String) : Boolean{
-        var sessionDateTime = DateTime.parse(sessionDate, DateTimeFormat.forPattern(Constants.SIMPLE_SERVER_DATE_PATTERN))
-        var dueDateTime: DateTime? = null
-        if(DateUtils.isValidDateFollowPattern(dueDate)){
-            dueDateTime = DateTime.parse(dueDate, DateTimeFormat.forPattern(Constants.SIMPLE_SERVER_DATE_PATTERN))
-        }else{
-            dueDateTime = DateTime.parse(dueDate /*DateTimeFormat.forPattern(Constants.FULL_DATE_PATTERN)*/)
-        }
-        if(sessionDateTime.isAfter(dueDateTime)
-            || sessionDateTime.isEqual(dueDateTime)
-            || (dueDateTime.isAfter(sessionDateTime) && Days.daysBetween(sessionDateTime, dueDateTime).days <= 3)){
+    fun isVaccineDueDateOnSession(sessionDate: String, dueDate: String) : Boolean{
+        var sessionLocalDate = LocalDate(org.hisp.dhis.android.sdk.utils.support.DateUtils.parseDate(sessionDate))
+        var dueLocalDate = LocalDate(org.hisp.dhis.android.sdk.utils.support.DateUtils.parseDate(dueDate))
+        if(sessionLocalDate.isAfter(dueLocalDate)
+            || sessionLocalDate.isEqual(dueLocalDate)
+            || (dueLocalDate.isAfter(sessionLocalDate) && Days.daysBetween(sessionLocalDate, dueLocalDate).days <= 3)){
             return true
         }
 
@@ -336,6 +430,8 @@ class MainPresenter : BasePresenter<MainView> {
     }
 
     // -------END - SESSION WISE SUB-MODULE ----------- //
+
+
 
     // SURVEY MODULE
     fun getSurveyEntities(orgUnitId: String, programId: String){

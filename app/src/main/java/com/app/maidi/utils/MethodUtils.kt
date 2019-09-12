@@ -345,7 +345,7 @@ class MethodUtils {
                     || vaccineName.contains("Pentavalent 1")
                     || vaccineName.contains("RV 1")
                     || vaccineName.contains("IPV 1")
-                    || vaccineName.contains("PCV"))
+                    || vaccineName.contains("PCV 1"))
                         dueDate = dateOfBirth.plusWeeks(6)
             //}
 
@@ -361,7 +361,7 @@ class MethodUtils {
                     || vaccineName.contains("Pentavalent 3")
                     || vaccineName.contains("IPV 2")
                     || vaccineName.contains("RV 3")
-                    || vaccineName.contains("PCV"))
+                    || vaccineName.contains("PCV 2"))
                         dueDate = dateOfBirth.plusWeeks(14)
             //}
 

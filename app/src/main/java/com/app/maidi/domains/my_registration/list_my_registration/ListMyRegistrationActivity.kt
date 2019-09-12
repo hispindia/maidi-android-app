@@ -100,7 +100,7 @@ class ListMyRegistrationActivity : BaseActivity<ListMyRegistrationView, ListMyRe
         phoneAttributeValue.trackedEntityAttributeId = phoneNumberAttribute.uid
         phoneAttributeValue.value = userAccount.phoneNumber
 
-        listMyRegistrationPresenter.queryListMyRegistration(program.uid, birthDate, phoneAttributeValue)
+        listMyRegistrationPresenter.queryListMyRegistration(orgUnit.id, program.uid, birthDate, phoneAttributeValue)
     }
 
     override fun onResume() {

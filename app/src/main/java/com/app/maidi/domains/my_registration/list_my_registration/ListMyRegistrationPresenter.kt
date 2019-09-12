@@ -19,7 +19,7 @@ class ListMyRegistrationPresenter : BasePresenter<ListMyRegistrationView> {
     @Inject
     constructor(){}
 
-    fun queryListMyRegistration(programId: String, birthday: String, phoneValue: TrackedEntityAttributeValue){
+    fun queryListMyRegistration(orgUnitId: String, programId: String, birthday: String, phoneValue: TrackedEntityAttributeValue){
 
         if(isViewAttached)
             view.showLoading()
@@ -30,26 +30,30 @@ class ListMyRegistrationPresenter : BasePresenter<ListMyRegistrationView> {
             override fun execute(): Any {
 
                 try{
-                    /*var searchTrackedEntityInstanceLists = ArrayList<TrackedEntityInstance>()
+                    //var searchTrackedEntityInstanceLists = ArrayList<TrackedEntityInstance>()
                     var trackedEntityInstancesQueryResult: List<TrackedEntityInstance>?
-                    if (detailedSearch) {
+                    //if (detailedSearch) {
                         trackedEntityInstancesQueryResult =
                             TrackerController.queryTrackedEntityInstancesDataFromAllAccessibleOrgUnits(
-                                DhisController.getInstance().dhisApi, orgUnitId, programId, queryString, detailedSearch, birthdayValue, phoneValue
+                                DhisController.getInstance().dhisApi, orgUnitId, programId, "", false, phoneValue
                             )
-                    } else {
-                        trackedEntityInstancesQueryResult = TrackerController.queryTrackedEntityInstancesDataFromServer(
-                            DhisController.getInstance().dhisApi,
-                            orgUnitId,
-                            programId,
-                            queryString,
-                            birthdayValue,
-                            phoneValue
-                        )
-                    }*/
 
-                    var trackedEntityInstancesQueryResult
-                            = TrackerController.queryLocalTrackedEntityInstances(programId, birthday, phoneValue)
+                        /*for(instance in trackedEntityInstancesQueryResult){
+
+                        }*/
+                        /*} else {
+                            trackedEntityInstancesQueryResult = TrackerController.queryTrackedEntityInstancesDataFromServer(
+                                DhisController.getInstance().dhisApi,
+                                orgUnitId,
+                                programId,
+                                queryString,
+                                birthdayValue,
+                                phoneValue
+                            )
+                        }*/
+
+                    /*var trackedEntityInstancesQueryResult
+                            = TrackerController.queryLocalTrackedEntityInstances(programId, birthday, phoneValue)*/
 
                     /*if(trackedEntityInstancesQueryResult != null){
                         searchTrackedEntityInstanceLists.addAll(trackedEntityInstancesQueryResult)
