@@ -68,7 +68,7 @@ class ListMyRegistrationAdapter : RecyclerView.Adapter<ListMyRegistrationAdapter
         }
 
         if (!mother.isEmpty())
-            stringBuilder.append(" / " + mother)
+            stringBuilder.append(" - " + mother)
 
         holder.tvName.text = name
         holder.tvDescription.text = stringBuilder.toString()

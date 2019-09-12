@@ -11,10 +11,7 @@ import android.view.inputmethod.InputMethodManager
 import android.widget.EditText
 import androidx.appcompat.app.AppCompatActivity
 import com.app.maidi.models.Vaccine
-import org.joda.time.LocalDate
-import org.joda.time.Months
-import org.joda.time.Weeks
-import org.joda.time.Years
+import org.joda.time.*
 
 class MethodUtils {
 
@@ -232,13 +229,14 @@ class MethodUtils {
 
         fun checkVaccineReachDueDate(vaccineName: String, dateOfBirth: LocalDate, checkDate: LocalDate): Boolean{
             var isChecked = false
+            var days = Days.daysBetween(dateOfBirth, checkDate).days
             var weeks = Weeks.weeksBetween(dateOfBirth, checkDate).weeks
             var months = Months.monthsBetween(dateOfBirth, checkDate).months
             var years = Years.yearsBetween(dateOfBirth, checkDate).years
-            if(checkDate.isAfter(dateOfBirth)){
+            if(checkDate.isAfter(dateOfBirth) || checkDate.isEqual(dateOfBirth)){
                 if(vaccineName.contains("BCG")
-                    || vaccineName.contains("OPV 0")
-                    || vaccineName.contains("Hep B Birth dose"))
+                    || vaccineName.contains("Hep B Birth dose")
+                    || (vaccineName.contains("OPV 0") && days <= 15))
                     isChecked = true
             }
 

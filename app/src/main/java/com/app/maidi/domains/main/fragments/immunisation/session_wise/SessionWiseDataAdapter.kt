@@ -80,6 +80,7 @@ class SessionWiseDataAdapter : RecyclerView.Adapter<SessionWiseDataAdapter.Sessi
                 var itemView = LayoutInflater.from(context).inflate(R.layout.item_session_vaccine, null, false)
                 var tvVaccineName = itemView.findViewById<TextView>(R.id.item_session_vaccine_tv_vaccine_name)
                 var cbChecker = itemView.findViewById<CheckBox>(R.id.item_session_vaccine_cb_checker)
+                cbChecker.setButtonDrawable(context.resources.getDrawable(R.drawable.icon_checkbox))
                 tvVaccineName.visibility = View.INVISIBLE
                 tvVaccineName.text = vaccine.dataElement.displayName
                 if(vaccine.isInjected){

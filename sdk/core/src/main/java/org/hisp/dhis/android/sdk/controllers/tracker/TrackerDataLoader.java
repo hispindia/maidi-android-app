@@ -888,6 +888,57 @@ final class TrackerDataLoader extends ResourceController {
         return updatedTrackedEntityInstance;
     }
 
+    static List<Enrollment> getRemoteEnrollmentsWithDatas(DhisApi dhisApi,
+                                                         TrackedEntityInstance trackedEntityInstance, DateTime serverDateTime)
+            throws APIException {
+        if (trackedEntityInstance == null) {
+            return null;
+        }
+        if (dhisApi == null) {
+            return null;
+        }
+        DateTime lastUpdated = DateTimeManager.getInstance()
+                .getLastUpdated(ResourceType.ENROLLMENTS,
+                        trackedEntityInstance.getTrackedEntityInstance());
+        if (serverDateTime == null) {
+            try {
+                serverDateTime = dhisApi.getSystemInfo().execute().body().getServerDate();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+
+        List<Enrollment> enrollments = null;
+        try {
+            enrollments = unwrapResponse(dhisApi
+                    .getEnrollments(trackedEntityInstance.getTrackedEntityInstance(),
+                            getBasicQueryMap(lastUpdated)).execute().body(), ApiEndpointContainer.ENROLLMENTS);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        for (Enrollment enrollment : enrollments) {
+            enrollment.setLocalTrackedEntityInstanceId(trackedEntityInstance.getLocalId());
+        }
+
+        saveResourceDataFromServer(ResourceType.ENROLLMENTS,
+                trackedEntityInstance.getTrackedEntityInstance(), dhisApi,
+                enrollments, TrackerController.getEnrollments(trackedEntityInstance),
+                serverDateTime);
+        enrollments = TrackerController.getEnrollments(trackedEntityInstance);
+        if (enrollments != null) {
+            for (Enrollment enrollment : enrollments) {
+                try {
+                    getEventsDataFromServer(dhisApi, SyncStrategy.DOWNLOAD_ALL, enrollment,
+                            serverDateTime);
+                } catch (APIException e) {//can't throw this exception up because we want to
+                    // continue loading enrollments.. todo: let the user know?
+                    e.printStackTrace();
+                }
+            }
+        }
+        return enrollments;
+    }
+
     static List<Enrollment> getEnrollmentsDataFromServer(DhisApi dhisApi,
             TrackedEntityInstance trackedEntityInstance, DateTime serverDateTime)
             throws APIException {

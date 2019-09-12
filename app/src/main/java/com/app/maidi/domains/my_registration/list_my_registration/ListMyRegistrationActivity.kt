@@ -149,6 +149,7 @@ class ListMyRegistrationActivity : BaseActivity<ListMyRegistrationView, ListMyRe
 
     override fun showLoading() {
         showHUD()
+        updateText("Searching ...")
     }
 
     override fun hideLoading() {

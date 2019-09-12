@@ -69,8 +69,9 @@ public class EventRemoteDataSource extends ARemoteDataSource {
                     readValue(((ResponseBody)response.body()).string(), ApiResponse.class);
         } catch (IOException e) {
             e.printStackTrace();
+        } catch (NullPointerException e){
+            e.printStackTrace();
         }
-
 
         return apiResponse.getImportSummaries();
     }

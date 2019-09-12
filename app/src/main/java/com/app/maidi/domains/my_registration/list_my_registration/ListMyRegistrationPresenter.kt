@@ -12,6 +12,8 @@ import org.hisp.dhis.android.sdk.network.ResponseHolder
 import org.hisp.dhis.android.sdk.persistence.models.TrackedEntityAttribute
 import org.hisp.dhis.android.sdk.persistence.models.TrackedEntityAttributeValue
 import org.hisp.dhis.android.sdk.persistence.models.TrackedEntityInstance
+import org.hisp.dhis.android.sdk.utils.support.DateUtils
+import org.joda.time.LocalDate
 import javax.inject.Inject
 
 class ListMyRegistrationPresenter : BasePresenter<ListMyRegistrationView> {
@@ -30,42 +32,32 @@ class ListMyRegistrationPresenter : BasePresenter<ListMyRegistrationView> {
             override fun execute(): Any {
 
                 try{
-                    //var searchTrackedEntityInstanceLists = ArrayList<TrackedEntityInstance>()
-                    var trackedEntityInstancesQueryResult: List<TrackedEntityInstance>?
-                    //if (detailedSearch) {
-                        trackedEntityInstancesQueryResult =
+                    var birthDate = LocalDate(DateUtils.parseDate(birthday))
+                    var filterSearchResultList = arrayListOf<TrackedEntityInstance>()
+                    var dhisApi = DhisController.getInstance().dhisApi
+                    var searchPhoneResultInstances =
                             TrackerController.queryTrackedEntityInstancesDataFromAllAccessibleOrgUnits(
-                                DhisController.getInstance().dhisApi, orgUnitId, programId, "", false, phoneValue
+                                dhisApi, orgUnitId, programId, "", false, phoneValue
                             )
 
-                        /*for(instance in trackedEntityInstancesQueryResult){
-
-                        }*/
-                        /*} else {
-                            trackedEntityInstancesQueryResult = TrackerController.queryTrackedEntityInstancesDataFromServer(
-                                DhisController.getInstance().dhisApi,
-                                orgUnitId,
-                                programId,
-                                queryString,
-                                birthdayValue,
-                                phoneValue
-                            )
-                        }*/
-
-                    /*var trackedEntityInstancesQueryResult
-                            = TrackerController.queryLocalTrackedEntityInstances(programId, birthday, phoneValue)*/
-
-                    /*if(trackedEntityInstancesQueryResult != null){
-                        searchTrackedEntityInstanceLists.addAll(trackedEntityInstancesQueryResult)
-                    }
-
-                    if(localTrackedEntityInstances != null){
-                        searchTrackedEntityInstanceLists.addAll(localTrackedEntityInstances)
-                    }*/
+                        for(instance in searchPhoneResultInstances){
+                            var enrollments = TrackerController.getEnrollmentDataFromServer(dhisApi, instance, null)
+                            if(enrollments != null){
+                                for(enrollment in enrollments){
+                                    if(enrollment.trackedEntityInstance.equals(instance.trackedEntityInstance)) {
+                                        var incidentDate = LocalDate(DateUtils.parseDate(enrollment.incidentDate))
+                                        if (incidentDate.isEqual(birthDate)) {
+                                            filterSearchResultList.add(instance)
+                                            break
+                                        }
+                                    }
+                                }
+                            }
+                        }
 
                     if(isViewAttached)
-                        //view.getListMyRegistrationSuccess(searchTrackedEntityInstanceLists)
-                        view.getListMyRegistrationSuccess(trackedEntityInstancesQueryResult)
+                        view.getListMyRegistrationSuccess(filterSearchResultList)
+
                 }catch (ex : APIException){
                     if(isViewAttached)
                         view.getListMyRegistrationFailed(ex)

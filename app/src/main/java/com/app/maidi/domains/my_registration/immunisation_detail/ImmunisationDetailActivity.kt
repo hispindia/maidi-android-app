@@ -65,14 +65,6 @@ class ImmunisationDetailActivity : BaseActivity<ImmunisationDetailView, Immunisa
         rcvList.layoutManager = LinearLayoutManager(this)
 
         immunisationDetailPresenter.queryImmunisationInfo(organUnit.id, program.uid, trackedEntityInstance)
-
-        /*if(trackedEntityInstance.isFromServer) {
-            immunisationDetailPresenter.queryImmunisationInfo(organUnit.id, program.uid, trackedEntityInstance)
-        }else{
-            immunisationDetailPresenter.queryLocalImmunisationInfo(program.uid)
-        }*/
-
-        //immunisationDetailPresenter.queryLocalImmunisationInfo(program.uid)
     }
 
     override fun onResume() {
@@ -106,6 +98,7 @@ class ImmunisationDetailActivity : BaseActivity<ImmunisationDetailView, Immunisa
 
     override fun showLoading() {
         showHUD()
+        updateText("Getting data ...")
     }
 
     override fun hideLoading() {

@@ -13,6 +13,7 @@ import com.app.maidi.infrastructures.AppComponent
 import com.app.maidi.infrastructures.AppModules
 import com.app.maidi.infrastructures.DaggerAppComponent
 import com.app.maidi.utils.AppPreferences
+import com.bugfender.sdk.Bugfender
 import com.google.firebase.FirebaseApp
 import com.raizlabs.android.dbflow.config.FlowManager
 import okhttp3.internal.Util
@@ -31,6 +32,8 @@ class MainApplication : Dhis2Application() {
     override fun onCreate() {
         super.onCreate()
         AppPreferences.init(this)
+
+        Bugfender.init(this, "g23bHOinVXnhAGQOHizAuloPU6ty3GGH", false)
 
         if(BuildConfig.DEBUG) {
             DebugDB.getAddressLog()

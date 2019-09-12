@@ -39,6 +39,7 @@
     <string name="write_storage_permission">Permissions need to be granted to export datas into PDF file. Please grant permissions and re-open the app</string>
     <string name="export_pdf_file_failed">Failed to export to Pdf file. Please try again</string>
     <string name="export_pdf_file_success">The PDF file was exported successfully</string>
+    <string name="login_by_phone_time_out">The phone number verification period has timed out. Please try again.</string>
 
     <!-- ************** LOGIN SCREEN ************ -->
     <string name="login_app_title">MAIDI APP</string>

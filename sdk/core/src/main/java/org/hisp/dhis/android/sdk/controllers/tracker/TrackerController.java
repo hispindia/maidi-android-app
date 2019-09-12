@@ -600,6 +600,11 @@ public final class TrackerController extends ResourceController {
         return enrollments;
     }
 
+    public static List<Enrollment> getRemoteEnrollmentDatas(DhisApi dhisApi, TrackedEntityInstance trackedEntityInstance, DateTime serverDateTime) throws APIException {
+        List<Enrollment> enrollments = TrackerDataLoader.getRemoteEnrollmentsWithDatas(dhisApi, trackedEntityInstance, serverDateTime);
+        return enrollments;
+    }
+
     public static void getEventDataFromServer(DhisApi dhisApi, String uid) throws APIException {
         TrackerDataLoader.getEventDataFromServer(dhisApi, uid);
     }

@@ -191,8 +191,9 @@ class MainPresenter : BasePresenter<MainView> {
                         if(enrollment != null){
                             var incidentLocalDate = LocalDate(org.hisp.dhis.android.sdk.utils.support.DateUtils.parseDate(enrollment.incidentDate))
                             var sessionLocalDate = LocalDate(org.hisp.dhis.android.sdk.utils.support.DateUtils.parseDate(sessionDate))
-                            if(sessionLocalDate.isAfter(incidentLocalDate)){
-                                filtedTrackedEntityInstances.add(instance)
+                            if(sessionLocalDate.isAfter(incidentLocalDate) ||
+                                sessionLocalDate.isEqual(incidentLocalDate)){
+                                    filtedTrackedEntityInstances.add(instance)
                             }
                         }
                     }
@@ -388,7 +389,14 @@ class MainPresenter : BasePresenter<MainView> {
                 immunisationCard.enrollment = enrollment
                 immunisationCard.trackedEntityInstance = trackedEntityInstance
                 immunisationCard.vaccineList = sessionVaccineList
-                immunisationCardList.add(immunisationCard)
+
+                //var isHasVaccineOnSession = false
+                for(vaccine in sessionVaccineList){
+                    if(vaccine.isInjected) {
+                        immunisationCardList.add(immunisationCard)
+                        break
+                    }
+                }
             }
         }
 

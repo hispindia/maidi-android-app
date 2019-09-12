@@ -121,6 +121,7 @@ public class Event extends BaseSerializableModel {
     @JsonProperty("completedDate")
     @Column(name = "completedDate")
     String completedDate;
+
     @JsonProperty("dataValues")
     List<DataValue> dataValues;
 

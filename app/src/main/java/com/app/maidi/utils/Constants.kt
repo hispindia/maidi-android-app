@@ -31,6 +31,7 @@ class Constants{
         val RESEND_TOKEN = "RESEND_TOKEN"
 
         val INDIA_PHONE_NUMBER_REGEX = "^[6-9]\\d{9}\$"
-        val PHONE_NUMBER_PREFIX = "+91"
+        //val PHONE_NUMBER_PREFIX = "+91"
+        val PHONE_NUMBER_PREFIX = "+84"
     }
 }

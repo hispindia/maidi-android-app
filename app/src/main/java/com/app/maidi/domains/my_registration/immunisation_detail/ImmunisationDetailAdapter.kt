@@ -10,7 +10,7 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.app.maidi.R
 import com.app.maidi.models.Vaccine
-import com.app.maidi.utils.DateUtils
+import org.hisp.dhis.android.sdk.utils.support.DateUtils
 
 class ImmunisationDetailAdapter : RecyclerView.Adapter<ImmunisationDetailAdapter.ImmunisationDetailHolder>{
 
@@ -38,9 +38,11 @@ class ImmunisationDetailAdapter : RecyclerView.Adapter<ImmunisationDetailAdapter
         }
         var vaccine = dataValues.get(position)
         holder.tvVaccineName.text = vaccine.dataElement.displayName
-        holder.tvVaccineDate.text = if(vaccine.dueDate != null && !vaccine.dueDate.isEmpty())
-                                        DateUtils.convertFromFullDateToSimpleDate(vaccine.dueDate)
-                                    else ""
+        if(!vaccine.isInjected) {
+            holder.tvVaccineDate.text = if (vaccine.dueDate != null && !vaccine.dueDate.isEmpty())
+                com.app.maidi.utils.DateUtils.convertCalendarToServerString(DateUtils.parseDate(vaccine.dueDate))
+            else ""
+        }
         holder.cbInjected.isChecked = vaccine.isInjected
     }
 

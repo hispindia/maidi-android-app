@@ -13,6 +13,7 @@ import org.hisp.dhis.android.sdk.network.ResponseHolder
 import org.hisp.dhis.android.sdk.persistence.models.Event
 import org.hisp.dhis.android.sdk.persistence.models.TrackedEntityInstance
 import org.joda.time.LocalDate
+import java.util.HashMap
 import javax.inject.Inject
 
 class ImmunisationDetailPresenter : BasePresenter<ImmunisationDetailView> {
@@ -32,11 +33,11 @@ class ImmunisationDetailPresenter : BasePresenter<ImmunisationDetailView> {
                 @Throws(APIException::class)
                 override fun execute(): Any {
 
+                        var dhisApi = DhisController.getInstance().dhisApi
                         var vaccineList = arrayListOf<Vaccine>()
                         var injectedVaccineList = arrayListOf<Vaccine>()
 
-                        TrackerController.getEnrollmentDataFromServer(DhisController.getInstance().dhisApi, trackedEntityInstance, null)
-
+                        TrackerController.getRemoteEnrollmentDatas(dhisApi, trackedEntityInstance, null)
                         var events : List<Event> = TrackerController.getEvents(organUnitId, programId, trackedEntityInstance.uid)
 
                         var programStage = TrackerController.getProgramStageByName(programId, Constants.IMMUNISATION)
@@ -54,44 +55,24 @@ class ImmunisationDetailPresenter : BasePresenter<ImmunisationDetailView> {
                         //}
 
                         for(event in events){
-                            var dataValues = TrackerController.getDataValue(event.uid)
-                            for (vaccine in vaccineList) {
-                                for(dataValue in dataValues){
-                                    var dataElement = TrackerController.getDataElement(dataValue.dataElement)
-                                    if (vaccine.dataElement.uid.equals(dataElement.uid)) {
-                                        vaccine.isInjected = if(dataValue.value.equals("true")) true else false
-                                        vaccine.dueDate = event.dueDate
-                                        vaccine.isShowed = true
-                                        if(dataValue.value.equals("true")){
-                                            injectedVaccineList.add(vaccine)
+                            val map = HashMap<String, String>()
+                            map["fields"] = "[:all]"
+                            var remoteEvent = dhisApi.getEvent(event.uid, map).execute().body()
+                            //var dataValues = TrackerController.getDataValue(event.uid)
+                            if(remoteEvent != null && remoteEvent.dataValues != null){
+                                for (vaccine in vaccineList) {
+                                    for(dataValue in remoteEvent!!.dataValues){
+                                        var dataElement = TrackerController.getDataElement(dataValue.dataElement)
+                                        if (vaccine.dataElement.uid.equals(dataElement.uid)) {
+                                            vaccine.isInjected = if(dataValue.value.equals("true")) true else false
+                                            vaccine.dueDate = event.dueDate
+                                            vaccine.isShowed = true
+                                            if(dataValue.value.equals("true")){
+                                                injectedVaccineList.add(vaccine)
+                                            }
                                         }
-                                        //isHasValue = true
                                     }
                                 }
-
-                                /*if(!isHasValue){
-                                    if (event.eventDate != null && !event.eventDate.isEmpty()) {
-                                        if (DateUtils.checkVaccineReachDueDate(
-                                                vaccine.dataElement.displayName,
-                                                LocalDate(DateUtils.parseDate(enrollment.incidentDate)),
-                                                LocalDate(DateUtils.parseDate(event.eventDate))
-                                            )
-                                        ) {
-                                            vaccine.dueDate = event.dueDate
-                                            vaccine.isShowed = true
-                                        }
-                                    }else{
-                                        if (DateUtils.checkVaccineReachDueDate(
-                                                vaccine.dataElement.displayName,
-                                                LocalDate(DateUtils.parseDate(enrollment.incidentDate)),
-                                                LocalDate.now()
-                                            )
-                                        ) {
-                                            vaccine.dueDate = event.dueDate
-                                            vaccine.isShowed = true
-                                        }
-                                    }
-                                }*/
                             }
                         }
 
@@ -101,13 +82,6 @@ class ImmunisationDetailPresenter : BasePresenter<ImmunisationDetailView> {
                             injectedVaccineList,
                             vaccineList
                         )
-
-                        /*var filtedVaccineList = arrayListOf<Vaccine>()
-                        for(vaccine in vaccineList){
-                            if(vaccine.isShowed){
-                                filtedVaccineList.add(vaccine)
-                            }
-                        }*/
 
                         if(isViewAttached) {
                             view.getDataElementSuccess(scheduleVaccineList)
