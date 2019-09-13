@@ -114,7 +114,7 @@ class WeeklyWorkplanFragment : BaseFragment{
                                         if(checkDateHasWorkplan(tvPlanDate.text.toString())){
                                             mainActivity.transformFragment(
                                                 R.id.activity_main_fl_content,
-                                                ListVillageFragment(tvPlanDate.text.toString(), workplanList)
+                                                ListVillageFragment(tvPlanDate.text.toString())
                                             )
                                             return
                                         }

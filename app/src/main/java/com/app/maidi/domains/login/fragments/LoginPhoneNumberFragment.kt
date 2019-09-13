@@ -74,14 +74,14 @@ class LoginPhoneNumberFragment : BaseFragment(){
     fun onNext(){
         hideKeyBoard(loginActivity)
         if(!etPhoneNumber.text!!.isEmpty()){
-            //if(DateUtils.isValidPhoneNumber(etPhoneNumber.text.toString())){
+            if(DateUtils.isValidPhoneNumber(etPhoneNumber.text.toString())){
                 var phoneNumberWithPrefix = Constants.PHONE_NUMBER_PREFIX + etPhoneNumber.text.toString()
                 loginPresenter.sendVerifyRequest(loginActivity, phoneNumberWithPrefix, verificationChangeListener)
                 return
-            //}
+            }
 
-            //Toast.makeText(loginActivity, resources.getString(R.string.phone_number_invalid), Toast.LENGTH_LONG).show()
-            //return
+            Toast.makeText(loginActivity, resources.getString(R.string.phone_number_invalid), Toast.LENGTH_LONG).show()
+            return
         }
 
         Toast.makeText(loginActivity, resources.getString(R.string.phone_number_not_been_typed), Toast.LENGTH_LONG).show()

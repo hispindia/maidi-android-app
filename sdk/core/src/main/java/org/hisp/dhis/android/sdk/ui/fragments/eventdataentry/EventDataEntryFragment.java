@@ -563,6 +563,16 @@ public class EventDataEntryFragment extends DataEntryFragment<EventDataEntryFrag
         }
     }
 
+
+    public void delete() {
+        if (isValid()) {
+            form.getEvent().setStatus(Event.STATUS_DELETED);
+            form.getEvent().save();
+            DhisService.deleteEventData();
+            isFinish = true;
+        }
+    }
+
     @Override
     public HashMap<ErrorType, ArrayList<String>> getValidationErrors() {
         HashMap<ErrorType, ArrayList<String>> errors = new HashMap<>();

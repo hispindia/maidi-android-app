@@ -24,6 +24,7 @@ import androidx.appcompat.app.AlertDialog
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.core.content.FileProvider
+import androidx.fragment.app.FragmentManager
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import butterknife.BindView
 import butterknife.ButterKnife
@@ -38,6 +39,7 @@ import com.app.maidi.domains.main.fragments.aefi.RegisteredCasesFragment
 import com.app.maidi.domains.main.fragments.immunisation.immunisation_card.ImmunisationCardFragment
 import com.app.maidi.domains.main.fragments.immunisation.session_wise.SessionWiseDataListFragment
 import com.app.maidi.domains.main.fragments.survey.ListSurveyFragment
+import com.app.maidi.domains.main.fragments.workplan.ListVillageFragment
 import com.app.maidi.domains.main.fragments.workplan.MonthlyWorkplanDetailFragment
 import com.app.maidi.infrastructures.ActivityModules
 import com.app.maidi.models.Dose
@@ -189,6 +191,15 @@ class MainActivity : BaseActivity<MainView, MainPresenter>(), View.OnClickListen
                 Toast.makeText(
                     this,
                     resources.getString(R.string.create_update_successful),
+                    Toast.LENGTH_LONG
+                ).show()
+                onBackPressed()
+            }
+            UiEvent.UiEventType.SUCCESS_DELETE_EVENT -> {
+                hideLoading()
+                Toast.makeText(
+                    this,
+                    resources.getString(R.string.delete_event_successful),
                     Toast.LENGTH_LONG
                 ).show()
                 onBackPressed()
@@ -432,6 +443,9 @@ class MainActivity : BaseActivity<MainView, MainPresenter>(), View.OnClickListen
             if(isCurrentFragment<MonthlyWorkplanDetailFragment>(R.id.activity_main_fl_content)){
                 getCurrentFragment<MonthlyWorkplanDetailFragment>(R.id.activity_main_fl_content).getWorkplanList(events)
             }
+            if(isCurrentFragment<ListVillageFragment>(R.id.activity_main_fl_content)){
+                getCurrentFragment<ListVillageFragment>(R.id.activity_main_fl_content).getWorkplanList(events)
+            }
             hideHUD()
         }
     }
@@ -444,13 +458,19 @@ class MainActivity : BaseActivity<MainView, MainPresenter>(), View.OnClickListen
     }
 
     override fun onBackPressed() {
-        if(isCurrentFragment<EventDataEntryFragment>(R.id.activity_main_fl_content)){
-            var handled = getCurrentFragment<EventDataEntryFragment>(R.id.activity_main_fl_content).onBackPressed()
-            if(handled)
+        //if(supportFragmentManager.backStackEntryCount > 1) {
+            if (isCurrentFragment<EventDataEntryFragment>(R.id.activity_main_fl_content)) {
+                var handled = getCurrentFragment<EventDataEntryFragment>(R.id.activity_main_fl_content).onBackPressed()
+                if (handled)
+                    super.onBackPressed()
+                    //supportFragmentManager.popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE)
+            } else {
                 super.onBackPressed()
-        }else {
-            super.onBackPressed()
-        }
+                //supportFragmentManager.popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE)
+            }
+        //}else{
+            //super.onBackPressed()
+        //}
     }
 
     // *******************THE END - MainView functions *****************

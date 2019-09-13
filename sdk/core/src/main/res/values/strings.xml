@@ -120,6 +120,7 @@
     <string name="loading_datavalue">Loading initial data. Please wait ...</string>
     <string name="registration_successful">Registration Successful</string>
     <string name="create_update_successful">Create\/Update Successful</string>
+    <string name="delete_event_successful">Delete event successful</string>
     <string name="saving_data_locally">Saving data locally</string>
     <string name="loading_events">Loading Events</string>
     <string name="loading_enrollments">Loading Enrollments</string>

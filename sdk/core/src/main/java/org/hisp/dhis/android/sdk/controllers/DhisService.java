@@ -226,6 +226,25 @@ public final class DhisService extends Service {
         });
     }
 
+    public static void deleteEventData() {
+        JobExecutor.enqueueJob(new NetworkJob<Object>(0,
+                null) {
+            @Override
+            public Object execute() throws APIException {
+                try {
+                    Dhis2Application.getEventBus().post(new UiEvent(UiEvent.UiEventType.START_SEND_DATA));
+                    UiUtils.postProgressMessage("Deleting event ...", LoadingMessageEvent.EventType.METADATA);
+                    DhisController.sendEventData();
+                    Dhis2Application.getEventBus().post(new UiEvent(UiEvent.UiEventType.SUCCESS_DELETE_EVENT));
+                }catch (APIException ex){
+                    Dhis2Application.getEventBus().post(new UiEvent(UiEvent.UiEventType.ERROR_SEND_DATA));
+                    throw ex;
+                }
+                return new Object();
+            }
+        });
+    }
+
     public static void updateData(){
         JobExecutor.enqueueJob(new NetworkJob<Object>(0,
                 null) {

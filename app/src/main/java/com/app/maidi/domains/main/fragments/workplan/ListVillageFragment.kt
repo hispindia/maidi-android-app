@@ -39,16 +39,15 @@ class ListVillageFragment : BaseFragment, OnItemClickListener {
     lateinit var adapter: ListVillageAdapter
 
     var eventMaps = hashMapOf<Long, String>()
-    var eventList: List<Event>
+    var eventList: List<Event> = arrayListOf()
     var eventDate: String
     var eventDataFragment: EventDataEntryFragment? = null
 
     @BindView(R.id.fragment_list_survey_rcv_list)
     lateinit var rcvList: RecyclerView
 
-    constructor(eventDate: String, eventList: List<Event>){
+    constructor(eventDate: String){
         this.eventDate = eventDate
-        this.eventList = eventList
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -64,10 +63,6 @@ class ListVillageFragment : BaseFragment, OnItemClickListener {
         ButterKnife.bind(this, viewGroup)
 
         rcvList.layoutManager = LinearLayoutManagerWrapper(mainActivity, LinearLayoutManager.VERTICAL, false)
-
-        getVillageListByDate()
-        adapter = ListVillageAdapter(mainActivity, eventMaps, this)
-        rcvList.adapter = adapter
 
         return viewGroup
     }
@@ -86,10 +81,7 @@ class ListVillageFragment : BaseFragment, OnItemClickListener {
                     getString(R.string.cancel),
                     { dialog, which ->
                         if(eventDataFragment != null) {
-                            eventDataFragment!!.setFinish(true)
-                            event.status = Event.STATUS_DELETED
-                            event.save()
-                            DhisService.updateData()
+                            eventDataFragment!!.delete()
                         }
                     },
                     { dialog, which ->
@@ -102,8 +94,8 @@ class ListVillageFragment : BaseFragment, OnItemClickListener {
         eventDataFragment = EventDataEntryFragment
                                 .newWorkplanEventInstance(currentUnit.id, currentProgram.uid, programStage.uid, eventId)
 
-        eventDataFragment!!.let {
-            mainActivity.transformFragment(R.id.activity_main_fl_content, it)
+        if(eventDataFragment != null){
+            mainActivity.transformFragment(R.id.activity_main_fl_content, eventDataFragment!!)
             mainActivity.solidActionBar(resources.getString(R.string.monthly_workplan_update), R.drawable.ic_delete_24, deleteButtonListener)
         }
     }
@@ -133,6 +125,14 @@ class ListVillageFragment : BaseFragment, OnItemClickListener {
 
         mainActivity.solidActionBar(resources.getString(R.string.monthly_workplan_update))
         mainActivity.isSwipeForceSyncronizeEnabled(false)
+        mainPresenter.getWorkplanEntities(currentUnit.id, currentProgram.uid)
+    }
+
+    fun getWorkplanList(events : List<Event>){
+        this.eventList = events
+        getVillageListByDate()
+        adapter = ListVillageAdapter(mainActivity, eventMaps, this)
+        rcvList.adapter = adapter
     }
 
     fun createPresenter() : MainPresenter {

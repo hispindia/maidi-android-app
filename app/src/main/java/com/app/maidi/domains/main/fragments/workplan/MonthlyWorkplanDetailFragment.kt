@@ -74,6 +74,8 @@ class MonthlyWorkplanDetailFragment : BaseFragment, MonthPickerDialog.OnDateSetL
         //vpPagers.offscreenPageLimit = weekList.size
         tblTabs.setupWithViewPager(vpPagers)
 
+        mainPresenter.getWorkplanEntities(currentUnit.id, currentProgram.uid)
+
         return viewGroup
     }
 
@@ -87,7 +89,7 @@ class MonthlyWorkplanDetailFragment : BaseFragment, MonthPickerDialog.OnDateSetL
         }
 
         mainActivity.isSwipeForceSyncronizeEnabled(false)
-        mainPresenter.getWorkplanEntities(currentUnit.id, currentProgram.uid)
+
     }
 
     override fun onDateSet(selectedMonth: Int, selectedYear: Int) {

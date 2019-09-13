@@ -506,7 +506,6 @@ final class TrackerDataSender {
         }
     }
 
-
     private static Map<String, TrackedEntityInstance> getRecursiveRelationatedTeis(
             TrackedEntityInstance trackedEntityInstance,
             Map<String, TrackedEntityInstance> relatedTeiList) {

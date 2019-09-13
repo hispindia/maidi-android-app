@@ -35,7 +35,7 @@ package org.hisp.dhis.android.sdk.events;
 public final class UiEvent {
     public enum UiEventType {
         SYNC_DASHBOARDS, USER_LOG_OUT, SYNC_INTERPRETATIONS, SYNCING_START, SYNCING_END,
-        INITIAL_SYNCING_END, START_SEND_DATA, SUCCESS_SEND_DATA, ERROR_SEND_DATA
+        INITIAL_SYNCING_END, START_SEND_DATA, SUCCESS_SEND_DATA, ERROR_SEND_DATA, SUCCESS_DELETE_EVENT
     }
 
     private final UiEventType mType;

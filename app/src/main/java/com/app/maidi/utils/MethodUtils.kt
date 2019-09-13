@@ -236,7 +236,7 @@ class MethodUtils {
             if(checkDate.isAfter(dateOfBirth) || checkDate.isEqual(dateOfBirth)){
                 if(vaccineName.contains("BCG")
                     || vaccineName.contains("Hep B Birth dose")
-                    || (vaccineName.contains("OPV 0") && days <= 15))
+                    || (vaccineName.contains("OPV 0") && days >= 15))
                     isChecked = true
             }
 
