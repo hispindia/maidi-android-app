@@ -252,6 +252,10 @@ public class EventDataEntryFragment extends DataEntryFragment<EventDataEntryFrag
         super.onDetach();
     }
 
+    public void setFinish(boolean finish) {
+        isFinish = finish;
+    }
+
     private void detachSpinner() {
         if (isSpinnerAttached()) {
             spinner = null;

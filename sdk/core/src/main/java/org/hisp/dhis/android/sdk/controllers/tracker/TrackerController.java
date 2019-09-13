@@ -344,6 +344,7 @@ public final class TrackerController extends ResourceController {
         List<Event> events = new Select().from(Event.class).where(Condition.column
                 (Event$Table.ORGANISATIONUNITID).is(organisationUnitId))
                 .and(Condition.column(Event$Table.PROGRAMID).is(programId))
+                .and(Condition.column(Event$Table.STATUS).isNot(Event.STATUS_DELETED))
                 .orderBy(false, Event$Table.LASTUPDATED).queryList();
         return events;
     }
@@ -861,20 +862,22 @@ public final class TrackerController extends ResourceController {
 
     public static List<Event> getEvents(String organisationUnitId, String programId, String trackedEntityInstance) {
         List<Event> events = new Select().from(Event.class).where(
-                Condition.column(Event$Table.ORGANISATIONUNITID).is(organisationUnitId)).and(
-                Condition.column(Event$Table.PROGRAMID).is(programId)).and(
-                Condition.column(Event$Table.TRACKEDENTITYINSTANCE).is(trackedEntityInstance)
-        ).orderBy(false, Event$Table.LASTUPDATED).queryList();
+                    Condition.column(Event$Table.ORGANISATIONUNITID).is(organisationUnitId)).and(
+                    Condition.column(Event$Table.PROGRAMID).is(programId)).and(
+                    Condition.column(Event$Table.TRACKEDENTITYINSTANCE).is(trackedEntityInstance))
+                .and(Condition.column(Event$Table.STATUS).isNot(Event.STATUS_DELETED))
+                .orderBy(false, Event$Table.LASTUPDATED).queryList();
         return events;
     }
 
     public static List<Event> getEventsThoughProgramStage(String organisationUnitId, String programId, String programStageId, String trackedEntityInstance) {
         List<Event> events = new Select().from(Event.class).where(
-                Condition.column(Event$Table.ORGANISATIONUNITID).is(organisationUnitId)).and(
-                Condition.column(Event$Table.PROGRAMID).is(programId)).and(
-                Condition.column(Event$Table.PROGRAMSTAGEID).is(programStageId)).and(
-                Condition.column(Event$Table.TRACKEDENTITYINSTANCE).is(trackedEntityInstance)
-        ).orderBy(false, Event$Table.LASTUPDATED).queryList();
+                    Condition.column(Event$Table.ORGANISATIONUNITID).is(organisationUnitId)).and(
+                    Condition.column(Event$Table.PROGRAMID).is(programId)).and(
+                    Condition.column(Event$Table.PROGRAMSTAGEID).is(programStageId)).and(
+                    Condition.column(Event$Table.TRACKEDENTITYINSTANCE).is(trackedEntityInstance))
+                .and(Condition.column(Event$Table.STATUS).isNot(Event.STATUS_DELETED))
+                .orderBy(false, Event$Table.LASTUPDATED).queryList();
         return events;
     }
 

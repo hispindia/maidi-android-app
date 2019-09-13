@@ -1,5 +1,6 @@
 package com.app.maidi.domains.main.fragments.workplan
 
+import android.content.DialogInterface
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -16,6 +17,7 @@ import com.app.maidi.domains.main.fragments.listener.OnItemClickListener
 import com.app.maidi.utils.Constants
 import com.app.maidi.utils.LinearLayoutManagerWrapper
 import com.app.maidi.utils.DateUtils
+import org.hisp.dhis.android.sdk.controllers.DhisService
 import org.hisp.dhis.android.sdk.controllers.metadata.MetaDataController
 import org.hisp.dhis.android.sdk.controllers.tracker.TrackerController
 import org.hisp.dhis.android.sdk.persistence.models.Event
@@ -23,6 +25,7 @@ import org.hisp.dhis.android.sdk.persistence.models.OrganisationUnit
 import org.hisp.dhis.android.sdk.persistence.models.Program
 import org.hisp.dhis.android.sdk.persistence.models.ProgramStage
 import org.hisp.dhis.android.sdk.ui.fragments.eventdataentry.EventDataEntryFragment
+import org.hisp.dhis.android.sdk.utils.UiUtils
 
 class ListVillageFragment : BaseFragment, OnItemClickListener {
 
@@ -38,6 +41,7 @@ class ListVillageFragment : BaseFragment, OnItemClickListener {
     var eventMaps = hashMapOf<Long, String>()
     var eventList: List<Event>
     var eventDate: String
+    var eventDataFragment: EventDataEntryFragment? = null
 
     @BindView(R.id.fragment_list_survey_rcv_list)
     lateinit var rcvList: RecyclerView
@@ -70,9 +74,38 @@ class ListVillageFragment : BaseFragment, OnItemClickListener {
 
     override fun onItemClicked(position: Int) {
         var eventId = eventMaps.keys.toList().get(position)
-        mainActivity.transformFragment(R.id.activity_main_fl_content,
-            EventDataEntryFragment.newWorkplanEventInstance(currentUnit.id, currentProgram.uid, programStage.uid, eventId))
-        mainActivity.solidActionBar(resources.getString(R.string.monthly_workplan_update))
+
+        var deleteButtonListener = View.OnClickListener {
+            var event = TrackerController.getEvent(eventId)
+            if(!event.status.equals(Event.STATUS_DELETED)){
+                UiUtils.showConfirmDialog(
+                    activity!!,
+                    getString(R.string.delete),
+                    getString(R.string.confirm_delete_event),
+                    getString(R.string.delete),
+                    getString(R.string.cancel),
+                    { dialog, which ->
+                        if(eventDataFragment != null) {
+                            eventDataFragment!!.setFinish(true)
+                            event.status = Event.STATUS_DELETED
+                            event.save()
+                            DhisService.updateData()
+                        }
+                    },
+                    { dialog, which ->
+                        //cancel
+                        dialog.dismiss()
+                    })
+            }
+        }
+
+        eventDataFragment = EventDataEntryFragment
+                                .newWorkplanEventInstance(currentUnit.id, currentProgram.uid, programStage.uid, eventId)
+
+        eventDataFragment!!.let {
+            mainActivity.transformFragment(R.id.activity_main_fl_content, it)
+            mainActivity.solidActionBar(resources.getString(R.string.monthly_workplan_update), R.drawable.ic_delete_24, deleteButtonListener)
+        }
     }
 
     fun getVillageListByDate(){

@@ -249,6 +249,23 @@ class MainActivity : BaseActivity<MainView, MainPresenter>(), View.OnClickListen
         ivReferral.setOnClickListener(null)
     }
 
+    fun solidActionBar(title: String, createButtonIcon: Int, createButtonlistener: View.OnClickListener){
+        actionbar.setBackgroundResource(R.color.dark_blue)
+        tvTitle.text = title
+        ivMenu.setImageResource(R.drawable.ic_arrow_left)
+        ivMenu.imageTintList = ColorStateList.valueOf(Color.WHITE)
+
+        ivMenu.setOnClickListener({
+            onBackPressed()
+        })
+
+        ivCreate.visibility = View.VISIBLE
+        ivCreate.setImageResource(createButtonIcon)
+        ivCreate.setOnClickListener(createButtonlistener)
+        ivReferral.visibility = View.GONE
+        ivReferral.setOnClickListener(null)
+    }
+
     fun solidActionBar(title: String, createButtonlistener: View.OnClickListener, referralButtonListener: View.OnClickListener){
         actionbar.setBackgroundResource(R.color.dark_blue)
         tvTitle.text = title

@@ -50,9 +50,9 @@ class MainPresenter : BasePresenter<MainView> {
                     var immunisationInstances = listOf<TrackedEntityInstance>()
 
                     aefiInstances = TrackerController.queryLocalTrackedEntityInstances(orgUnitId, aefiProgramId)
-                    immunisationInstances = TrackerController.queryLocalTrackedEntityInstances(orgUnitId, immunisationProgramId)
+                    //immunisationInstances = TrackerController.queryLocalTrackedEntityInstances(orgUnitId, immunisationProgramId)
                     trackedEntityInstances.addAll(aefiInstances)
-                    trackedEntityInstances.addAll(immunisationInstances)
+                    //trackedEntityInstances.addAll(immunisationInstances)
 
                     if(isViewAttached)
                         view.getAefiTrackedEntityInstances(trackedEntityInstances)
