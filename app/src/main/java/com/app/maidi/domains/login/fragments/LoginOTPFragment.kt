@@ -136,7 +136,7 @@ class LoginOTPFragment : BaseFragment(){
 
         var credential = PhoneAuthProvider.getCredential(verificationId, etOtp.text!!.toString())
 
-        loginPresenter.signInWithVerifyCode(credential, phoneNumber)
+        loginPresenter.signInWithPhoneAuthCredential(credential, phoneNumber)
     }
 
     @OnClick(R.id.fragment_login_input_otp_btn_resend)

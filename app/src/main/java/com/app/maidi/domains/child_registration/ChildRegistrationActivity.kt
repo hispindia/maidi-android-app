@@ -7,6 +7,7 @@ import butterknife.ButterKnife
 import com.app.maidi.MainApplication
 import com.app.maidi.R
 import com.app.maidi.custom.MaidiCrashManagerListener
+import com.app.maidi.domains.aefi.AdverseEventInformationActivity
 import com.app.maidi.domains.base.BaseActivity
 import com.app.maidi.infrastructures.ActivityModules
 import com.app.maidi.utils.DateUtils
@@ -25,7 +26,8 @@ import javax.inject.Inject
 class ChildRegistrationActivity : BaseActivity<ChildRegistrationView, ChildRegistrationPresenter>() {
 
     companion object{
-        val ORGANISATION_UNIT = "ORGANISATION_UNIT"
+        val PROGRAM = "PROGRAM"
+        val UNIQUE_ID = "UNIQUE_ID"
     }
 
     @Inject
@@ -39,13 +41,13 @@ class ChildRegistrationActivity : BaseActivity<ChildRegistrationView, ChildRegis
     @BindView(R.id.activity_child_registration_actionbar)
     lateinit var actionbar: RelativeLayout
 
-    lateinit var trackedEntityInstance: TrackedEntityInstance
-
     lateinit var ivBack: ImageView
     lateinit var currentProgram: Program
     lateinit var topUnit: OrganisationUnit
 
     lateinit var enrollmentDataEntryFragment: EnrollmentDataEntryFragment
+
+    var uniqueId: String? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -55,14 +57,24 @@ class ChildRegistrationActivity : BaseActivity<ChildRegistrationView, ChildRegis
         setupEditTextKeyboard(llContent, this)
 
         topUnit = MetaDataController.getTopAssignedOrganisationUnit()
-        if(intent.extras != null && intent.extras.getString(ORGANISATION_UNIT) != null) {
-            currentProgram = MetaDataController.getProgramByName(intent.extras.getString(ORGANISATION_UNIT))
+        if(intent.extras != null && intent.extras.getString(PROGRAM) != null) {
+            currentProgram = MetaDataController.getProgramByName(intent.extras.getString(PROGRAM))
+        }
+
+        if(intent.extras != null && intent.extras.containsKey(UNIQUE_ID)) {
+            uniqueId = intent.extras.getString(UNIQUE_ID)
         }
 
         var enrollmentDate = DateUtils.convertCalendarToServerString(DateTime.now().toDate())
         var incidentDate = DateUtils.convertCalendarToServerString(DateTime.now().toDate())
 
-        enrollmentDataEntryFragment = EnrollmentDataEntryFragment.newInstance(topUnit.id, currentProgram.uid, enrollmentDate, incidentDate)
+        if(uniqueId != null && !uniqueId!!.isEmpty()){
+            enrollmentDataEntryFragment = EnrollmentDataEntryFragment
+                .newInstanceWithCaseId(topUnit.id, currentProgram.uid, enrollmentDate, incidentDate, true, uniqueId)
+        }else {
+            enrollmentDataEntryFragment =
+                EnrollmentDataEntryFragment.newInstance(topUnit.id, currentProgram.uid, enrollmentDate, incidentDate)
+        }
 
         supportFragmentManager.beginTransaction()
             .replace(R.id.activity_child_registration_container, enrollmentDataEntryFragment)
@@ -86,7 +98,18 @@ class ChildRegistrationActivity : BaseActivity<ChildRegistrationView, ChildRegis
                     resources.getString(R.string.registration_successful),
                     Toast.LENGTH_LONG
                 ).show()
-                finish()
+
+                if(uniqueId != null && !uniqueId!!.isEmpty()){
+                    if(uiEvent.content != null && !uiEvent.content!!.isEmpty()) {
+                        var bundle = Bundle()
+                        bundle.putString(
+                            AdverseEventInformationActivity.TRACKED_ENTITY_INSTANCE_ID,
+                            uiEvent.content
+                        )
+                        transformActivity(this, AdverseEventInformationActivity::class.java, true, bundle)
+                    }
+                }else
+                    finish()
             }
         }
     }

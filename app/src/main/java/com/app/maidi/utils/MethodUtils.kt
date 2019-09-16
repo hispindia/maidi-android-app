@@ -110,21 +110,21 @@ class MethodUtils {
                 }
 
                 if(!isHasInjected){
-                    var isNeedToCheckReachDueDate = true
+                    /*var isNeedToCheckReachDueDate = true
                     if(checkHasPreviousVaccine(vaccine.dataElement.displayName)){
                         if(!checkPreviousVaccineHasInjected(vaccine.dataElement.displayName, injectedVaccineList)){
                             isNeedToCheckReachDueDate = false
                         }
                     }
 
-                    if(isNeedToCheckReachDueDate){
+                    if(isNeedToCheckReachDueDate){*/
                         if(checkVaccineReachDueDate(vaccine.dataElement.displayName, dateOfBirth, checkDate)){
                             var dueDate = getDueDateForVaccine(vaccine.dataElement.displayName, dateOfBirth)
                             var serverDueDate = DateUtils.convertCalendarToServerString(dueDate.toDate())
                             vaccine.dueDate = serverDueDate
                             scheduleVaccineList.add(vaccine)
                         }
-                    }
+                    //}
                 }
             }
 
@@ -236,7 +236,7 @@ class MethodUtils {
             if(checkDate.isAfter(dateOfBirth) || checkDate.isEqual(dateOfBirth)){
                 if(vaccineName.contains("BCG")
                     || vaccineName.contains("Hep B Birth dose")
-                    || (vaccineName.contains("OPV 0") && days >= 15))
+                    || (vaccineName.contains("OPV 0") && days <= 15))
                     isChecked = true
             }
 

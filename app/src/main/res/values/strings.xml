@@ -31,8 +31,6 @@
     <string name="visit_date">Visit date</string>
     <string name="data_entry">Data Entry</string>
     <string name="view">View</string>
-    <string name="warning">Warning</string>
-    <string name="delete">Delete</string>
 
     <!-- *************** GLOBAL WARNING STRING ************* -->
     <string name="phone_number_invalid">The phone number is invalid. Please recheck and try again</string>
@@ -42,7 +40,7 @@
     <string name="export_pdf_file_failed">Failed to export to Pdf file. Please try again</string>
     <string name="export_pdf_file_success">The PDF file was exported successfully</string>
     <string name="login_by_phone_time_out">The phone number verification period has timed out. Please try again.</string>
-    <string name="confirm_delete_event">Are you sure you want to delete this event? This action will not been able to restored after that</string>
+    <string name="verify_phone_number_success">Verify phone number success.</string>
 
     <!-- ************** LOGIN SCREEN ************ -->
     <string name="login_app_title">MAIDI APP</string>

@@ -33,7 +33,7 @@ class MainBeneficiaryFragment : BaseFragment(){
     @OnClick(R.id.activity_main_fl_child_registration)
     fun onChildRegistrationModuleClicked(){
         var bundle = Bundle()
-        bundle.putString(ChildRegistrationActivity.ORGANISATION_UNIT, Constants.BENEFICIARY_CHILD_REGISTRATION)
+        bundle.putString(ChildRegistrationActivity.PROGRAM, Constants.BENEFICIARY_CHILD_REGISTRATION)
         mainActivity.transformActivity(mainActivity, ChildRegistrationActivity::class.java, false, bundle)
     }
 

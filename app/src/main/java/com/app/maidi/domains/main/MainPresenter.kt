@@ -46,13 +46,31 @@ class MainPresenter : BasePresenter<MainView> {
                 @Throws(APIException::class)
                 override fun execute(): Any {
                     var trackedEntityInstances = arrayListOf<TrackedEntityInstance>()
+                    var filterImmunisationInstances = arrayListOf<TrackedEntityInstance>()
                     var aefiInstances = listOf<TrackedEntityInstance>()
                     var immunisationInstances = listOf<TrackedEntityInstance>()
 
                     aefiInstances = TrackerController.queryLocalTrackedEntityInstances(orgUnitId, aefiProgramId)
-                    //immunisationInstances = TrackerController.queryLocalTrackedEntityInstances(orgUnitId, immunisationProgramId)
+                    immunisationInstances = TrackerController.queryLocalTrackedEntityInstances(orgUnitId, immunisationProgramId)
+
+                    for(immunisationInstance in immunisationInstances){
+                        var immunisationUniqueId = TrackerController.getUniqueIdAttributeValue(immunisationInstance)
+                        var hasSameUniqueId = false
+                        for(aefiInstance in aefiInstances){
+                            var aefiUniqueId = TrackerController.getUniqueIdAttributeValue(aefiInstance)
+                            if(immunisationUniqueId.value.equals(aefiUniqueId.value)){
+                                hasSameUniqueId = true
+                                break
+                            }
+                        }
+
+                        if(!hasSameUniqueId){
+                            filterImmunisationInstances.add(immunisationInstance)
+                        }
+                    }
+
                     trackedEntityInstances.addAll(aefiInstances)
-                    //trackedEntityInstances.addAll(immunisationInstances)
+                    trackedEntityInstances.addAll(filterImmunisationInstances)
 
                     if(isViewAttached)
                         view.getAefiTrackedEntityInstances(trackedEntityInstances)
@@ -283,8 +301,8 @@ class MainPresenter : BasePresenter<MainView> {
 
                 scheduleVaccineList = MethodUtils.createScheduleVaccineList(
                     LocalDate(org.hisp.dhis.android.sdk.utils.support.DateUtils.parseDate(enrollment.incidentDate)),
-                    LocalDate.now(),
-                    //LocalDate(org.hisp.dhis.android.sdk.utils.support.DateUtils.parseDate(sessionDate)).plusDays(3),
+                    //LocalDate.now(),
+                    LocalDate(org.hisp.dhis.android.sdk.utils.support.DateUtils.parseDate(sessionDate)).plusDays(3),
                     injectedVaccineList,
                     vaccineList
                 )

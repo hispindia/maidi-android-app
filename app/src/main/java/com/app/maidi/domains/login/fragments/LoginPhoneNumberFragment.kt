@@ -38,8 +38,12 @@ class LoginPhoneNumberFragment : BaseFragment(){
         ButterKnife.bind(this, viewGroup)
         verificationChangeListener = object : PhoneAuthProvider.OnVerificationStateChangedCallbacks(){
 
-            override fun onVerificationCompleted(p0: PhoneAuthCredential?) {
+            override fun onVerificationCompleted(phoneAuthCredential: PhoneAuthCredential?) {
                 Bugfender.sendIssue("Verify Login By Phone", "Completed")
+                if(phoneAuthCredential != null) {
+                    Toast.makeText(loginActivity, resources.getString(R.string.verify_phone_number_success), Toast.LENGTH_LONG).show()
+                    loginPresenter.signInWithPhoneAuthCredential(phoneAuthCredential!!, etPhoneNumber.text!!.toString())
+                }
             }
 
             override fun onVerificationFailed(p0: FirebaseException?) {

@@ -73,6 +73,8 @@ public class EnrollmentDataEntryFragment extends DataEntryFragment<EnrollmentDat
     public static final String INCIDENT_DATE = "extra:incidentDate";
     public static final String TRACKEDENTITYINSTANCE_ID = "extra:TrackedEntityInstanceId";
     public static final String PROGRAMRULES_FORCED_TRIGGER = "forced";
+    public static final String IS_UNIQUE_ID = "extra:isUniqueId";
+    public static final String UNIQUE_ID = "extra:uniqueID";
     private EnrollmentDataEntryFragmentForm form;
     private SaveThread saveThread;
     private Map<String, List<ProgramRule>> programRulesForTrackedEntityAttributes;
@@ -112,6 +114,20 @@ public class EnrollmentDataEntryFragment extends DataEntryFragment<EnrollmentDat
         args.putString(ORG_UNIT_ID, unitId);
         args.putString(PROGRAM_ID, programId);
         args.putLong(TRACKEDENTITYINSTANCE_ID, trackedEntityInstanceId);
+        fragment.setArguments(args);
+        return fragment;
+    }
+
+    public static EnrollmentDataEntryFragment newInstanceWithCaseId(String unitId, String programId, String enrollmentDate, String incidentDate, boolean isUniqueID, String uniqueId) {
+        EnrollmentDataEntryFragment fragment = new EnrollmentDataEntryFragment();
+        Bundle args = new Bundle();
+        args.putString(ENROLLMENT_DATE, enrollmentDate);
+        args.putString(INCIDENT_DATE, incidentDate);
+        args.putString(ORG_UNIT_ID, unitId);
+        args.putString(ORG_UNIT_ID, unitId);
+        args.putString(PROGRAM_ID, programId);
+        args.putBoolean(IS_UNIQUE_ID, isUniqueID);
+        args.putString(UNIQUE_ID, uniqueId);
         fragment.setArguments(args);
         return fragment;
     }
@@ -162,10 +178,16 @@ public class EnrollmentDataEntryFragment extends DataEntryFragment<EnrollmentDat
             String enrollmentDate = fragmentArguments.getString(ENROLLMENT_DATE);
             String incidentDate = fragmentArguments.getString(INCIDENT_DATE);
             long trackedEntityInstance = fragmentArguments.getLong(TRACKEDENTITYINSTANCE_ID, -1);
+            boolean isUniqueId = fragmentArguments.getBoolean(IS_UNIQUE_ID, false);
+            String uniqueId = fragmentArguments.containsKey(UNIQUE_ID)
+                                ? fragmentArguments.getString(UNIQUE_ID)
+                                : null;
 
             return new DbLoader<>(
-                    getActivity().getBaseContext(), modelsToTrack, new EnrollmentDataEntryFragmentQuery(
-                    orgUnitId, programId, trackedEntityInstance, enrollmentDate, incidentDate,
+                    getActivity().getBaseContext(),
+                    modelsToTrack,
+                    new EnrollmentDataEntryFragmentQuery(
+                        orgUnitId, programId, trackedEntityInstance, enrollmentDate, incidentDate, isUniqueId, uniqueId,
                     EnrollmentDataEntryFragment.this)
             );
         }
@@ -501,6 +523,8 @@ public class EnrollmentDataEntryFragment extends DataEntryFragment<EnrollmentDat
                         if(!ids[ids.length - 1].isEmpty()) {
                             value.setValue(ids[ids.length - 1]);
                             form.getEnrollment().setOrgUnit(ids[ids.length - 1]);
+                            form.getTrackedEntityInstance().setOrgUnit(ids[ids.length - 1]);
+                            form.getTrackedEntityInstance().save();
                         }
                     }
                     if(value.getDisplayName().contains("Photo")){
@@ -534,7 +558,11 @@ public class EnrollmentDataEntryFragment extends DataEntryFragment<EnrollmentDat
             }
         }
 
-        DhisService.updateData();
+        if (form != null && form.getTrackedEntityInstance() != null) {
+            DhisService.updateData(form.getTrackedEntityInstance().getUid());
+        }else{
+            DhisService.updateData(null);
+        }
     }
 
     private void discardChanges() {

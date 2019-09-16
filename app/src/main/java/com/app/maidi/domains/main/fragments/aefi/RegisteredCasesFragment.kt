@@ -65,9 +65,20 @@ class RegisteredCasesFragment : BaseFragment(), OnItemClickListener{
 
     override fun onItemClicked(position: Int) {
         var trackedEntityInstance = trackedEntityInstances.get(position)
-        var bundle = Bundle()
-        bundle.putString(AdverseEventInformationActivity.TRACKED_ENTITY_INSTANCE_ID, trackedEntityInstance.uid)
-        mainActivity.transformActivity(mainActivity, AdverseEventInformationActivity::class.java, false, bundle)
+        var uniqueIdValue = TrackerController.getUniqueIdAttributeValue(trackedEntityInstance)
+        var enrollment = TrackerController.getEnrollment(trackedEntityInstance)
+        if(enrollment.program.uid.equals(aefiProgram.uid)){
+            var bundle = Bundle()
+            bundle.putString(AdverseEventInformationActivity.TRACKED_ENTITY_INSTANCE_ID, trackedEntityInstance.uid)
+            mainActivity.transformActivity(mainActivity, AdverseEventInformationActivity::class.java, false, bundle)
+        }else{
+            var bundle = Bundle()
+            bundle.putString(ChildRegistrationActivity.PROGRAM, Constants.AEFI)
+            if(uniqueIdValue != null){
+                bundle.putString(ChildRegistrationActivity.UNIQUE_ID, uniqueIdValue.value)
+            }
+            mainActivity.transformActivity(mainActivity, ChildRegistrationActivity::class.java, false, bundle)
+        }
     }
 
     override fun onResume() {
@@ -75,7 +86,7 @@ class RegisteredCasesFragment : BaseFragment(), OnItemClickListener{
 
         var createButtonListener = View.OnClickListener {
             var bundle = Bundle()
-            bundle.putString(ChildRegistrationActivity.ORGANISATION_UNIT, Constants.AEFI)
+            bundle.putString(ChildRegistrationActivity.PROGRAM, Constants.AEFI)
             mainActivity.transformActivity(mainActivity, ChildRegistrationActivity::class.java, false, bundle)
         }
 

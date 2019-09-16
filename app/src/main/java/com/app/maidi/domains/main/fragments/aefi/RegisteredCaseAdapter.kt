@@ -10,9 +10,11 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.RecyclerView
 import com.app.maidi.R
 import com.app.maidi.domains.main.fragments.listener.OnItemClickListener
+import com.app.maidi.utils.Constants
 import com.app.maidi.utils.DateUtils
 import com.app.maidi.utils.MethodUtils
 import org.hisp.dhis.android.sdk.controllers.metadata.MetaDataController
+import org.hisp.dhis.android.sdk.controllers.tracker.TrackerController
 import org.hisp.dhis.android.sdk.persistence.models.TrackedEntityInstance
 
 class RegisteredCaseAdapter : RecyclerView.Adapter<RegisteredCaseAdapter.RegisteredCaseHolder>{
@@ -39,6 +41,8 @@ class RegisteredCaseAdapter : RecyclerView.Adapter<RegisteredCaseAdapter.Registe
     override fun onBindViewHolder(holder: RegisteredCaseHolder, position: Int) {
         try {
             var trackedEntityInstance = trackedEntityInstances.get(position)
+            var enrollment = TrackerController.getEnrollment(trackedEntityInstance)
+            var aefiProgram = MetaDataController.getProgramByName(Constants.AEFI)
 
             if(position % 2 == 0)
                 holder.llHeader.setBackgroundColor(activity.resources.getColor(R.color.lighter_gray_background_color))
@@ -55,11 +59,13 @@ class RegisteredCaseAdapter : RecyclerView.Adapter<RegisteredCaseAdapter.Registe
                     holder.tvChildName.text = attribute.value
                 }
 
-                if (attribute.displayName.contains("Date of Birth")) {
-                    if(DateUtils.isValidDateFollowPattern(attribute.value)) {
-                        holder.tvDob.text = attribute.value
-                    } else {
-                        holder.tvDob.text = DateUtils.convertFromFullDateToSimpleDate(attribute.value)
+                if(enrollment.program.equals(aefiProgram.uid)) {
+                    if (attribute.displayName.contains("Date of Birth")) {
+                        if (DateUtils.isValidDateFollowPattern(attribute.value)) {
+                            holder.tvDob.text = attribute.value
+                        } else {
+                            holder.tvDob.text = DateUtils.convertFromFullDateToSimpleDate(attribute.value)
+                        }
                     }
                 }
 
@@ -73,6 +79,14 @@ class RegisteredCaseAdapter : RecyclerView.Adapter<RegisteredCaseAdapter.Registe
                             break
                         }
                     }
+                }
+            }
+
+            if(!enrollment.program.equals(aefiProgram.uid)) {
+                if(enrollment.incidentDate != null) {
+                    holder.tvDob.text = DateUtils.convertCalendarToString(
+                        org.hisp.dhis.android.sdk.utils.support.DateUtils.parseDate(enrollment.incidentDate)
+                    )
                 }
             }
 

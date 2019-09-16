@@ -351,4 +351,7 @@
     <string name="district">District</string>
     <string name="block">Block</string>
     <string name="village_ward">Village/Ward</string>
+
+    <string name="warning">Warning</string>
+    <string name="confirm_delete_event">Are you sure you want to delete this event? This action will not been able to restored after that</string>
 </resources>

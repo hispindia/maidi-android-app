@@ -43,7 +43,7 @@ class MainFragment : BaseFragment() {
     fun onChildRegistrationModuleClicked(){
         if(MetaDataController.getProgramByName(Constants.IMMUNISATION) != null) {
             var bundle = Bundle()
-            bundle.putString(ChildRegistrationActivity.ORGANISATION_UNIT, Constants.IMMUNISATION)
+            bundle.putString(ChildRegistrationActivity.PROGRAM, Constants.IMMUNISATION)
             mainActivity.transformActivity(mainActivity, ChildRegistrationActivity::class.java, false, bundle)
         }
     }

@@ -558,7 +558,7 @@ public class EventDataEntryFragment extends DataEntryFragment<EventDataEntryFrag
             if(isShowSpinnerButton)
                 DhisService.sendEventData();
             else
-                DhisService.updateData();
+                DhisService.updateData(null);
             isFinish = true;
         }
     }
@@ -1180,6 +1180,26 @@ public class EventDataEntryFragment extends DataEntryFragment<EventDataEntryFrag
                         //discard
                         doBack();
                         isFinish = true;
+                        getActivity().onBackPressed();
+                    }
+                }, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        //cancel
+                        dialog.dismiss();
+                    }
+                });
+    }
+
+    public void showConfirmDeleteDialog(){
+        UiUtils.showConfirmDialog(getActivity(),
+                getString(R.string.warning), getString(R.string.confirm_delete_event),
+                getString(R.string.delete),
+                getString(R.string.cancel), new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        //discard
+                        delete();
                         getActivity().onBackPressed();
                     }
                 }, new DialogInterface.OnClickListener() {

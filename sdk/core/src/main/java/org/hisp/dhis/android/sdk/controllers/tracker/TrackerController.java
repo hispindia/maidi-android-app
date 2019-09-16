@@ -962,6 +962,29 @@ public final class TrackerController extends ResourceController {
                         Condition.column(Event$Table.STATUS).isNot(Event.STATUS_DELETED)).queryList();
     }
 
+    public static Enrollment getEnrollment(TrackedEntityInstance trackedEntityInstance){
+        return new Select().from(Enrollment.class)
+                .where(Condition.column(Enrollment$Table.TRACKEDENTITYINSTANCE)
+                            .is(trackedEntityInstance.getTrackedEntityInstance()))
+                .querySingle();
+    }
+
+    public static TrackedEntityAttributeValue getUniqueIdAttributeValue(TrackedEntityInstance trackedEntityInstance){
+        TrackedEntityAttribute attribute = new Select()
+                .from(TrackedEntityAttribute.class)
+                .where(Condition.column(TrackedEntityAttribute$Table.DISPLAYNAME)
+                    .like("%Case ID%"))
+                .querySingle();
+        TrackedEntityAttributeValue value = null;
+        if(attribute != null && trackedEntityInstance != null){
+            value = new Select().from(TrackedEntityAttributeValue.class)
+                    .where(Condition.column(TrackedEntityAttributeValue$Table.TRACKEDENTITYATTRIBUTEID).is(attribute.getUid()))
+                    .and(Condition.column(TrackedEntityAttributeValue$Table.TRACKEDENTITYINSTANCEID).is(trackedEntityInstance.getTrackedEntityInstance()))
+                    .querySingle();
+        }
+        return value;
+    }
+
     public static void sendEventDatas(DhisApi dhisApi) throws APIException {
         Log.d(CLASS_TAG, "sending local data");
         TrackerDataSender.deleteLocallyDeletedEvents(dhisApi);

@@ -71,23 +71,8 @@ class ListVillageFragment : BaseFragment, OnItemClickListener {
         var eventId = eventMaps.keys.toList().get(position)
 
         var deleteButtonListener = View.OnClickListener {
-            var event = TrackerController.getEvent(eventId)
-            if(!event.status.equals(Event.STATUS_DELETED)){
-                UiUtils.showConfirmDialog(
-                    activity!!,
-                    getString(R.string.delete),
-                    getString(R.string.confirm_delete_event),
-                    getString(R.string.delete),
-                    getString(R.string.cancel),
-                    { dialog, which ->
-                        if(eventDataFragment != null) {
-                            eventDataFragment!!.delete()
-                        }
-                    },
-                    { dialog, which ->
-                        //cancel
-                        dialog.dismiss()
-                    })
+            if(eventDataFragment != null) {
+                eventDataFragment!!.showConfirmDeleteDialog()
             }
         }
 

@@ -67,7 +67,7 @@ class LoginPresenter : BasePresenter<LoginView>{
         )
     }
 
-    fun signInWithVerifyCode(credential: PhoneAuthCredential, phoneNumber: String){
+    fun signInWithPhoneAuthCredential(credential: PhoneAuthCredential, phoneNumber: String){
         FirebaseAuth.getInstance().signInWithCredential(credential)
             .addOnCompleteListener { task ->
                 if(task.isSuccessful){

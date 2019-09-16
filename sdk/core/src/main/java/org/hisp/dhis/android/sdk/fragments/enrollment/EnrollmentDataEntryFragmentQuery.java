@@ -57,14 +57,20 @@ class EnrollmentDataEntryFragmentQuery implements Query<EnrollmentDataEntryFragm
     private Enrollment currentEnrollment;
     private EnrollmentDataEntryFragment mFragment;
 
+    private String uniqueCaseID;
+    private boolean isNeedUniqueCaseId;
+
     EnrollmentDataEntryFragmentQuery(String mOrgUnitId, String mProgramId,
             long mTrackedEntityInstanceId,
-            String enrollmentDate, String incidentDate, EnrollmentDataEntryFragment fragment) {
+            String enrollmentDate, String incidentDate,
+            boolean isNeedUniqueCaseId, String uniqueCaseID, EnrollmentDataEntryFragment fragment) {
         this.mOrgUnitId = mOrgUnitId;
         this.mProgramId = mProgramId;
         this.mTrackedEntityInstanceId = mTrackedEntityInstanceId;
         this.enrollmentDate = enrollmentDate;
         this.incidentDate = incidentDate;
+        this.isNeedUniqueCaseId = isNeedUniqueCaseId;
+        this.uniqueCaseID = uniqueCaseID;
         mFragment = fragment;
     }
 
@@ -122,6 +128,18 @@ class EnrollmentDataEntryFragmentQuery implements Query<EnrollmentDataEntryFragm
                 TrackedEntityAttribute trackedEntityAttribute =
                         MetaDataController.getTrackedEntityAttribute(
                                 ptea.getTrackedEntityAttributeId());
+
+                if(isNeedUniqueCaseId && trackedEntityAttribute.getDisplayName().contains("Case ID")){
+                    TrackedEntityAttributeValue trackedEntityAttributeValue =
+                            new TrackedEntityAttributeValue();
+                    trackedEntityAttributeValue.setTrackedEntityAttributeId(
+                            ptea.getTrackedEntityAttribute().getUid());
+                    trackedEntityAttributeValue.setTrackedEntityInstanceId(
+                            currentTrackedEntityInstance.getUid());
+                    trackedEntityAttributeValue.setValue(uniqueCaseID);
+                    trackedEntityAttributeValues.add(trackedEntityAttributeValue);
+                }
+
                 if (trackedEntityAttribute.isGenerated()) {
                     TrackedEntityAttributeGeneratedValue trackedEntityAttributeGeneratedValue =
                             MetaDataController.getTrackedEntityAttributeGeneratedValue(
@@ -148,12 +166,17 @@ class EnrollmentDataEntryFragmentQuery implements Query<EnrollmentDataEntryFragm
             boolean editable = true;
             boolean shouldNeverBeEdited = false;
             ValueType valueType = programTrackedEntityAttributes.get(i).getTrackedEntityAttribute().getValueType();
-            if (programTrackedEntityAttributes.get(i).getTrackedEntityAttribute().isGenerated()) {
-                editable = false;
-                shouldNeverBeEdited = true;
-                valueType = ValueType.TEXT;
-                mFragment.getListViewAdapter().disableIndex(programTrackedEntityAttributes.get(
-                        i).getTrackedEntityAttribute().getUid());
+            if (programTrackedEntityAttributes.get(i).getTrackedEntityAttribute().isGenerated()
+                || (isNeedUniqueCaseId
+                        && programTrackedEntityAttributes.get(i)
+                                .getTrackedEntityAttribute().getDisplayName().contains("Case ID")
+                    )
+                ) {
+                    editable = false;
+                    shouldNeverBeEdited = true;
+                    valueType = ValueType.TEXT;
+                    mFragment.getListViewAdapter().disableIndex(programTrackedEntityAttributes.get(
+                            i).getTrackedEntityAttribute().getUid());
             }
             if (ValueType.COORDINATE.equals(programTrackedEntityAttributes.get(
                     i).getTrackedEntityAttribute().getValueType())) {

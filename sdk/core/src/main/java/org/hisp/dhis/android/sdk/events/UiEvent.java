@@ -39,6 +39,7 @@ public final class UiEvent {
     }
 
     private final UiEventType mType;
+    private String content;
 
     public UiEvent(UiEventType type) {
         mType = type;
@@ -46,5 +47,13 @@ public final class UiEvent {
 
     public UiEventType getEventType() {
         return mType;
+    }
+
+    public void setContent(String content) {
+        this.content = content;
+    }
+
+    public String getContent() {
+        return content;
     }
 }
