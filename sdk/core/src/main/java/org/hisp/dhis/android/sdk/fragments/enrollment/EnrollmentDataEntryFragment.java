@@ -346,6 +346,7 @@ public class EnrollmentDataEntryFragment extends DataEntryFragment<EnrollmentDat
         }
     }
 
+
     private void showProgramOverviewFragment() {
         //HolderActivity.navigateToProgramOverviewFragment(getActivity(), form.getOrganisationUnit().getId(), form.getProgram().getUid(), form.getTrackedEntityInstance().getLocalId());
     }
@@ -356,16 +357,18 @@ public class EnrollmentDataEntryFragment extends DataEntryFragment<EnrollmentDat
                     getContext().getString(R.string.profile_form_empty));
             return false;
         }
-        if(!TrackerController.validateUniqueValues(form.getTrackedEntityAttributeValueMap(), form.getOrganisationUnit().getId())){
+
+        if (!TrackerController.validateUniqueValues(form.getTrackedEntityAttributeValueMap(), form.getOrganisationUnit().getId())) {
             List<String> listOfUniqueInvalidFields = TrackerController.getNotValidatedUniqueValues(form.getTrackedEntityAttributeValueMap(), form.getOrganisationUnit().getId());
             String listOfInvalidAttributes = " ";
-            for(String value:listOfUniqueInvalidFields){
+            for (String value : listOfUniqueInvalidFields) {
                 listOfInvalidAttributes += value + " ";
             }
             UiUtils.showErrorDialog(getActivity(), getContext().getString(R.string.error_message),
                     String.format(getContext().getString(R.string.invalid_unique_value_form_empty), listOfInvalidAttributes));
             return false;
         }
+
         ArrayList<String> programRulesValidationErrors =
                 getProgramRuleFragmentHelper().getProgramRuleValidationErrors();
         HashMap<ErrorType, ArrayList<String>> allErrors = getValidationErrors();

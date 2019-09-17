@@ -97,7 +97,8 @@ class AdverseEventInformationActivity : AppCompatActivity() {
                     resources.getString(R.string.create_update_successful),
                     Toast.LENGTH_LONG
                 ).show()
-                onBackPressed()
+                finish()
+                //onBackPressed()
             }
         }
     }
@@ -153,5 +154,25 @@ class AdverseEventInformationActivity : AppCompatActivity() {
         }catch (exception : Exception){
             Log.d("Null Exception", exception.toString())
         }
+    }
+
+    override fun onBackPressed() {
+        if (isCurrentFragment<EventDataEntryFragment>(R.id.activity_adverse_event_information_container)) {
+            var handled = getCurrentFragment<EventDataEntryFragment>(R.id.activity_adverse_event_information_container).onBackPressed()
+            if (handled)
+                super.onBackPressed()
+        } else {
+            super.onBackPressed()
+        }
+    }
+
+    inline fun <reified T> isCurrentFragment(containerId: Int) : Boolean {
+        var fragment = supportFragmentManager.findFragmentById(containerId)
+        return fragment is T
+    }
+
+    inline fun <reified T> getCurrentFragment(containerId: Int) : T{
+        var fragment = supportFragmentManager.findFragmentById(containerId)
+        return fragment as T
     }
 }

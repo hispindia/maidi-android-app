@@ -176,20 +176,24 @@ public final class DhisController {
     }
 
     public static void sendData() throws APIException, IllegalStateException {
-        EnrollmentLocalDataSource enrollmentLocalDataSource = new EnrollmentLocalDataSource();
-        EnrollmentRemoteDataSource enrollmentRemoteDataSource = new EnrollmentRemoteDataSource(DhisController.getInstance().getDhisApi());
-        IEnrollmentRepository enrollmentRepository = new EnrollmentRepository(enrollmentLocalDataSource, enrollmentRemoteDataSource);
+        try {
+            EnrollmentLocalDataSource enrollmentLocalDataSource = new EnrollmentLocalDataSource();
+            EnrollmentRemoteDataSource enrollmentRemoteDataSource = new EnrollmentRemoteDataSource(DhisController.getInstance().getDhisApi());
+            IEnrollmentRepository enrollmentRepository = new EnrollmentRepository(enrollmentLocalDataSource, enrollmentRemoteDataSource);
 
-        EventLocalDataSource mLocalDataSource = new EventLocalDataSource();
-        EventRemoteDataSource mRemoteDataSource = new EventRemoteDataSource(DhisController.getInstance().getDhisApi());
-        EventRepository eventRepository = new EventRepository(mLocalDataSource, mRemoteDataSource);
-        FailedItemRepository failedItemRepository = new FailedItemRepository();
+            EventLocalDataSource mLocalDataSource = new EventLocalDataSource();
+            EventRemoteDataSource mRemoteDataSource = new EventRemoteDataSource(DhisController.getInstance().getDhisApi());
+            EventRepository eventRepository = new EventRepository(mLocalDataSource, mRemoteDataSource);
+            FailedItemRepository failedItemRepository = new FailedItemRepository();
 
-        TrackedEntityInstanceLocalDataSource trackedEntityInstanceLocalDataSource = new TrackedEntityInstanceLocalDataSource();
-        TrackedEntityInstanceRemoteDataSource trackedEntityInstanceRemoteDataSource = new TrackedEntityInstanceRemoteDataSource(DhisController.getInstance().getDhisApi());
-        ITrackedEntityInstanceRepository trackedEntityInstanceRepository = new TrackedEntityInstanceRepository(trackedEntityInstanceLocalDataSource, trackedEntityInstanceRemoteDataSource);
-        SyncAppUseCase syncAppUseCase = new SyncAppUseCase(trackedEntityInstanceRepository, enrollmentRepository, eventRepository, failedItemRepository);
-        syncAppUseCase.execute();
+            TrackedEntityInstanceLocalDataSource trackedEntityInstanceLocalDataSource = new TrackedEntityInstanceLocalDataSource();
+            TrackedEntityInstanceRemoteDataSource trackedEntityInstanceRemoteDataSource = new TrackedEntityInstanceRemoteDataSource(DhisController.getInstance().getDhisApi());
+            ITrackedEntityInstanceRepository trackedEntityInstanceRepository = new TrackedEntityInstanceRepository(trackedEntityInstanceLocalDataSource, trackedEntityInstanceRemoteDataSource);
+            SyncAppUseCase syncAppUseCase = new SyncAppUseCase(trackedEntityInstanceRepository, enrollmentRepository, eventRepository, failedItemRepository);
+            syncAppUseCase.execute();
+        }catch (Exception ex){
+            ex.printStackTrace();
+        }
     }
 
     static UserAccount logInUser(HttpUrl serverUrl, Credentials credentials) throws APIException {
