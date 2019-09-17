@@ -55,17 +55,21 @@ class MainPresenter : BasePresenter<MainView> {
 
                     for(immunisationInstance in immunisationInstances){
                         var immunisationUniqueId = TrackerController.getUniqueIdAttributeValue(immunisationInstance)
-                        var hasSameUniqueId = false
-                        for(aefiInstance in aefiInstances){
-                            var aefiUniqueId = TrackerController.getUniqueIdAttributeValue(aefiInstance)
-                            if(immunisationUniqueId.value.equals(aefiUniqueId.value)){
-                                hasSameUniqueId = true
-                                break
+                        if(immunisationUniqueId != null){
+                            var hasSameUniqueId = false
+                            for(aefiInstance in aefiInstances){
+                                var aefiUniqueId = TrackerController.getUniqueIdAttributeValue(aefiInstance)
+                                if(aefiUniqueId != null) {
+                                    if (immunisationUniqueId.value.equals(aefiUniqueId.value)) {
+                                        hasSameUniqueId = true
+                                        break
+                                    }
+                                }
                             }
-                        }
 
-                        if(!hasSameUniqueId){
-                            filterImmunisationInstances.add(immunisationInstance)
+                            if(!hasSameUniqueId){
+                                filterImmunisationInstances.add(immunisationInstance)
+                            }
                         }
                     }
 

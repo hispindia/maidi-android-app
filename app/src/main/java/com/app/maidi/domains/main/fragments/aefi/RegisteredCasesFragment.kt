@@ -52,7 +52,13 @@ class RegisteredCasesFragment : BaseFragment(), OnItemClickListener{
         var viewGroup = inflater.inflate(R.layout.fragment_registered_cases, container, false)
         ButterKnife.bind(this, viewGroup)
 
-        rcvList.layoutManager = LinearLayoutManager(mainActivity)
+        var layoutManager = object : LinearLayoutManager(mainActivity, VERTICAL, false){
+            override fun onLayoutCompleted(state: RecyclerView.State?) {
+                super.onLayoutCompleted(state)
+                mainActivity.hideLoading()
+            }
+        }
+        rcvList.layoutManager = layoutManager
 
         return viewGroup
     }

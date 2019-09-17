@@ -391,7 +391,7 @@ class MainActivity : BaseActivity<MainView, MainPresenter>(), View.OnClickListen
             if(isCurrentFragment<RegisteredCasesFragment>(R.id.activity_main_fl_content)){
                 getCurrentFragment<RegisteredCasesFragment>(R.id.activity_main_fl_content).getRemoteTrackedEntityInstances(trackedEntityInstances)
             }
-            hideHUD()
+            //hideHUD()
         }
     }
 
