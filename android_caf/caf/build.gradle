@@ -1,0 +1,140 @@
+import org.ajoberstar.grgit.Grgit
+
+ext {
+    //Git version
+    git = Grgit.open(currentDir: projectDir)
+    gitVersionName = git.describe()
+    gitVersionCode = git.tag.list().size()
+}
+
+buildscript {
+    ext {
+        //App version
+        cafVersion = [
+                buildGradle          : "3.0.1",
+                grgit                : "2.1.1",
+                compileSdkVersion    : 26,
+                buildToolsVersion    : "26.0.2",
+                minSdkVersion        : 16,
+                targetSdkVersion     : 26,
+                gson                 : "2.8.2",
+                okhttp               : "3.10.0",
+                retrofit             : "2.3.0",
+                rxAndroid            : "1.2.0",
+                rxJava               : "1.1.5",
+                dagger               : "2.13",
+                daggerCompiler       : "2.13",
+                jsr250Api            : "1.0",
+                threetenabp          : "1.0.5",
+                hawk                 : "1.23",
+                cicerone             : "3.0.0",
+                logentries           : "logentries-android-4.4.1",
+                eventbus             : "3.1.1",
+                cookie               : "v1.0.1"
+        ]
+
+        def props = rootProject.getExtensions().findByName("ext")
+        if (props != null) {
+            props = props.properties
+            if (props.containsKey("cafVersion")) {
+                props = props.getAt("cafVersion")
+                if (props["buildGradle"] != null) cafVersion.buildGradle = props["buildGradle"]
+                if (props["grgit"] != null) cafVersion.grgit = props["grgit"]
+                if (props["compileSdkVersion"] != null) cafVersion.compileSdkVersion = props["compileSdkVersion"]
+                if (props["buildToolsVersion"] != null) cafVersion.buildToolsVersion = props["buildToolsVersion"]
+                if (props["minSdkVersion"] != null) cafVersion.minSdkVersion = props["minSdkVersion"]
+                if (props["targetSdkVersion"] != null) cafVersion.targetSdkVersion = props["targetSdkVersion"]
+                if (props["gson"] != null) cafVersion.gson = props["gson"]
+                if (props["okhttp"] != null) cafVersion.okhttp = props["okhttp"]
+                if (props["retrofit"] != null) cafVersion.retrofit = props["retrofit"]
+                if (props["rxAndroid"] != null) cafVersion.rxAndroid = props["rxAndroid"]
+                if (props["rxJava"] != null) cafVersion.rxJava = props["rxJava"]
+                if (props["dagger"] != null) cafVersion.dagger = props["dagger"]
+                if (props["daggerCompiler"] != null) cafVersion.daggerCompiler = props["daggerCompiler"]
+                if (props["jsr250Api"] != null) cafVersion.jsr250Api = props["jsr250Api"]
+                if (props["threetenabp"] != null) cafVersion.threetenabp = props["threetenabp"]
+                if (props["hawk"] != null) cafVersion.hawk = props["hawk"]
+                if (props["cicerone"] != null) cafVersion.cicerone = props["cicerone"]
+                if (props["logentries"] != null) cafVersion.logentries = props["logentries"]
+                if (props["eventbus"] != null) cafVersion.eventbus = props["eventbus"]
+                if (props["cookie"] != null) cafVersion.cookie = props["cookie"]
+            }
+        }
+    }
+    repositories {
+        jcenter()
+        mavenCentral()
+        google()
+        maven { url "https://jitpack.io" }
+    }
+
+    dependencies {
+        classpath "com.android.tools.build:gradle:${cafVersion.buildGradle}"
+        classpath "org.ajoberstar:grgit:${cafVersion.grgit}"
+    }
+}
+
+apply plugin: 'com.android.library'
+
+android {
+    compileSdkVersion cafVersion.compileSdkVersion
+    libraryVariants.all { variant ->
+        variant.outputs.all {
+            outputFileName = "caf-${variant.name}.apk"
+        }
+    }
+
+    defaultConfig {
+        minSdkVersion cafVersion.minSdkVersion
+        targetSdkVersion cafVersion.targetSdkVersion
+        versionCode gitVersionCode
+        versionName gitVersionName
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+    }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+
+    packagingOptions {
+        exclude 'META-INF/LICENSE.txt'
+        exclude 'META-INF/NOTICE.txt'
+    }
+}
+
+dependencies {
+    implementation fileTree(dir: 'libs', include: ['*.jar'])
+
+    //Rest client
+    implementation "com.google.code.gson:gson:${cafVersion.gson}"
+    implementation "com.squareup.okhttp3:okhttp:${cafVersion.okhttp}"
+    implementation "com.squareup.retrofit2:retrofit:${cafVersion.retrofit}"
+    implementation "com.squareup.retrofit2:converter-gson:${cafVersion.retrofit}"
+    implementation "com.squareup.retrofit2:adapter-rxjava:${cafVersion.retrofit}"
+    //Async
+    implementation "io.reactivex:rxandroid:${cafVersion.rxAndroid}"
+    implementation "io.reactivex:rxjava:${cafVersion.rxJava}"
+    //Dagger
+    annotationProcessor "com.google.dagger:dagger-compiler:${cafVersion.daggerCompiler}"
+    implementation "com.google.dagger:dagger:${cafVersion.dagger}"
+    compileOnly "javax.annotation:jsr250-api:${cafVersion.jsr250Api}"
+    //Date times
+    implementation "com.jakewharton.threetenabp:threetenabp:${cafVersion.threetenabp}"
+    //Logs
+    implementation "com.github.LogentriesCommunity:le_android:${cafVersion.logentries}"
+    //Pref storage
+    implementation "com.github.orhanobut:hawk:${cafVersion.hawk}"
+    //Cicerone
+    implementation "ru.terrakok.cicerone:cicerone:${cafVersion.cicerone}"
+    //Messages
+    implementation "org.greenrobot:eventbus:${cafVersion.eventbus}"
+    //Cookie
+    implementation "com.github.franmontiel:PersistentCookieJar:${cafVersion.cookie}"
+}
