@@ -1,6 +1,5 @@
 package com.app.maidi.domains.login
 
-import android.app.Activity
 import com.app.maidi.infrastructures.ActivityModules
 import com.app.maidi.infrastructures.AppComponent
 import com.app.maidi.infrastructures.scope.ActivityScope

@@ -1,12 +1,15 @@
 package com.app.maidi.domains.child_registration
 
 import android.os.Bundle
-import android.widget.*
+import android.widget.ImageView
+import android.widget.LinearLayout
+import android.widget.RelativeLayout
+import android.widget.Toast
 import butterknife.BindView
 import butterknife.ButterKnife
 import com.app.maidi.MainApplication
 import com.app.maidi.R
-import com.app.maidi.custom.MaidiCrashManagerListener
+import com.app.maidi.utils.MaidiCrashManagerListener
 import com.app.maidi.domains.aefi.AdverseEventInformationActivity
 import com.app.maidi.domains.base.BaseActivity
 import com.app.maidi.infrastructures.ActivityModules
@@ -19,7 +22,8 @@ import org.hisp.dhis.android.sdk.events.LoadingMessageEvent
 import org.hisp.dhis.android.sdk.events.UiEvent
 import org.hisp.dhis.android.sdk.fragments.enrollment.EnrollmentDataEntryFragment
 import org.hisp.dhis.android.sdk.persistence.Dhis2Application
-import org.hisp.dhis.android.sdk.persistence.models.*
+import org.hisp.dhis.android.sdk.persistence.models.OrganisationUnit
+import org.hisp.dhis.android.sdk.persistence.models.Program
 import org.joda.time.DateTime
 import javax.inject.Inject
 
@@ -28,6 +32,12 @@ class ChildRegistrationActivity : BaseActivity<ChildRegistrationView, ChildRegis
     companion object{
         val PROGRAM = "PROGRAM"
         val UNIQUE_ID = "UNIQUE_ID"
+        val HAS_DATAS = "HAS_DATAS"
+        val CHILD_NAME = "CHILD_NAME"
+        val GENDER = "GENDER"
+        val DATE_OF_BIRTH = "DATE_OF_BIRTH"
+        val CAREGIVER = "CAREGIVER"
+        val CHILD_REGISTRATION_INSTANCE_ID = "CHILD_REGISTRATION_INSTANCE_ID"
     }
 
     @Inject
@@ -48,6 +58,12 @@ class ChildRegistrationActivity : BaseActivity<ChildRegistrationView, ChildRegis
     lateinit var enrollmentDataEntryFragment: EnrollmentDataEntryFragment
 
     var uniqueId: String? = null
+    var hasDatas: Boolean = false
+    var childName: String? = null
+    var gender: String? = null
+    var dateOfBirth: String? = null
+    var caregiver: String? = null
+    var childRegistrationInstanceId: String? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -65,13 +81,40 @@ class ChildRegistrationActivity : BaseActivity<ChildRegistrationView, ChildRegis
             uniqueId = intent.extras.getString(UNIQUE_ID)
         }
 
+        if(intent.extras != null && intent.extras.containsKey(HAS_DATAS)) {
+            hasDatas = intent.extras.getBoolean(HAS_DATAS)
+        }
+
+        if(intent.extras != null && intent.extras.containsKey(CHILD_NAME)) {
+            childName = intent.extras.getString(CHILD_NAME)
+        }
+
+        if(intent.extras != null && intent.extras.containsKey(GENDER)) {
+            gender = intent.extras.getString(GENDER)
+        }
+
+        if(intent.extras != null && intent.extras.containsKey(DATE_OF_BIRTH)) {
+            dateOfBirth = intent.extras.getString(DATE_OF_BIRTH)
+        }
+
+        if(intent.extras != null && intent.extras.containsKey(CAREGIVER)) {
+            caregiver = intent.extras.getString(CAREGIVER)
+        }
+
+        if(intent.extras != null && intent.extras.containsKey(CHILD_REGISTRATION_INSTANCE_ID)) {
+            childRegistrationInstanceId = intent.extras.getString(CHILD_REGISTRATION_INSTANCE_ID)
+        }
+
         var enrollmentDate = DateUtils.convertCalendarToServerString(DateTime.now().toDate())
         var incidentDate = DateUtils.convertCalendarToServerString(DateTime.now().toDate())
 
         if(uniqueId != null && !uniqueId!!.isEmpty()){
             enrollmentDataEntryFragment = EnrollmentDataEntryFragment
                 .newInstanceWithCaseId(topUnit.id, currentProgram.uid, enrollmentDate, incidentDate, true, uniqueId)
-        }else {
+        } else if(hasDatas){
+            enrollmentDataEntryFragment = EnrollmentDataEntryFragment
+                .newInstanceWithDatas(topUnit.id, currentProgram.uid, enrollmentDate, incidentDate, childRegistrationInstanceId, childName, gender, caregiver, dateOfBirth)
+        } else {
             enrollmentDataEntryFragment =
                 EnrollmentDataEntryFragment.newInstance(topUnit.id, currentProgram.uid, enrollmentDate, incidentDate)
         }

@@ -1,28 +1,18 @@
 package com.app.maidi
 
 import android.app.Activity
-import android.app.Application
-import android.database.sqlite.SQLiteDatabase
 import android.util.Log
 import com.amitshekhar.DebugDB
-import com.app.maidi.database.MaidiDatabase
 import com.app.maidi.domains.main.DaggerMainComponent
 import com.app.maidi.domains.main.MainComponent
-import com.app.maidi.infrastructures.ActivityModules
 import com.app.maidi.infrastructures.AppComponent
 import com.app.maidi.infrastructures.AppModules
 import com.app.maidi.infrastructures.DaggerAppComponent
 import com.app.maidi.utils.AppPreferences
-import com.bugfender.sdk.Bugfender
-import com.google.firebase.FirebaseApp
 import com.raizlabs.android.dbflow.config.FlowManager
-import okhttp3.internal.Util
 import org.hisp.dhis.android.sdk.persistence.Dhis2Application
-import org.hisp.dhis.android.sdk.persistence.Dhis2Database
-import org.hisp.dhis.android.sdk.persistence.migrations.MigrationUtil
 import org.hisp.dhis.android.sdk.utils.Utils
 import uk.co.chrisjenx.calligraphy.CalligraphyConfig
-import javax.inject.Inject
 
 class MainApplication : Dhis2Application() {
 
@@ -32,8 +22,6 @@ class MainApplication : Dhis2Application() {
     override fun onCreate() {
         super.onCreate()
         AppPreferences.init(this)
-
-        Bugfender.init(this, "g23bHOinVXnhAGQOHizAuloPU6ty3GGH", false)
 
         if(BuildConfig.DEBUG) {
             DebugDB.getAddressLog()

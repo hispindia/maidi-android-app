@@ -58,12 +58,22 @@ class EnrollmentDataEntryFragmentQuery implements Query<EnrollmentDataEntryFragm
     private EnrollmentDataEntryFragment mFragment;
 
     private String uniqueCaseID;
+    private String childName;
+    private String caregiverName;
+    private String gender;
+    private String dateOfBirth;
     private boolean isNeedUniqueCaseId;
 
     EnrollmentDataEntryFragmentQuery(String mOrgUnitId, String mProgramId,
             long mTrackedEntityInstanceId,
             String enrollmentDate, String incidentDate,
-            boolean isNeedUniqueCaseId, String uniqueCaseID, EnrollmentDataEntryFragment fragment) {
+            boolean isNeedUniqueCaseId,
+            String uniqueCaseID,
+            String childName,
+            String caregiverName,
+            String gender,
+            String dateOfBirth,
+            EnrollmentDataEntryFragment fragment) {
         this.mOrgUnitId = mOrgUnitId;
         this.mProgramId = mProgramId;
         this.mTrackedEntityInstanceId = mTrackedEntityInstanceId;
@@ -71,6 +81,10 @@ class EnrollmentDataEntryFragmentQuery implements Query<EnrollmentDataEntryFragm
         this.incidentDate = incidentDate;
         this.isNeedUniqueCaseId = isNeedUniqueCaseId;
         this.uniqueCaseID = uniqueCaseID;
+        this.childName = childName;
+        this.caregiverName = caregiverName;
+        this.gender = gender;
+        this.dateOfBirth = dateOfBirth;
         mFragment = fragment;
     }
 
@@ -137,6 +151,50 @@ class EnrollmentDataEntryFragmentQuery implements Query<EnrollmentDataEntryFragm
                     trackedEntityAttributeValue.setTrackedEntityInstanceId(
                             currentTrackedEntityInstance.getUid());
                     trackedEntityAttributeValue.setValue(uniqueCaseID);
+                    trackedEntityAttributeValues.add(trackedEntityAttributeValue);
+                }
+
+                if(childName != null && trackedEntityAttribute.getDisplayName().contains("Name")){
+                    TrackedEntityAttributeValue trackedEntityAttributeValue =
+                            new TrackedEntityAttributeValue();
+                    trackedEntityAttributeValue.setTrackedEntityAttributeId(
+                            ptea.getTrackedEntityAttribute().getUid());
+                    trackedEntityAttributeValue.setTrackedEntityInstanceId(
+                            currentTrackedEntityInstance.getUid());
+                    trackedEntityAttributeValue.setValue(childName);
+                    trackedEntityAttributeValues.add(trackedEntityAttributeValue);
+                }
+
+                if(gender != null && trackedEntityAttribute.getDisplayName().contains("Gender")){
+                    TrackedEntityAttributeValue trackedEntityAttributeValue =
+                            new TrackedEntityAttributeValue();
+                    trackedEntityAttributeValue.setTrackedEntityAttributeId(
+                            ptea.getTrackedEntityAttribute().getUid());
+                    trackedEntityAttributeValue.setTrackedEntityInstanceId(
+                            currentTrackedEntityInstance.getUid());
+                    trackedEntityAttributeValue.setValue(gender);
+                    trackedEntityAttributeValues.add(trackedEntityAttributeValue);
+                }
+
+                if(dateOfBirth != null && trackedEntityAttribute.getDisplayName().contains("Date of Birth")){
+                    TrackedEntityAttributeValue trackedEntityAttributeValue =
+                            new TrackedEntityAttributeValue();
+                    trackedEntityAttributeValue.setTrackedEntityAttributeId(
+                            ptea.getTrackedEntityAttribute().getUid());
+                    trackedEntityAttributeValue.setTrackedEntityInstanceId(
+                            currentTrackedEntityInstance.getUid());
+                    trackedEntityAttributeValue.setValue(dateOfBirth);
+                    trackedEntityAttributeValues.add(trackedEntityAttributeValue);
+                }
+
+                if(caregiverName != null && trackedEntityAttribute.getDisplayName().contains("Caregiver name")){
+                    TrackedEntityAttributeValue trackedEntityAttributeValue =
+                            new TrackedEntityAttributeValue();
+                    trackedEntityAttributeValue.setTrackedEntityAttributeId(
+                            ptea.getTrackedEntityAttribute().getUid());
+                    trackedEntityAttributeValue.setTrackedEntityInstanceId(
+                            currentTrackedEntityInstance.getUid());
+                    trackedEntityAttributeValue.setValue(caregiverName);
                     trackedEntityAttributeValues.add(trackedEntityAttributeValue);
                 }
 

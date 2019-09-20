@@ -31,8 +31,6 @@ package org.hisp.dhis.android.sdk.fragments.programoverview.selectprogramdialogf
 
 
 import android.os.Bundle;
-import androidx.fragment.app.DialogFragment;
-import androidx.fragment.app.FragmentManager;;
 import android.util.Pair;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -40,8 +38,9 @@ import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.TextView;
+import androidx.fragment.app.DialogFragment;
+import androidx.fragment.app.FragmentManager;
 import org.hisp.dhis.android.sdk.R;
-import org.hisp.dhis.android.sdk.activities.HolderActivity;
 import org.hisp.dhis.android.sdk.fragments.programoverview.registerrelationshipdialogfragment.RelationshipTypesDialogFragment;
 import org.hisp.dhis.android.sdk.fragments.search.OnlineSearchResultFragment;
 import org.hisp.dhis.android.sdk.fragments.selectprogram.dialogs.Action;
@@ -56,6 +55,8 @@ import org.hisp.dhis.android.sdk.ui.views.FloatingActionButton;
 import org.hisp.dhis.android.sdk.utils.api.ProgramType;
 
 import java.util.Arrays;
+
+;
 
 public class SelectProgramDialogFragment extends DialogFragment
         implements View.OnClickListener  , AutoCompleteDialogFragment.OnOptionSelectedListener  {

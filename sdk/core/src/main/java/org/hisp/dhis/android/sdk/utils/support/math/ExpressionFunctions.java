@@ -29,9 +29,6 @@
 
 package org.hisp.dhis.android.sdk.utils.support.math;
 
-import static org.hisp.dhis.android.sdk.utils.support.DateUtils.getMediumDateString;
-import static org.hisp.dhis.client.sdk.utils.StringUtils.isEmpty;
-
 import org.hisp.dhis.android.sdk.persistence.models.Enrollment;
 import org.hisp.dhis.android.sdk.persistence.models.Event;
 import org.hisp.dhis.android.sdk.persistence.models.ProgramRuleVariable;
@@ -44,6 +41,9 @@ import org.joda.time.Years;
 import java.text.ParseException;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+
+import static org.hisp.dhis.android.sdk.utils.support.DateUtils.getMediumDateString;
+import static org.hisp.dhis.client.sdk.utils.StringUtils.isEmpty;
 
 /**
  * Defines a set of functions that can be used in expressions in {@link org.hisp.dhis.android.sdk.persistence.models.ProgramRule}s

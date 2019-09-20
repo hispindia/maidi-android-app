@@ -29,7 +29,6 @@
 
 package org.hisp.dhis.android.sdk.ui.fragments.dataentry;
 
-import org.hisp.dhis.android.sdk.ui.adapters.rows.dataentry.DataEntryRow;
 import org.hisp.dhis.android.sdk.ui.adapters.rows.dataentry.Row;
 
 import java.util.List;

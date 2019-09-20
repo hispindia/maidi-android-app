@@ -31,24 +31,16 @@ package org.hisp.dhis.android.sdk.controllers;
 
 import android.content.Context;
 import android.util.Log;
-
-import com.fasterxml.jackson.annotation.JsonAutoDetect;
-import com.fasterxml.jackson.databind.MapperFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.datatype.jdk8.Jdk8Module;
 import com.fasterxml.jackson.datatype.joda.JodaModule;
-import com.fasterxml.jackson.module.paramnames.ParameterNamesModule;
-
+import okhttp3.HttpUrl;
 import org.hisp.dhis.android.sdk.controllers.metadata.MetaDataController;
 import org.hisp.dhis.android.sdk.controllers.tracker.TrackerController;
 import org.hisp.dhis.android.sdk.events.UiEvent;
-import org.hisp.dhis.android.sdk.network.APIException;
-import org.hisp.dhis.android.sdk.network.Credentials;
-import org.hisp.dhis.android.sdk.network.DhisApi;
-import org.hisp.dhis.android.sdk.network.RepoManager;
-import org.hisp.dhis.android.sdk.network.Session;
+import org.hisp.dhis.android.sdk.network.*;
 import org.hisp.dhis.android.sdk.persistence.Dhis2Application;
 import org.hisp.dhis.android.sdk.persistence.models.SystemInfo;
+import org.hisp.dhis.android.sdk.persistence.models.TrackedEntityInstance;
 import org.hisp.dhis.android.sdk.persistence.models.UserAccount;
 import org.hisp.dhis.android.sdk.persistence.preferences.DateTimeManager;
 import org.hisp.dhis.android.sdk.persistence.preferences.LastUpdatedManager;
@@ -59,25 +51,17 @@ import org.hisp.dhis.android.sdk.synchronization.data.event.EventLocalDataSource
 import org.hisp.dhis.android.sdk.synchronization.data.event.EventRemoteDataSource;
 import org.hisp.dhis.android.sdk.synchronization.data.event.EventRepository;
 import org.hisp.dhis.android.sdk.synchronization.data.faileditem.FailedItemRepository;
-import org.hisp.dhis.android.sdk.synchronization.data.trackedentityinstance
-        .TrackedEntityInstanceLocalDataSource;
+import org.hisp.dhis.android.sdk.synchronization.data.trackedentityinstance.TrackedEntityInstanceLocalDataSource;
 import org.hisp.dhis.android.sdk.synchronization.data.trackedentityinstance.TrackedEntityInstanceRemoteDataSource;
-import org.hisp.dhis.android.sdk.synchronization.data.trackedentityinstance
-        .TrackedEntityInstanceRepository;
+import org.hisp.dhis.android.sdk.synchronization.data.trackedentityinstance.TrackedEntityInstanceRepository;
 import org.hisp.dhis.android.sdk.synchronization.domain.app.SyncAppUseCase;
 import org.hisp.dhis.android.sdk.synchronization.domain.enrollment.IEnrollmentRepository;
-import org.hisp.dhis.android.sdk.synchronization.domain.trackedentityinstance
-        .ITrackedEntityInstanceRepository;
-import org.hisp.dhis.android.sdk.utils.NetworkUtils;
+import org.hisp.dhis.android.sdk.synchronization.domain.trackedentityinstance.ITrackedEntityInstanceRepository;
 import org.hisp.dhis.android.sdk.utils.SyncDateWrapper;
 import org.hisp.dhis.client.sdk.ui.AppPreferencesImpl;
+import retrofit2.Response;
 
 import java.io.IOException;
-
-import okhttp3.HttpUrl;
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
 
 public final class DhisController {
     private static final String CLASS_TAG = "Dhis2";
@@ -323,5 +307,9 @@ public final class DhisController {
 
     static void sendEventData() throws APIException, IllegalStateException {
         TrackerController.sendEventDatas(getInstance().getDhisApi());
+    }
+
+    static void sendTrackedEntityInstanceData(TrackedEntityInstance trackedEntityInstance)  throws APIException, IllegalStateException{
+        TrackerController.sendTrackedEntityInstanceChanges(getInstance().getDhisApi(), trackedEntityInstance, true);
     }
 }

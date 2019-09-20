@@ -35,11 +35,6 @@ import android.content.DialogInterface;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
-import androidx.fragment.app.DialogFragment;
-import androidx.fragment.app.FragmentActivity;
-import androidx.fragment.app.FragmentManager;;
-import androidx.loader.app.LoaderManager;
-import androidx.loader.content.Loader;
 import android.text.Editable;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -51,6 +46,11 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
+import androidx.fragment.app.DialogFragment;
+import androidx.fragment.app.FragmentActivity;
+import androidx.fragment.app.FragmentManager;
+import androidx.loader.app.LoaderManager;
+import androidx.loader.content.Loader;
 import com.raizlabs.android.dbflow.structure.Model;
 import com.squareup.otto.Subscribe;
 import org.hisp.dhis.android.sdk.R;
@@ -77,6 +77,8 @@ import org.hisp.dhis.android.sdk.utils.UiUtils;
 
 import java.util.ArrayList;
 import java.util.List;
+
+;
 
 public class QueryTrackedEntityInstancesDialogFragment extends DialogFragment
         implements View.OnClickListener, LoaderManager.LoaderCallbacks<QueryTrackedEntityInstancesDialogFragmentForm> {

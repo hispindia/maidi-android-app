@@ -35,7 +35,6 @@ import com.raizlabs.android.dbflow.annotation.Column;
 import com.raizlabs.android.dbflow.annotation.Table;
 import com.raizlabs.android.dbflow.sql.builder.Condition;
 import com.raizlabs.android.dbflow.sql.language.Select;
-
 import org.hisp.dhis.android.sdk.persistence.Dhis2Database;
 
 import java.util.List;

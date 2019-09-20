@@ -30,13 +30,12 @@ package org.hisp.dhis.client.sdk.ui.adapters;
 
 import android.content.Context;
 import android.os.Bundle;
-import androidx.fragment.app.FragmentManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
-
+import androidx.fragment.app.FragmentManager;
 import androidx.recyclerview.widget.RecyclerView;
 import org.hisp.dhis.android.sdk.ui.R;
 import org.hisp.dhis.client.sdk.ui.fragments.FilterableDialogFragment;

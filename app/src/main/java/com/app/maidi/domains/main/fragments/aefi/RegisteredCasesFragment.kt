@@ -1,6 +1,5 @@
 package com.app.maidi.domains.main.fragments.aefi
 
-import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -19,11 +18,9 @@ import com.app.maidi.domains.main.fragments.listener.OnItemClickListener
 import com.app.maidi.utils.Constants
 import org.hisp.dhis.android.sdk.controllers.metadata.MetaDataController
 import org.hisp.dhis.android.sdk.controllers.tracker.TrackerController
-import org.hisp.dhis.android.sdk.fragments.enrollment.EnrollmentDataEntryFragment
 import org.hisp.dhis.android.sdk.persistence.models.OrganisationUnit
 import org.hisp.dhis.android.sdk.persistence.models.Program
 import org.hisp.dhis.android.sdk.persistence.models.TrackedEntityInstance
-import org.hisp.dhis.android.sdk.ui.fragments.eventdataentry.EventDataEntryFragment
 
 class RegisteredCasesFragment : BaseFragment(), OnItemClickListener{
 

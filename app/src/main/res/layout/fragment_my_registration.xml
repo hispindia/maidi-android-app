@@ -38,22 +38,6 @@
 
     </FrameLayout>
 
-    <com.github.florent37.singledateandtimepicker.SingleDateAndTimePicker
-            android:id="@+id/fragment_my_registration_picker"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:visibility="gone"
-            android:background="#EEEEEE"
-            app:picker_curved="true"
-            app:picker_cyclic="true"
-            app:picker_displayHours="false"
-            app:picker_displayMinutes="false"
-            app:picker_displayDays="false"
-            app:picker_displayDaysOfMonth="true"
-            app:picker_displayMonth="true"
-            app:picker_displayYears="true"
-    />
-
     <androidx.cardview.widget.CardView
             android:id="@+id/fragment_my_registration_btn_search"
             android:layout_width="match_parent"

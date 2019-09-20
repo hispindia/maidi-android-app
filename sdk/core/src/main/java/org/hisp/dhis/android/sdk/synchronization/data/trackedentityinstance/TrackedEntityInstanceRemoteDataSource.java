@@ -1,6 +1,7 @@
 package org.hisp.dhis.android.sdk.synchronization.data.trackedentityinstance;
 
 
+import okhttp3.ResponseBody;
 import org.hisp.dhis.android.sdk.controllers.DhisController;
 import org.hisp.dhis.android.sdk.network.APIException;
 import org.hisp.dhis.android.sdk.network.DhisApi;
@@ -8,16 +9,12 @@ import org.hisp.dhis.android.sdk.persistence.models.ApiResponse;
 import org.hisp.dhis.android.sdk.persistence.models.ImportSummary;
 import org.hisp.dhis.android.sdk.persistence.models.TrackedEntityInstance;
 import org.hisp.dhis.android.sdk.synchronization.data.common.ARemoteDataSource;
-import org.hisp.dhis.android.sdk.utils.NetworkUtils;
+import retrofit2.Response;
 
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
-import okhttp3.Request;
-import okhttp3.ResponseBody;
-import retrofit2.Response;
 
 
 public class TrackedEntityInstanceRemoteDataSource  extends ARemoteDataSource {

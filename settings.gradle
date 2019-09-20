@@ -1,5 +1,4 @@
-include ':app', ':caf', ':ResideMenu', ':singledateandtimepicker', ':core', ':utils', ':ui'
-project(':caf').projectDir = new File('android_caf/caf')
+include ':app', ':ResideMenu', ':core', ':utils', ':ui'
 project(':core').projectDir = new File('sdk/core')
 project(':utils').projectDir = new File('sdk/utils')
 project(':ui').projectDir = new File('sdk/ui')

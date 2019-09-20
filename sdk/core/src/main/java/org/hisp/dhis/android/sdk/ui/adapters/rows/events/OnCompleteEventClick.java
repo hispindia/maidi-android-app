@@ -31,7 +31,6 @@ package org.hisp.dhis.android.sdk.ui.adapters.rows.events;
 
 import android.widget.Button;
 import android.widget.TextView;
-
 import org.hisp.dhis.android.sdk.persistence.models.Event;
 
 /**

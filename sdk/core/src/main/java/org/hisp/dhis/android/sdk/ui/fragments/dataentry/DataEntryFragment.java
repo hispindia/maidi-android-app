@@ -32,23 +32,15 @@ package org.hisp.dhis.android.sdk.ui.fragments.dataentry;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.os.Parcelable;
+import android.view.*;
 import android.widget.*;
-import androidx.cardview.widget.CardView;
-import androidx.loader.app.LoaderManager;
-import androidx.loader.content.Loader;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
-import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
-import android.view.View;
-import android.view.ViewGroup;
-import android.view.ViewParent;
-
+import androidx.cardview.widget.CardView;
+import androidx.loader.app.LoaderManager;
+import androidx.loader.content.Loader;
 import com.squareup.otto.Subscribe;
-
 import org.hisp.dhis.android.sdk.R;
 import org.hisp.dhis.android.sdk.controllers.ErrorType;
 import org.hisp.dhis.android.sdk.persistence.Dhis2Application;

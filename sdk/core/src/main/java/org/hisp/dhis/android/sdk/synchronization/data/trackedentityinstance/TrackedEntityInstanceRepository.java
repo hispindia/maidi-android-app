@@ -1,14 +1,10 @@
 package org.hisp.dhis.android.sdk.synchronization.data.trackedentityinstance;
 
-import org.hisp.dhis.android.sdk.controllers.tracker.TrackerController;
-import org.hisp.dhis.android.sdk.persistence.models.ApiResponse;
 import org.hisp.dhis.android.sdk.persistence.models.ImportSummary;
-import org.hisp.dhis.android.sdk.persistence.models.Relationship;
 import org.hisp.dhis.android.sdk.persistence.models.TrackedEntityInstance;
 import org.hisp.dhis.android.sdk.synchronization.domain.trackedentityinstance.ITrackedEntityInstanceRepository;
 import org.joda.time.DateTime;
 
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 

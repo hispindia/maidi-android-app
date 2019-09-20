@@ -1,10 +1,6 @@
 package org.hisp.dhis.android.sdk.ui.adapters.rows.dataentry;
 
 
-import static org.hisp.dhis.android.sdk.ui.adapters.rows.dataentry.AbsDatePickerRow
-        .EMPTY_FIELD;
-
-import androidx.fragment.app.FragmentManager;
 import android.text.InputFilter;
 import android.text.InputType;
 import android.text.Spanned;
@@ -13,10 +9,12 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.TextView;
-
+import androidx.fragment.app.FragmentManager;
 import org.hisp.dhis.android.sdk.R;
 import org.hisp.dhis.android.sdk.persistence.models.BaseValue;
 import org.hisp.dhis.android.sdk.ui.adapters.rows.dataentry.autocompleterow.TextRow;
+
+import static org.hisp.dhis.android.sdk.ui.adapters.rows.dataentry.AbsDatePickerRow.EMPTY_FIELD;
 
 public class IntegerNegativeEditTextRow extends TextRow {
     private static String rowTypeTemp;

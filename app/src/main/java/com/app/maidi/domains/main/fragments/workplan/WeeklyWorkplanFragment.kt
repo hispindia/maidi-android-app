@@ -22,7 +22,6 @@ import org.hisp.dhis.android.sdk.persistence.models.Program
 import org.hisp.dhis.android.sdk.persistence.models.ProgramStage
 import org.hisp.dhis.android.sdk.ui.fragments.eventdataentry.EventDataEntryFragment
 import org.joda.time.LocalDate
-import java.lang.StringBuilder
 
 class WeeklyWorkplanFragment : BaseFragment{
 

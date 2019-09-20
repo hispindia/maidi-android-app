@@ -29,28 +29,6 @@
 
 package org.hisp.dhis.android.sdk;
 
-import android.content.Intent;
-import android.content.res.Configuration;
-import android.os.Bundle;
-import androidx.annotation.NonNull;
-import androidx.fragment.app.Fragment;
-import android.util.Log;
-import android.view.MenuItem;
-import android.view.View;
-import org.hisp.dhis.android.sdk.activities.HolderActivity;
-import org.hisp.dhis.android.sdk.controllers.DhisController;
-import org.hisp.dhis.android.sdk.controllers.PeriodicSynchronizerController;
-import org.hisp.dhis.android.sdk.controllers.metadata.MetaDataController;
-import org.hisp.dhis.android.sdk.fragments.selectprogram.SelectProgramFragment;
-import org.hisp.dhis.android.sdk.network.Session;
-import org.hisp.dhis.android.sdk.persistence.Dhis2Application;
-import org.hisp.dhis.android.sdk.persistence.models.UserAccount;
-import org.hisp.dhis.android.sdk.utils.ScreenSizeConfigurator;
-import org.hisp.dhis.client.sdk.ui.fragments.InformationFragment;
-import org.hisp.dhis.client.sdk.ui.fragments.WrapperFragment;
-
-import static org.hisp.dhis.client.sdk.utils.StringUtils.isEmpty;
-
 public class MainActivity /*extends AbsHomeActivity*/ {
     /*public final static String TAG = MainActivity.class.getSimpleName();
 

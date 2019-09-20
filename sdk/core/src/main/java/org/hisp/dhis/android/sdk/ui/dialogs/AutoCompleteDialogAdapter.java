@@ -36,7 +36,6 @@ import android.widget.BaseAdapter;
 import android.widget.Filter;
 import android.widget.Filterable;
 import android.widget.TextView;
-
 import org.hisp.dhis.android.sdk.R;
 
 import java.util.ArrayList;

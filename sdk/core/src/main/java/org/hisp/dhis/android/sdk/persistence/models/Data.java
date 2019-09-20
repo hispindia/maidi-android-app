@@ -2,7 +2,6 @@ package org.hisp.dhis.android.sdk.persistence.models;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
-
 import org.hisp.dhis.android.sdk.utils.StringUtils;
 
 public final class Data {

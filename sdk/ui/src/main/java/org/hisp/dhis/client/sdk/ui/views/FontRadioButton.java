@@ -34,7 +34,6 @@ import android.graphics.Paint;
 import android.graphics.Typeface;
 import android.util.AttributeSet;
 import android.widget.RadioGroup;
-
 import androidx.annotation.StringRes;
 import androidx.appcompat.widget.AppCompatRadioButton;
 import org.hisp.dhis.android.sdk.ui.R;

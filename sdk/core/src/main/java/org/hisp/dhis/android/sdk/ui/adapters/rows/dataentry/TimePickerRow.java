@@ -31,15 +31,13 @@ package org.hisp.dhis.android.sdk.ui.adapters.rows.dataentry;
 
 import android.app.TimePickerDialog;
 import android.content.Context;
-import androidx.fragment.app.FragmentManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
-import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.TimePicker;
-
+import androidx.fragment.app.FragmentManager;
 import org.hisp.dhis.android.sdk.R;
 import org.hisp.dhis.android.sdk.persistence.Dhis2Application;
 import org.hisp.dhis.android.sdk.persistence.models.BaseValue;

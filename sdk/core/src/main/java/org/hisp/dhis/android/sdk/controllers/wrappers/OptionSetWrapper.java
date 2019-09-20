@@ -29,8 +29,6 @@
 
 package org.hisp.dhis.android.sdk.controllers.wrappers;
 
-import android.util.Log;
-
 import org.hisp.dhis.android.sdk.controllers.metadata.MetaDataController;
 import org.hisp.dhis.android.sdk.persistence.models.Option;
 import org.hisp.dhis.android.sdk.persistence.models.OptionSet;

@@ -35,7 +35,6 @@ import android.app.DialogFragment;
 import android.content.DialogInterface;
 import android.content.DialogInterface.OnClickListener;
 import android.os.Bundle;
-import android.view.View;
 
 public class CustomDialogFragment
     extends DialogFragment

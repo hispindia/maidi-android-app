@@ -29,13 +29,7 @@
 
 package org.hisp.dhis.android.sdk.persistence.models;
 
-import com.raizlabs.android.dbflow.annotation.Column;
-import com.raizlabs.android.dbflow.annotation.ForeignKey;
-import com.raizlabs.android.dbflow.annotation.ForeignKeyAction;
-import com.raizlabs.android.dbflow.annotation.ForeignKeyReference;
-import com.raizlabs.android.dbflow.annotation.NotNull;
-import com.raizlabs.android.dbflow.annotation.Table;
-
+import com.raizlabs.android.dbflow.annotation.*;
 import org.hisp.dhis.android.sdk.persistence.Dhis2Database;
 
 /**

@@ -1,6 +1,5 @@
 package com.app.maidi.domains.main.fragments.workplan
 
-import android.content.DialogInterface
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -15,9 +14,8 @@ import com.app.maidi.domains.main.MainActivity
 import com.app.maidi.domains.main.MainPresenter
 import com.app.maidi.domains.main.fragments.listener.OnItemClickListener
 import com.app.maidi.utils.Constants
-import com.app.maidi.utils.LinearLayoutManagerWrapper
 import com.app.maidi.utils.DateUtils
-import org.hisp.dhis.android.sdk.controllers.DhisService
+import com.app.maidi.utils.LinearLayoutManagerWrapper
 import org.hisp.dhis.android.sdk.controllers.metadata.MetaDataController
 import org.hisp.dhis.android.sdk.controllers.tracker.TrackerController
 import org.hisp.dhis.android.sdk.persistence.models.Event
@@ -25,7 +23,6 @@ import org.hisp.dhis.android.sdk.persistence.models.OrganisationUnit
 import org.hisp.dhis.android.sdk.persistence.models.Program
 import org.hisp.dhis.android.sdk.persistence.models.ProgramStage
 import org.hisp.dhis.android.sdk.ui.fragments.eventdataentry.EventDataEntryFragment
-import org.hisp.dhis.android.sdk.utils.UiUtils
 
 class ListVillageFragment : BaseFragment, OnItemClickListener {
 

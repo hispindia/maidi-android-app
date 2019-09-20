@@ -4,7 +4,6 @@ import android.app.Activity
 import com.app.maidi.infrastructures.scope.ActivityScope
 import dagger.Module
 import dagger.Provides
-import javax.inject.Singleton
 
 @Module
 class ActivityModules {

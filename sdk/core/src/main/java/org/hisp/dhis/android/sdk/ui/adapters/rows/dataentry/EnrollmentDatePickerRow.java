@@ -28,18 +28,14 @@
  */
 package org.hisp.dhis.android.sdk.ui.adapters.rows.dataentry;
 
-import static android.text.TextUtils.isEmpty;
-
 import android.app.DatePickerDialog;
 import android.content.Context;
-import androidx.fragment.app.FragmentManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.DatePicker;
-import android.widget.ImageButton;
 import android.widget.TextView;
-
+import androidx.fragment.app.FragmentManager;
 import org.hisp.dhis.android.sdk.R;
 import org.hisp.dhis.android.sdk.persistence.Dhis2Application;
 import org.hisp.dhis.android.sdk.persistence.models.DataValue;
@@ -47,6 +43,8 @@ import org.hisp.dhis.android.sdk.persistence.models.Enrollment;
 import org.hisp.dhis.android.sdk.ui.fragments.dataentry.RowValueChangedEvent;
 import org.joda.time.DateTime;
 import org.joda.time.LocalDate;
+
+import static android.text.TextUtils.isEmpty;
 
 
 public class EnrollmentDatePickerRow extends AbsDatePickerRow {

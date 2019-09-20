@@ -7,12 +7,12 @@ import android.widget.LinearLayout
 import android.widget.Toast
 import butterknife.BindView
 import butterknife.ButterKnife
-import com.app.maidi.domains.main.MainActivity
 import com.app.maidi.MainApplication
 import com.app.maidi.R
-import com.app.maidi.custom.MaidiCrashManagerListener
+import com.app.maidi.utils.MaidiCrashManagerListener
 import com.app.maidi.domains.base.BaseActivity
 import com.app.maidi.domains.login.fragments.LoginMainFragment
+import com.app.maidi.domains.main.MainActivity
 import com.app.maidi.infrastructures.ActivityModules
 import com.app.maidi.models.database.User
 import com.app.maidi.utils.MethodUtils.Companion.setupEditTextKeyboard
@@ -36,7 +36,6 @@ import org.hisp.dhis.android.sdk.persistence.preferences.ResourceType
 import org.hisp.dhis.android.sdk.services.StartPeriodicSynchronizerService
 import org.hisp.dhis.android.sdk.utils.Utils
 import javax.inject.Inject
-import kotlin.Exception
 
 class LoginActivity : BaseActivity<LoginView, LoginPresenter>(), LoginView{
 
@@ -96,7 +95,6 @@ class LoginActivity : BaseActivity<LoginView, LoginPresenter>(), LoginView{
 
     @Subscribe
     fun loadingEvent(loadingMessageEvent: LoadingMessageEvent){
-        //Toast.makeText(this, loadingMessageEvent.message , Toast.LENGTH_SHORT).show()
         updateText(loadingMessageEvent.message)
     }
 

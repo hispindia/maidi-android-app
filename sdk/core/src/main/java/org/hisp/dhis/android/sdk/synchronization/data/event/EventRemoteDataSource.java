@@ -1,5 +1,6 @@
 package org.hisp.dhis.android.sdk.synchronization.data.event;
 
+import okhttp3.ResponseBody;
 import org.hisp.dhis.android.sdk.controllers.DhisController;
 import org.hisp.dhis.android.sdk.network.APIException;
 import org.hisp.dhis.android.sdk.network.DhisApi;
@@ -7,14 +8,12 @@ import org.hisp.dhis.android.sdk.persistence.models.ApiResponse;
 import org.hisp.dhis.android.sdk.persistence.models.Event;
 import org.hisp.dhis.android.sdk.persistence.models.ImportSummary;
 import org.hisp.dhis.android.sdk.synchronization.data.common.ARemoteDataSource;
+import retrofit2.Response;
 
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
-import okhttp3.ResponseBody;
-import retrofit2.Response;
 
 public class EventRemoteDataSource extends ARemoteDataSource {
 

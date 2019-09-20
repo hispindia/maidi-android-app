@@ -29,18 +29,17 @@
 
 package org.hisp.dhis.android.sdk.ui.adapters.rows.dataentry;
 
-import androidx.fragment.app.FragmentManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CompoundButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
-
+import androidx.fragment.app.FragmentManager;
 import org.hisp.dhis.android.sdk.R;
-import org.hisp.dhis.android.sdk.ui.fragments.dataentry.RowValueChangedEvent;
 import org.hisp.dhis.android.sdk.persistence.Dhis2Application;
 import org.hisp.dhis.android.sdk.persistence.models.BaseValue;
+import org.hisp.dhis.android.sdk.ui.fragments.dataentry.RowValueChangedEvent;
 
 public class RadioButtonsRow extends Row {
     private static final String EMPTY_FIELD = "";

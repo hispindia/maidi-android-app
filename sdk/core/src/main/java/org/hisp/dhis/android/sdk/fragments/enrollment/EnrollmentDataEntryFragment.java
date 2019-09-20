@@ -31,17 +31,17 @@ package org.hisp.dhis.android.sdk.fragments.enrollment;
 
 import android.content.DialogInterface;
 import android.os.Bundle;
-import android.widget.Toast;
-import androidx.loader.content.Loader;
-import androidx.appcompat.app.AppCompatActivity;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.loader.content.Loader;
 import com.raizlabs.android.dbflow.structure.Model;
 import com.squareup.otto.Subscribe;
 import org.hisp.dhis.android.sdk.R;
-import org.hisp.dhis.android.sdk.activities.HolderActivity;
-import org.hisp.dhis.android.sdk.controllers.*;
+import org.hisp.dhis.android.sdk.controllers.DhisService;
+import org.hisp.dhis.android.sdk.controllers.ErrorType;
+import org.hisp.dhis.android.sdk.controllers.GpsController;
 import org.hisp.dhis.android.sdk.controllers.metadata.MetaDataController;
 import org.hisp.dhis.android.sdk.controllers.tracker.TrackerController;
 import org.hisp.dhis.android.sdk.persistence.loaders.DbLoader;
@@ -75,6 +75,10 @@ public class EnrollmentDataEntryFragment extends DataEntryFragment<EnrollmentDat
     public static final String PROGRAMRULES_FORCED_TRIGGER = "forced";
     public static final String IS_UNIQUE_ID = "extra:isUniqueId";
     public static final String UNIQUE_ID = "extra:uniqueID";
+    public static final String CHILD_NAME = "extra:childName";
+    public static final String GENDER = "extra:gender";
+    public static final String CAREGIVER_NAME = "extra:caregiverName";
+    public static final String DATE_OF_BIRTH = "extra:dateOfBirth";
     private EnrollmentDataEntryFragmentForm form;
     private SaveThread saveThread;
     private Map<String, List<ProgramRule>> programRulesForTrackedEntityAttributes;
@@ -87,6 +91,8 @@ public class EnrollmentDataEntryFragment extends DataEntryFragment<EnrollmentDat
 
     //the trackedEntityAttributeValues before anything is changed, used to backtrack
     private Map<String, TrackedEntityAttributeValue> originalTrackedEntityAttributeValueMap;
+
+    private String childRegistrationId = null;
 
     public EnrollmentDataEntryFragment() {
         originalEnrollment = null;
@@ -128,6 +134,24 @@ public class EnrollmentDataEntryFragment extends DataEntryFragment<EnrollmentDat
         args.putString(PROGRAM_ID, programId);
         args.putBoolean(IS_UNIQUE_ID, isUniqueID);
         args.putString(UNIQUE_ID, uniqueId);
+        fragment.setArguments(args);
+        return fragment;
+    }
+
+    public static EnrollmentDataEntryFragment newInstanceWithDatas(String unitId, String programId, String enrollmentDate, String incidentDate,
+                                                                   String childRegistrationId, String childName, String gender, String caregiverName, String dateOfBirth) {
+        EnrollmentDataEntryFragment fragment = new EnrollmentDataEntryFragment();
+        Bundle args = new Bundle();
+        args.putString(ENROLLMENT_DATE, enrollmentDate);
+        args.putString(INCIDENT_DATE, incidentDate);
+        args.putString(ORG_UNIT_ID, unitId);
+        args.putString(ORG_UNIT_ID, unitId);
+        args.putString(PROGRAM_ID, programId);
+        args.putString(CHILD_NAME, childName);
+        args.putString(GENDER, gender);
+        args.putString(CAREGIVER_NAME, caregiverName);
+        args.putString(DATE_OF_BIRTH, dateOfBirth);
+        fragment.childRegistrationId = childRegistrationId;
         fragment.setArguments(args);
         return fragment;
     }
@@ -182,12 +206,25 @@ public class EnrollmentDataEntryFragment extends DataEntryFragment<EnrollmentDat
             String uniqueId = fragmentArguments.containsKey(UNIQUE_ID)
                                 ? fragmentArguments.getString(UNIQUE_ID)
                                 : null;
+            String childName = fragmentArguments.containsKey(CHILD_NAME)
+                    ? fragmentArguments.getString(CHILD_NAME)
+                    : null;
+            String gender = fragmentArguments.containsKey(GENDER)
+                    ? fragmentArguments.getString(GENDER)
+                    : null;
+            String caregiverName = fragmentArguments.containsKey(CAREGIVER_NAME)
+                    ? fragmentArguments.getString(CAREGIVER_NAME)
+                    : null;
+            String dateOfBirth = fragmentArguments.containsKey(DATE_OF_BIRTH)
+                    ? fragmentArguments.getString(DATE_OF_BIRTH)
+                    : null;
 
             return new DbLoader<>(
                     getActivity().getBaseContext(),
                     modelsToTrack,
                     new EnrollmentDataEntryFragmentQuery(
                         orgUnitId, programId, trackedEntityInstance, enrollmentDate, incidentDate, isUniqueId, uniqueId,
+                            childName, caregiverName, gender, dateOfBirth,
                     EnrollmentDataEntryFragment.this)
             );
         }
@@ -562,9 +599,21 @@ public class EnrollmentDataEntryFragment extends DataEntryFragment<EnrollmentDat
         }
 
         if (form != null && form.getTrackedEntityInstance() != null) {
-            DhisService.updateData(form.getTrackedEntityInstance().getUid());
+
+            if(childRegistrationId != null){
+                TrackedEntityInstance instance = TrackerController.getTrackedEntityInstance(childRegistrationId);
+                if(instance != null) {
+                    Enrollment enrollment = TrackerController.getEnrollment(instance);
+                    enrollment.setStatus(Enrollment.CANCELLED);
+                    enrollment.save();
+                    //instance.setInActive(true);
+                    //instance.save();
+                    DhisService.updateTrackedEntityInstance(instance);
+                }
+            }
+            DhisService.updateData("Sending data ... ", form.getTrackedEntityInstance().getUid());
         }else{
-            DhisService.updateData(null);
+            DhisService.updateData("Sending data ... ", null);
         }
     }
 

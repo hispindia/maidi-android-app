@@ -30,14 +30,12 @@
 package org.hisp.dhis.android.sdk.controllers.tracker;
 
 import android.content.Context;
-import androidx.annotation.NonNull;
 import android.util.Log;
-
+import androidx.annotation.NonNull;
 import com.raizlabs.android.dbflow.sql.builder.Condition;
 import com.raizlabs.android.dbflow.sql.language.Join;
 import com.raizlabs.android.dbflow.sql.language.Select;
 import com.raizlabs.android.dbflow.sql.queriable.StringQuery;
-
 import org.hisp.dhis.android.sdk.R;
 import org.hisp.dhis.android.sdk.controllers.LoadingController;
 import org.hisp.dhis.android.sdk.controllers.ResourceController;
@@ -982,6 +980,19 @@ public final class TrackerController extends ResourceController {
                     .and(Condition.column(TrackedEntityAttributeValue$Table.TRACKEDENTITYINSTANCEID).is(trackedEntityInstance.getTrackedEntityInstance()))
                     .querySingle();
         }
+        return value;
+    }
+
+    public static TrackedEntityAttributeValue getTrackedEntityAttributeValueByDisplayName(String displayName, TrackedEntityInstance trackedEntityInstance){
+        TrackedEntityAttributeValue value = null;
+        TrackedEntityAttribute attribute = new Select().from(TrackedEntityAttribute.class)
+                .where(Condition.column(TrackedEntityAttribute$Table.DISPLAYNAME).like("%" + displayName + "%"))
+                .querySingle();
+
+        if(attribute != null){
+            value = TrackerController.getTrackedEntityAttributeValue(attribute.getUid(), trackedEntityInstance.getTrackedEntityInstance());
+        }
+
         return value;
     }
 

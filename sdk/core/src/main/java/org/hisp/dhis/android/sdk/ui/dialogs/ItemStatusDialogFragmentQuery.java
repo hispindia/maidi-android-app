@@ -30,7 +30,6 @@
 package org.hisp.dhis.android.sdk.ui.dialogs;
 
 import android.content.Context;
-
 import org.hisp.dhis.android.sdk.controllers.tracker.TrackerController;
 import org.hisp.dhis.android.sdk.events.OnRowClick;
 import org.hisp.dhis.android.sdk.persistence.loaders.Query;

@@ -1,38 +1,5 @@
 package org.hisp.dhis.android.sdk.utils.support.math;
 
-import static org.hamcrest.CoreMatchers.equalTo;
-import static org.hamcrest.CoreMatchers.is;
-import static org.hisp.dhis.android.sdk.utils.api.ValueType.INTEGER;
-import static org.hisp.dhis.android.sdk.utils.support.math.ExpressionFunctions.addDays;
-import static org.hisp.dhis.android.sdk.utils.support.math.ExpressionFunctions.ceil;
-import static org.hisp.dhis.android.sdk.utils.support.math.ExpressionFunctions.concatenate;
-import static org.hisp.dhis.android.sdk.utils.support.math.ExpressionFunctions.condition;
-import static org.hisp.dhis.android.sdk.utils.support.math.ExpressionFunctions.count;
-import static org.hisp.dhis.android.sdk.utils.support.math.ExpressionFunctions.countIfValue;
-import static org.hisp.dhis.android.sdk.utils.support.math.ExpressionFunctions.countIfZeroPos;
-import static org.hisp.dhis.android.sdk.utils.support.math.ExpressionFunctions.daysBetween;
-import static org.hisp.dhis.android.sdk.utils.support.math.ExpressionFunctions.floor;
-import static org.hisp.dhis.android.sdk.utils.support.math.ExpressionFunctions.hasValue;
-import static org.hisp.dhis.android.sdk.utils.support.math.ExpressionFunctions.lastEventDate;
-import static org.hisp.dhis.android.sdk.utils.support.math.ExpressionFunctions.left;
-import static org.hisp.dhis.android.sdk.utils.support.math.ExpressionFunctions.length;
-import static org.hisp.dhis.android.sdk.utils.support.math.ExpressionFunctions.modulus;
-import static org.hisp.dhis.android.sdk.utils.support.math.ExpressionFunctions.monthsBetween;
-import static org.hisp.dhis.android.sdk.utils.support.math.ExpressionFunctions.oizp;
-import static org.hisp.dhis.android.sdk.utils.support.math.ExpressionFunctions.right;
-import static org.hisp.dhis.android.sdk.utils.support.math.ExpressionFunctions.round;
-import static org.hisp.dhis.android.sdk.utils.support.math.ExpressionFunctions.split;
-import static org.hisp.dhis.android.sdk.utils.support.math.ExpressionFunctions.substring;
-import static org.hisp.dhis.android.sdk.utils.support.math.ExpressionFunctions.validatePattern;
-import static org.hisp.dhis.android.sdk.utils.support.math.ExpressionFunctions.weeksBetween;
-import static org.hisp.dhis.android.sdk.utils.support.math.ExpressionFunctions.yearsBetween;
-import static org.hisp.dhis.android.sdk.utils.support.math.ExpressionFunctions.zing;
-import static org.hisp.dhis.android.sdk.utils.support.math.ExpressionFunctions.zpvc;
-import static org.junit.Assert.assertThat;
-
-import static java.util.Arrays.asList;
-
-import org.hamcrest.MatcherAssert;
 import org.hisp.dhis.android.sdk.persistence.models.ProgramRuleVariable;
 import org.hisp.dhis.android.sdk.utils.api.ValueType;
 import org.hisp.dhis.android.sdk.utils.services.VariableService;
@@ -43,6 +10,12 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import static org.hamcrest.CoreMatchers.equalTo;
+import static org.hamcrest.CoreMatchers.is;
+import static org.hisp.dhis.android.sdk.utils.api.ValueType.INTEGER;
+import static org.hisp.dhis.android.sdk.utils.support.math.ExpressionFunctions.*;
+import static org.junit.Assert.assertThat;
 
 public class ExpressionFunctionsTest {
     private static Object trueValue = new Object();

@@ -30,27 +30,19 @@
 package org.hisp.dhis.android.sdk.utils;
 
 import android.util.Log;
-
 import com.raizlabs.android.dbflow.structure.BaseModel;
-
 import org.apache.commons.beanutils.ConversionException;
 import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.hisp.dhis.android.sdk.controllers.tracker.TrackerController;
 import org.hisp.dhis.android.sdk.network.APIException;
-import org.hisp.dhis.android.sdk.persistence.models.Conflict;
-import org.hisp.dhis.android.sdk.persistence.models.Enrollment;
-import org.hisp.dhis.android.sdk.persistence.models.Event;
-import org.hisp.dhis.android.sdk.persistence.models.FailedItem;
-import org.hisp.dhis.android.sdk.persistence.models.ImportSummary;
-import org.hisp.dhis.android.sdk.persistence.models.TrackedEntityInstance;
+import org.hisp.dhis.android.sdk.persistence.models.*;
+import retrofit2.http.Header;
 
 import java.io.IOException;
 import java.net.HttpURLConnection;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-
-import retrofit2.http.Header;
 
 
 /**

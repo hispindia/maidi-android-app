@@ -44,7 +44,6 @@ import android.view.View;
 import android.view.animation.AccelerateInterpolator;
 import android.view.animation.OvershootInterpolator;
 import android.widget.ImageButton;
-
 import org.hisp.dhis.android.sdk.R;
 
 public class FloatingActionButton extends ImageButton {

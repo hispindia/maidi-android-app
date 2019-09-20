@@ -31,14 +31,15 @@ package org.hisp.dhis.android.sdk.fragments.trackedentityinstanceprofile;
 
 import android.content.DialogInterface;
 import android.os.Bundle;
-import androidx.loader.content.Loader;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
+import androidx.loader.content.Loader;
 import com.raizlabs.android.dbflow.structure.Model;
 import com.squareup.otto.Subscribe;
+import org.hisp.dhis.android.sdk.R;
 import org.hisp.dhis.android.sdk.controllers.DhisController;
 import org.hisp.dhis.android.sdk.controllers.ErrorType;
 import org.hisp.dhis.android.sdk.controllers.GpsController;
@@ -57,7 +58,6 @@ import org.hisp.dhis.android.sdk.ui.adapters.rows.dataentry.RunProgramRulesEvent
 import org.hisp.dhis.android.sdk.ui.adapters.rows.events.OnDetailedInfoButtonClick;
 import org.hisp.dhis.android.sdk.ui.fragments.dataentry.*;
 import org.hisp.dhis.android.sdk.utils.UiUtils;
-import org.hisp.dhis.android.sdk.R;
 
 import java.util.ArrayList;
 import java.util.HashMap;

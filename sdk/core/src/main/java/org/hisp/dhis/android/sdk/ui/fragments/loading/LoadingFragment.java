@@ -30,15 +30,13 @@
 package org.hisp.dhis.android.sdk.ui.fragments.loading;
 
 import android.os.Bundle;
-import androidx.fragment.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
-
+import androidx.fragment.app.Fragment;
 import com.squareup.otto.Subscribe;
-
 import org.hisp.dhis.android.sdk.R;
 import org.hisp.dhis.android.sdk.events.LoadingMessageEvent;
 import org.hisp.dhis.android.sdk.persistence.Dhis2Application;

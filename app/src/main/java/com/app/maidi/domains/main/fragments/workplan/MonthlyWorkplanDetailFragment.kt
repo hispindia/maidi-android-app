@@ -25,7 +25,6 @@ import org.hisp.dhis.android.sdk.persistence.models.ProgramStage
 import org.joda.time.DateTimeConstants
 import org.joda.time.LocalDate
 import java.util.*
-import kotlin.collections.ArrayList
 import kotlin.collections.HashMap
 
 class MonthlyWorkplanDetailFragment : BaseFragment, MonthPickerDialog.OnDateSetListener{
@@ -71,7 +70,6 @@ class MonthlyWorkplanDetailFragment : BaseFragment, MonthPickerDialog.OnDateSetL
         etSelectedMonth.setText(DateUtils.convertCalendarToMonthString(Calendar.getInstance().time))
         weeklyPagerAdapter = WeeklyPagerAdapter(childFragmentManager!!, weekList, workplanList, isEditMode)
         vpPagers.adapter = weeklyPagerAdapter
-        //vpPagers.offscreenPageLimit = weekList.size
         tblTabs.setupWithViewPager(vpPagers)
 
         mainPresenter.getWorkplanEntities(currentUnit.id, currentProgram.uid)

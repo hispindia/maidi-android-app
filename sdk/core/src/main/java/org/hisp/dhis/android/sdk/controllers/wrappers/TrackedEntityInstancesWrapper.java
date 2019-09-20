@@ -31,12 +31,10 @@ package org.hisp.dhis.android.sdk.controllers.wrappers;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.JsonNode;
-
 import org.hisp.dhis.android.sdk.controllers.DhisController;
 import org.hisp.dhis.android.sdk.persistence.models.Header;
 import org.hisp.dhis.android.sdk.persistence.models.TrackedEntityAttributeValue;
 import org.hisp.dhis.android.sdk.persistence.models.TrackedEntityInstance;
-import org.joda.time.DateTime;
 
 import java.io.IOException;
 import java.util.ArrayList;

@@ -10,16 +10,14 @@ import butterknife.BindView
 import butterknife.ButterKnife
 import com.app.maidi.MainApplication
 import com.app.maidi.R
-import com.app.maidi.custom.MaidiCrashManagerListener
+import com.app.maidi.utils.MaidiCrashManagerListener
 import com.app.maidi.domains.base.BaseActivity
 import com.app.maidi.domains.my_registration.list_my_registration.ListMyRegistrationActivity
 import com.app.maidi.infrastructures.ActivityModules
 import com.app.maidi.models.Vaccine
 import com.app.maidi.utils.Constants
 import net.hockeyapp.android.CrashManager
-import org.hisp.dhis.android.sdk.controllers.DhisController
 import org.hisp.dhis.android.sdk.controllers.metadata.MetaDataController
-import org.hisp.dhis.android.sdk.controllers.tracker.TrackerController
 import org.hisp.dhis.android.sdk.network.APIException
 import org.hisp.dhis.android.sdk.persistence.models.TrackedEntityInstance
 import javax.inject.Inject

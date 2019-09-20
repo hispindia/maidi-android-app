@@ -29,13 +29,12 @@
 
 package org.hisp.dhis.android.sdk.utils;
 
+import okio.ByteString;
 import org.apache.commons.beanutils.ConversionException;
+import retrofit2.Converter;
 
 import java.io.IOException;
 import java.io.InputStream;
-
-import okio.ByteString;
-import retrofit2.Converter;
 
 /**
  * @author Simen Skogly Russnes on 20.08.15.

@@ -32,7 +32,6 @@ import android.content.Context;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
-import androidx.annotation.Nullable;
 import android.text.Html;
 import android.text.SpannableString;
 import android.text.Spanned;
@@ -43,7 +42,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
-
+import androidx.annotation.Nullable;
 import org.hisp.dhis.android.sdk.ui.BuildConfig;
 import org.hisp.dhis.android.sdk.ui.R;
 import org.hisp.dhis.client.sdk.ui.activities.BaseActivity;

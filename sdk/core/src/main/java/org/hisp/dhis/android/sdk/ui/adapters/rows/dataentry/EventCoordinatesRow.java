@@ -30,7 +30,6 @@
 package org.hisp.dhis.android.sdk.ui.adapters.rows.dataentry;
 
 import android.location.Location;
-import androidx.fragment.app.FragmentManager;
 import android.text.Editable;
 import android.text.InputFilter;
 import android.text.Spanned;
@@ -39,7 +38,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.ImageButton;
-
+import androidx.fragment.app.FragmentManager;
 import org.hisp.dhis.android.sdk.R;
 import org.hisp.dhis.android.sdk.controllers.GpsController;
 import org.hisp.dhis.android.sdk.persistence.Dhis2Application;

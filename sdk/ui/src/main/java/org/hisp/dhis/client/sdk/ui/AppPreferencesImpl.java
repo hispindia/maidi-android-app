@@ -28,10 +28,10 @@
 
 package org.hisp.dhis.client.sdk.ui;
 
-import static org.hisp.dhis.client.sdk.utils.Preconditions.isNull;
-
 import android.content.Context;
 import android.content.SharedPreferences;
+
+import static org.hisp.dhis.client.sdk.utils.Preconditions.isNull;
 
 public class AppPreferencesImpl implements AppPreferences {
     public final static String PREFS_NAME = "preferences:application";

@@ -48,7 +48,6 @@ import androidx.loader.content.Loader;
 import com.raizlabs.android.dbflow.structure.Model;
 import com.squareup.otto.Subscribe;
 import org.hisp.dhis.android.sdk.R;
-import org.hisp.dhis.android.sdk.activities.HolderActivity;
 import org.hisp.dhis.android.sdk.controllers.tracker.TrackerController;
 import org.hisp.dhis.android.sdk.events.OnRowClick;
 import org.hisp.dhis.android.sdk.events.OnTeiDownloadedEvent;

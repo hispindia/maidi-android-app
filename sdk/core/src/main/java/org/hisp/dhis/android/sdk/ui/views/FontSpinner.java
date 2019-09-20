@@ -34,7 +34,6 @@ import android.content.res.TypedArray;
 import android.graphics.Typeface;
 import android.util.AttributeSet;
 import android.widget.Spinner;
-
 import org.hisp.dhis.android.sdk.R;
 import org.hisp.dhis.android.sdk.utils.TypefaceManager;
 

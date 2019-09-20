@@ -31,7 +31,6 @@ package org.hisp.dhis.android.sdk.utils;
 
 import android.os.Handler;
 import android.os.Looper;
-
 import com.squareup.otto.Bus;
 import com.squareup.otto.ThreadEnforcer;
 

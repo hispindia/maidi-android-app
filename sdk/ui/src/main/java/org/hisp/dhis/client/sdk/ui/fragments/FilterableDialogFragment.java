@@ -29,11 +29,6 @@
 package org.hisp.dhis.client.sdk.ui.fragments;
 
 import android.os.Bundle;
-import androidx.annotation.Nullable;
-import androidx.appcompat.app.AppCompatDialogFragment;
-import androidx.fragment.app.DialogFragment;
-import androidx.core.content.ContextCompat;
-import androidx.recyclerview.widget.LinearLayoutManager;
 import android.text.Editable;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -41,7 +36,11 @@ import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
-
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatDialogFragment;
+import androidx.core.content.ContextCompat;
+import androidx.fragment.app.DialogFragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import org.hisp.dhis.android.sdk.ui.R;
 import org.hisp.dhis.client.sdk.ui.adapters.OnPickerItemClickListener;

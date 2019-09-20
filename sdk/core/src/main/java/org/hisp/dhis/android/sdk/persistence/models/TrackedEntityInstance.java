@@ -30,6 +30,7 @@
 package org.hisp.dhis.android.sdk.persistence.models;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
@@ -38,11 +39,10 @@ import com.raizlabs.android.dbflow.annotation.Table;
 import com.raizlabs.android.dbflow.annotation.Unique;
 import com.raizlabs.android.dbflow.sql.builder.Condition;
 import com.raizlabs.android.dbflow.sql.language.Update;
-
 import org.hisp.dhis.android.sdk.controllers.tracker.TrackerController;
 import org.hisp.dhis.android.sdk.persistence.Dhis2Database;
-import org.hisp.dhis.android.sdk.utils.serializers.TrackedEntityInstanceTrackedEntitySerializer;
 import org.hisp.dhis.android.sdk.utils.api.CodeGenerator;
+import org.hisp.dhis.android.sdk.utils.serializers.TrackedEntityInstanceTrackedEntitySerializer;
 
 import java.io.Serializable;
 import java.util.List;
@@ -51,6 +51,7 @@ import java.util.List;
  * @author Simen Skogly Russnes on 03.03.15.
  */
 @JsonInclude(JsonInclude.Include.NON_NULL)
+@JsonIgnoreProperties(ignoreUnknown = false)
 @Table(databaseName = Dhis2Database.NAME)
 @JsonSerialize(using = TrackedEntityInstanceTrackedEntitySerializer.class)
 public class TrackedEntityInstance extends BaseSerializableModel implements Serializable {
@@ -70,6 +71,10 @@ public class TrackedEntityInstance extends BaseSerializableModel implements Seri
     @JsonProperty("orgUnit")
     @Column(name = "orgUnit")
     String orgUnit;
+
+    //@JsonProperty("inactive")
+    //@Column(name = "inactive")
+    //boolean inactive;
 
     @JsonProperty("attributes")
     List<TrackedEntityAttributeValue> attributes;
@@ -195,6 +200,16 @@ public class TrackedEntityInstance extends BaseSerializableModel implements Seri
     public void setLocalId(long localId) {
         this.localId = localId;
     }
+
+    /*@JsonProperty("inactive")
+    public void setInActive(boolean inActive) {
+        this.inactive = inActive;
+    }
+
+    @JsonProperty("inactive")
+    public boolean isInActive() {
+        return inactive;
+    }*/
 
     @Override
     @JsonIgnore

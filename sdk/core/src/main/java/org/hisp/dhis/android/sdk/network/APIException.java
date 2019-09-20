@@ -32,11 +32,9 @@ package org.hisp.dhis.android.sdk.network;
 
 import org.hisp.dhis.android.sdk.R;
 import org.hisp.dhis.android.sdk.persistence.Dhis2Application;
-
-import java.io.IOException;
 import retrofit2.Response;
 
-import static org.hisp.dhis.android.sdk.network.APIException.Kind.NETWORK;
+import java.io.IOException;
 
 public class APIException extends RuntimeException {
 

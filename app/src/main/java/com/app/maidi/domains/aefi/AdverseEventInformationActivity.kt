@@ -2,17 +2,16 @@ package com.app.maidi.domains.aefi
 
 import android.app.Dialog
 import android.content.Context
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.view.Window
 import android.widget.*
+import androidx.appcompat.app.AppCompatActivity
 import butterknife.BindView
 import butterknife.ButterKnife
 import com.app.maidi.R
-import com.app.maidi.custom.MaidiCrashManagerListener
+import com.app.maidi.utils.MaidiCrashManagerListener
 import com.app.maidi.utils.Constants
-import com.app.maidi.utils.DateUtils
 import com.app.maidi.utils.MethodUtils
 import com.squareup.otto.Subscribe
 import net.hockeyapp.android.CrashManager
@@ -21,10 +20,12 @@ import org.hisp.dhis.android.sdk.controllers.tracker.TrackerController
 import org.hisp.dhis.android.sdk.events.LoadingMessageEvent
 import org.hisp.dhis.android.sdk.events.UiEvent
 import org.hisp.dhis.android.sdk.persistence.Dhis2Application
-import org.hisp.dhis.android.sdk.persistence.models.*
+import org.hisp.dhis.android.sdk.persistence.models.Enrollment
+import org.hisp.dhis.android.sdk.persistence.models.OrganisationUnit
+import org.hisp.dhis.android.sdk.persistence.models.Program
+import org.hisp.dhis.android.sdk.persistence.models.ProgramStage
 import org.hisp.dhis.android.sdk.ui.fragments.eventdataentry.EventDataEntryFragment
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper
-import java.lang.Exception
 
 class AdverseEventInformationActivity : AppCompatActivity() {
 

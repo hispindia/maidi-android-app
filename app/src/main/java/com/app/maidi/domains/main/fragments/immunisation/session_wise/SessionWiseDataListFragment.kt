@@ -1,11 +1,9 @@
 package com.app.maidi.domains.main.fragments.immunisation.session_wise
 
-import android.content.pm.ActivityInfo
-import android.graphics.Color
 import android.os.Bundle
-import android.util.TypedValue
-import android.view.*
-import android.widget.CheckBox
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
 import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -16,7 +14,6 @@ import com.app.maidi.R
 import com.app.maidi.domains.base.BaseFragment
 import com.app.maidi.domains.main.MainActivity
 import com.app.maidi.domains.main.MainPresenter
-import com.app.maidi.domains.main.fragments.immunisation.immunisation_card.ImmunisationCardAdapter
 import com.app.maidi.models.Dose
 import com.app.maidi.models.ImmunisationCard
 import com.app.maidi.utils.Constants

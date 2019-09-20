@@ -1,10 +1,8 @@
 package com.app.maidi.domains.main.fragments.workplan
 
-import android.util.Log
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentStatePagerAdapter
-import androidx.viewpager.widget.PagerAdapter
 import org.hisp.dhis.android.sdk.persistence.models.Event
 import org.joda.time.LocalDate
 

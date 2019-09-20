@@ -31,26 +31,16 @@ package org.hisp.dhis.android.sdk.ui.dialogs;
 
 import android.content.Context;
 import android.os.Bundle;
-import androidx.fragment.app.DialogFragment;
-import androidx.fragment.app.FragmentManager;
 import android.text.Editable;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
-import android.widget.AdapterView;
-import android.widget.EditText;
-import android.widget.ImageView;
-import android.widget.ListView;
-import android.widget.ProgressBar;
-import android.widget.TextView;
-
-import com.squareup.otto.Subscribe;
-
+import android.widget.*;
+import androidx.fragment.app.DialogFragment;
+import androidx.fragment.app.FragmentManager;
 import org.hisp.dhis.android.sdk.R;
-import org.hisp.dhis.android.sdk.events.UiEvent;
 import org.hisp.dhis.android.sdk.ui.adapters.rows.AbsTextWatcher;
 import org.hisp.dhis.android.sdk.ui.dialogs.AutoCompleteDialogAdapter.OptionAdapterValue;
 import org.hisp.dhis.android.sdk.ui.views.FontTextView;

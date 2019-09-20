@@ -33,10 +33,6 @@ package org.hisp.dhis.android.sdk.fragments.programoverview.registerrelationship
 import android.content.Context;
 import android.content.DialogInterface;
 import android.os.Bundle;
-import androidx.fragment.app.DialogFragment;
-import androidx.fragment.app.FragmentManager;;
-import androidx.loader.app.LoaderManager;
-import androidx.loader.content.Loader;
 import android.text.Editable;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -45,6 +41,10 @@ import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.*;
+import androidx.fragment.app.DialogFragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.loader.app.LoaderManager;
+import androidx.loader.content.Loader;
 import com.raizlabs.android.dbflow.sql.builder.Condition;
 import com.raizlabs.android.dbflow.sql.language.Select;
 import com.raizlabs.android.dbflow.structure.Model;
@@ -67,6 +67,8 @@ import org.hisp.dhis.android.sdk.utils.UiUtils;
 
 import java.util.ArrayList;
 import java.util.List;
+
+;
 
 public class RegisterRelationshipDialogFragment extends DialogFragment
         implements View.OnClickListener, LoaderManager.LoaderCallbacks<RegisterRelationshipDialogFragmentForm>, AutoCompleteDialogFragment.OnOptionSelectedListener, AdapterView.OnItemClickListener {

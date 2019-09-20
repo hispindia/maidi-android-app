@@ -1,11 +1,6 @@
 package org.hisp.dhis.android.sdk.synchronization.domain.trackedentityinstance;
 
-import static android.R.attr.id;
-
-import static org.hisp.dhis.android.sdk.persistence.models.FailedItem.TRACKEDENTITYINSTANCE;
-
 import org.hisp.dhis.android.sdk.network.APIException;
-import org.hisp.dhis.android.sdk.persistence.models.ApiResponse;
 import org.hisp.dhis.android.sdk.persistence.models.Enrollment;
 import org.hisp.dhis.android.sdk.persistence.models.ImportSummary;
 import org.hisp.dhis.android.sdk.persistence.models.Relationship;
@@ -19,6 +14,9 @@ import org.hisp.dhis.android.sdk.synchronization.domain.faileditem.IFailedItemRe
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+
+import static android.R.attr.id;
+import static org.hisp.dhis.android.sdk.persistence.models.FailedItem.TRACKEDENTITYINSTANCE;
 
 public class TrackedEntityInstanceSynchronizer extends Synchronizer {
 

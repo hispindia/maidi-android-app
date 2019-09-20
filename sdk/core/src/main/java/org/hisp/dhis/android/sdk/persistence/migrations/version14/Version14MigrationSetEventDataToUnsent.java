@@ -1,12 +1,9 @@
 package org.hisp.dhis.android.sdk.persistence.migrations.version14;
 
 import com.raizlabs.android.dbflow.annotation.Migration;
-import com.raizlabs.android.dbflow.sql.builder.Condition;
 import com.raizlabs.android.dbflow.sql.migration.UpdateTableMigration;
-
 import org.hisp.dhis.android.sdk.persistence.Dhis2Database;
 import org.hisp.dhis.android.sdk.persistence.models.Event;
-import org.hisp.dhis.android.sdk.persistence.models.Event$Table;
 
 @Migration(version = 15, databaseName = Dhis2Database.NAME)
 public class Version14MigrationSetEventDataToUnsent extends UpdateTableMigration<Event> {

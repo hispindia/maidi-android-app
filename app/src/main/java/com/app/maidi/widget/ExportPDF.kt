@@ -10,15 +10,16 @@ import android.util.Log
 import android.widget.Toast
 import com.app.maidi.utils.Constants
 import com.itextpdf.text.*
-import com.itextpdf.text.pdf.*
+import com.itextpdf.text.pdf.PdfPCell
+import com.itextpdf.text.pdf.PdfPTable
+import com.itextpdf.text.pdf.PdfWriter
 import com.itextpdf.text.pdf.draw.LineSeparator
-import java.io.File
-import java.io.FileOutputStream
-import com.readystatesoftware.chuck.Chuck
 import org.hisp.dhis.android.sdk.controllers.tracker.TrackerController
 import org.hisp.dhis.android.sdk.persistence.models.Event
 import org.hisp.dhis.android.sdk.persistence.models.ProgramStageDataElement
 import org.hisp.dhis.android.sdk.utils.api.ValueType
+import java.io.File
+import java.io.FileOutputStream
 
 
 class ExportPDF {
@@ -47,6 +48,19 @@ class ExportPDF {
         createFile(fileTitle)
         try {
             document = Document(PageSize.A4)
+            pdfWriter = PdfWriter.getInstance(document!!, FileOutputStream(pdfFile!!))
+            document!!.open()
+        } catch (e: Exception) {
+            Log.e("createFile", e.toString())
+        }
+
+        return pdfFile!!
+    }
+
+    fun openLandscapeDocument(fileTitle: String) : File {
+        createFile(fileTitle)
+        try {
+            document = Document(PageSize.A4_LANDSCAPE)
             pdfWriter = PdfWriter.getInstance(document!!, FileOutputStream(pdfFile!!))
             document!!.open()
         } catch (e: Exception) {

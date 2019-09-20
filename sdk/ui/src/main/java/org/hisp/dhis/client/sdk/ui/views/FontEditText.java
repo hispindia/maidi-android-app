@@ -33,7 +33,6 @@ import android.content.res.TypedArray;
 import android.graphics.Paint;
 import android.graphics.Typeface;
 import android.util.AttributeSet;
-
 import androidx.annotation.StringRes;
 import androidx.appcompat.widget.AppCompatEditText;
 import org.hisp.dhis.android.sdk.ui.R;

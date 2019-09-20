@@ -3,7 +3,6 @@ package org.hisp.dhis.android.sdk.ui.adapters.rows.dataentry.autocompleterow;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.TextView;
-
 import org.hisp.dhis.android.sdk.R;
 
 class AutoCompleteRowViewHolder {

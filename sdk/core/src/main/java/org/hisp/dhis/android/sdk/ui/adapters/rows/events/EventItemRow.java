@@ -37,16 +37,15 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-
 import org.hisp.dhis.android.sdk.R;
 import org.hisp.dhis.android.sdk.events.OnRowClick;
 import org.hisp.dhis.android.sdk.events.OnTrackerItemClick;
 import org.hisp.dhis.android.sdk.persistence.Dhis2Application;
 import org.hisp.dhis.android.sdk.persistence.models.Event;
 
-import static org.hisp.dhis.android.sdk.utils.Preconditions.isNull;
-
 import java.util.List;
+
+import static org.hisp.dhis.android.sdk.utils.Preconditions.isNull;
 
 /**
  * Created by araz on 03.04.2015.

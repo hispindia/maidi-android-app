@@ -29,9 +29,7 @@
 
 package org.hisp.dhis.android.sdk.ui.adapters.rows.events;
 
-import android.util.Log;
 import android.view.View;
-
 import org.hisp.dhis.android.sdk.persistence.Dhis2Application;
 import org.hisp.dhis.android.sdk.ui.adapters.rows.dataentry.Row;
 

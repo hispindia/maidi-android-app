@@ -1,11 +1,7 @@
 package org.hisp.dhis.android.sdk.ui.adapters.rows.dataentry.autocompleterow;
 
-import androidx.fragment.app.FragmentManager;
 import android.view.View;
-
-import org.hisp.dhis.android.sdk.ui.dialogs.AutoCompleteDialogFragment;
-
-import java.util.ArrayList;
+import androidx.fragment.app.FragmentManager;
 
 class AutoCompleteDropDownButtonListener implements View.OnClickListener {
     private FragmentManager fragmentManager;

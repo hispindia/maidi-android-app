@@ -31,6 +31,9 @@
     <string name="visit_date">Visit date</string>
     <string name="data_entry">Data Entry</string>
     <string name="view">View</string>
+    <string name="enroll_new_child">Enroll new child</string>
+    <string name="registered_beneficaries">Registered \nbeneficaries</string>
+    <string name="reject">Reject</string>
 
     <!-- *************** GLOBAL WARNING STRING ************* -->
     <string name="phone_number_invalid">The phone number is invalid. Please recheck and try again</string>
@@ -41,6 +44,7 @@
     <string name="export_pdf_file_success">The PDF file was exported successfully</string>
     <string name="login_by_phone_time_out">The phone number verification period has timed out. Please try again.</string>
     <string name="verify_phone_number_success">Verify phone number success.</string>
+    <string name="enroll_child_into_immunisation_program">Do you want to enroll that child on Immunization program or reject this enrollment?</string>
 
     <!-- ************** LOGIN SCREEN ************ -->
     <string name="login_app_title">MAIDI APP</string>
@@ -89,12 +93,14 @@
     <string name="login_input_password_hint">Password</string>
     <string name="session_wise_vaccination_due_hint">Select session date to proceed</string>
     <string name="view_or_update_your_workplan">View or Update your Workplan</string>
+    <string name="enroll_new_child_or_view_registered_beneficaries">Enroll new child or view registered beneficaries</string>
     <string name="select_a_year_and_a_month_to_update_the_workplan">Select a year and a month to update the workplan</string>
 
     <!--- *************** Fragments of Main Screen's titles ************* -->
     <string name="my_immunisation_title">My Immunisation</string>
     <string name="immunisation_card_title">Immunisation Card</string>
     <string name="immunisation_card_events_title">Immunisation Card - Events</string>
+    <string name="registered_beneficaries_title">Registered beneficaries</string>
     <string name="immunisation_card_create_new_title">Immunisation Card - Create New Event</string>
     <string name="immunisation_card_update_title">Immunisation Card - Update Event</string>
     <string name="session_wise_vaccination_due">Session wise Vaccination due</string>

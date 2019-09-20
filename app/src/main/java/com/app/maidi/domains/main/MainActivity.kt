@@ -1,30 +1,24 @@
 package com.app.maidi.domains.main
 
 import android.Manifest
-import android.content.ActivityNotFoundException
-import android.content.Context
 import android.content.DialogInterface
 import android.content.Intent
-import android.content.pm.ActivityInfo
 import android.content.pm.PackageManager
 import android.content.res.ColorStateList
 import android.content.res.Configuration
 import android.graphics.Color
 import android.net.Uri
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.os.Environment
 import android.provider.Settings
 import android.util.Log
 import android.view.View
 import android.view.ViewGroup
-import android.view.WindowManager
 import android.widget.*
 import androidx.appcompat.app.AlertDialog
+import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.core.content.FileProvider
-import androidx.fragment.app.FragmentManager
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import butterknife.BindView
 import butterknife.ButterKnife
@@ -36,12 +30,12 @@ import com.app.maidi.domains.login.LoginActivity
 import com.app.maidi.domains.main.fragments.MainBeneficiaryFragment
 import com.app.maidi.domains.main.fragments.MainFragment
 import com.app.maidi.domains.main.fragments.aefi.RegisteredCasesFragment
+import com.app.maidi.domains.main.fragments.child_registration.RegisteredBeneficariesFragment
 import com.app.maidi.domains.main.fragments.immunisation.immunisation_card.ImmunisationCardFragment
 import com.app.maidi.domains.main.fragments.immunisation.session_wise.SessionWiseDataListFragment
 import com.app.maidi.domains.main.fragments.survey.ListSurveyFragment
 import com.app.maidi.domains.main.fragments.workplan.ListVillageFragment
 import com.app.maidi.domains.main.fragments.workplan.MonthlyWorkplanDetailFragment
-import com.app.maidi.infrastructures.ActivityModules
 import com.app.maidi.models.Dose
 import com.app.maidi.models.ImmunisationCard
 import com.app.maidi.utils.Constants
@@ -50,7 +44,6 @@ import com.squareup.otto.Subscribe
 import org.hisp.dhis.android.sdk.controllers.DhisController
 import org.hisp.dhis.android.sdk.controllers.DhisService
 import org.hisp.dhis.android.sdk.controllers.PeriodicSynchronizerController
-import org.hisp.dhis.android.sdk.controllers.SyncStrategy
 import org.hisp.dhis.android.sdk.controllers.metadata.MetaDataController
 import org.hisp.dhis.android.sdk.events.LoadingMessageEvent
 import org.hisp.dhis.android.sdk.events.UiEvent
@@ -386,6 +379,15 @@ class MainActivity : BaseActivity<MainView, MainPresenter>(), View.OnClickListen
 
     // ******************* MainView functions *****************
 
+    override fun getRegisteredBeneficariesInstances(trackedEntityInstances: List<TrackedEntityInstance>) {
+        runOnUiThread {
+            if(isCurrentFragment<RegisteredBeneficariesFragment>(R.id.activity_main_fl_content)){
+                getCurrentFragment<RegisteredBeneficariesFragment>(R.id.activity_main_fl_content).getRegisteredTrackedEntityInstances(trackedEntityInstances)
+            }
+            //hideHUD()
+        }
+    }
+
     override fun getAefiTrackedEntityInstances(trackedEntityInstances: List<TrackedEntityInstance>) {
         runOnUiThread {
             if(isCurrentFragment<RegisteredCasesFragment>(R.id.activity_main_fl_content)){
@@ -504,10 +506,6 @@ class MainActivity : BaseActivity<MainView, MainPresenter>(), View.OnClickListen
 
     fun checkStoragePermissions(){
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
-
-            /*if (ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
-                showFailedPermissionToast()
-            } else {*/
             ActivityCompat.requestPermissions(
                 this,
                 arrayOf(

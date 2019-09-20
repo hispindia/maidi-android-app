@@ -33,7 +33,6 @@ import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.os.Bundle;
 import androidx.fragment.app.DialogFragment;
-
 import org.hisp.dhis.android.sdk.R;
 
 /**

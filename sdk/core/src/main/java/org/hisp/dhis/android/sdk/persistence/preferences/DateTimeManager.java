@@ -31,7 +31,6 @@ package org.hisp.dhis.android.sdk.persistence.preferences;
 
 import android.content.Context;
 import android.content.SharedPreferences;
-
 import org.joda.time.DateTime;
 
 import static org.hisp.dhis.android.sdk.utils.Preconditions.isNull;

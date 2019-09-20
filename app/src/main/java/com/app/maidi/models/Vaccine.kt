@@ -1,7 +1,5 @@
 package com.app.maidi.models
 
-import android.os.Parcel
-import android.os.Parcelable
 import org.hisp.dhis.android.sdk.persistence.models.DataElement
 import org.hisp.dhis.android.sdk.persistence.models.DataValue
 

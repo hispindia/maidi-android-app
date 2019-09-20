@@ -1,15 +1,12 @@
 package com.app.maidi.domains.my_registration.list_my_registration
 
 import com.app.maidi.domains.base.BasePresenter
-import com.app.maidi.networks.NetworkProvider
-import com.app.maidi.services.account.AccountService
 import org.hisp.dhis.android.sdk.controllers.DhisController
 import org.hisp.dhis.android.sdk.controllers.tracker.TrackerController
 import org.hisp.dhis.android.sdk.job.JobExecutor
 import org.hisp.dhis.android.sdk.job.NetworkJob
 import org.hisp.dhis.android.sdk.network.APIException
 import org.hisp.dhis.android.sdk.network.ResponseHolder
-import org.hisp.dhis.android.sdk.persistence.models.TrackedEntityAttribute
 import org.hisp.dhis.android.sdk.persistence.models.TrackedEntityAttributeValue
 import org.hisp.dhis.android.sdk.persistence.models.TrackedEntityInstance
 import org.hisp.dhis.android.sdk.utils.support.DateUtils

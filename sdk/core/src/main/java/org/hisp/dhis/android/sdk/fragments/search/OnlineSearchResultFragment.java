@@ -5,15 +5,15 @@ import android.app.ProgressDialog;
 import android.os.Bundle;
 import android.os.Parcel;
 import android.os.Parcelable;
-import androidx.fragment.app.Fragment;
-import androidx.appcompat.app.ActionBar;
-import androidx.appcompat.app.AppCompatActivity;
 import android.text.Editable;
 import android.util.Log;
 import android.view.*;
 import android.widget.*;
+import androidx.appcompat.app.ActionBar;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.Fragment;
 import com.squareup.otto.Subscribe;
-import org.hisp.dhis.android.sdk.activities.HolderActivity;
+import org.hisp.dhis.android.sdk.R;
 import org.hisp.dhis.android.sdk.controllers.DhisController;
 import org.hisp.dhis.android.sdk.controllers.metadata.MetaDataController;
 import org.hisp.dhis.android.sdk.controllers.tracker.TrackerController;
@@ -35,7 +35,6 @@ import org.hisp.dhis.android.sdk.ui.dialogs.QueryTrackedEntityInstancesResultDia
 import org.hisp.dhis.android.sdk.ui.fragments.progressdialog.ProgressDialogFragment;
 import org.hisp.dhis.android.sdk.ui.views.FontEditText;
 import org.hisp.dhis.android.sdk.utils.UiUtils;
-import org.hisp.dhis.android.sdk.R;
 
 import java.io.Serializable;
 import java.util.ArrayList;

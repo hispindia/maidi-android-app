@@ -32,14 +32,12 @@ package org.hisp.dhis.android.sdk.ui.adapters.rows.dataentry;
 import android.app.Activity;
 import android.content.Context;
 import android.content.DialogInterface;
-import androidx.fragment.app.FragmentActivity;
-import androidx.fragment.app.FragmentManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-
-
+import androidx.fragment.app.FragmentActivity;
+import androidx.fragment.app.FragmentManager;
 import org.hisp.dhis.android.sdk.R;
 import org.hisp.dhis.android.sdk.controllers.metadata.MetaDataController;
 import org.hisp.dhis.android.sdk.persistence.Dhis2Application;

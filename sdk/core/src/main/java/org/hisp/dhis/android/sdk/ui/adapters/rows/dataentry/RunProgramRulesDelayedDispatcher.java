@@ -2,7 +2,6 @@ package org.hisp.dhis.android.sdk.ui.adapters.rows.dataentry;
 
 import android.os.Handler;
 import android.util.Log;
-
 import org.hisp.dhis.android.sdk.persistence.Dhis2Application;
 
 /**

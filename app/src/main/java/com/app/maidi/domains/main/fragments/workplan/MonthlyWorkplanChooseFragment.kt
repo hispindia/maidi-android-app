@@ -50,7 +50,7 @@ class MonthlyWorkplanChooseFragment : BaseFragment(){
             mainActivity.solidActionBar(resources.getString(R.string.monthly_workplan_create_new_event))
         }
 
-        mainActivity.solidActionBar(resources.getString(R.string.monthly_workplan), createButtonListener)
+        mainActivity.solidActionBar(resources.getString(R.string.monthly_workplan), R.drawable.ic_add, createButtonListener)
         mainActivity.isSwipeForceSyncronizeEnabled(false)
     }
 

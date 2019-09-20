@@ -15,7 +15,6 @@ import com.app.maidi.domains.login.LoginPresenter
 import com.app.maidi.utils.Constants
 import com.app.maidi.utils.DateUtils
 import com.app.maidi.utils.MethodUtils.Companion.hideKeyBoard
-import com.bugfender.sdk.Bugfender
 import com.google.android.material.textfield.TextInputEditText
 import com.google.firebase.FirebaseException
 import com.google.firebase.auth.PhoneAuthCredential
@@ -39,7 +38,6 @@ class LoginPhoneNumberFragment : BaseFragment(){
         verificationChangeListener = object : PhoneAuthProvider.OnVerificationStateChangedCallbacks(){
 
             override fun onVerificationCompleted(phoneAuthCredential: PhoneAuthCredential?) {
-                Bugfender.sendIssue("Verify Login By Phone", "Completed")
                 if(phoneAuthCredential != null) {
                     Toast.makeText(loginActivity, resources.getString(R.string.verify_phone_number_success), Toast.LENGTH_LONG).show()
                     loginPresenter.signInWithPhoneAuthCredential(phoneAuthCredential!!, etPhoneNumber.text!!.toString())
@@ -47,13 +45,11 @@ class LoginPhoneNumberFragment : BaseFragment(){
             }
 
             override fun onVerificationFailed(p0: FirebaseException?) {
-                Bugfender.sendIssue("Verify Login By Phone Failed", p0!!.message)
                 loginActivity.hideLoading()
                 Toast.makeText(loginActivity, p0!!.message, Toast.LENGTH_LONG).show()
             }
 
             override fun onCodeSent(verificationId: String?, resendToken: PhoneAuthProvider.ForceResendingToken?) {
-                Bugfender.sendIssue("Verify Code", "Sent")
                 super.onCodeSent(verificationId, resendToken)
                 loginActivity.hideLoading()
                 var bundle: Bundle = Bundle()

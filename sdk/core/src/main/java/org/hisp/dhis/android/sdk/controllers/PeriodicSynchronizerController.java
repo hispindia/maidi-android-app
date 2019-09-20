@@ -32,7 +32,6 @@ package org.hisp.dhis.android.sdk.controllers;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.util.Log;
-
 import org.hisp.dhis.android.sdk.services.PeriodicSynchronizer;
 
 /**

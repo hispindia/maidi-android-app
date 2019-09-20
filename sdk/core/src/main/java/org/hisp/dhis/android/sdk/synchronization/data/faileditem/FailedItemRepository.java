@@ -2,10 +2,9 @@ package org.hisp.dhis.android.sdk.synchronization.data.faileditem;
 
 import com.raizlabs.android.dbflow.sql.builder.Condition;
 import com.raizlabs.android.dbflow.sql.language.Select;
-
 import org.hisp.dhis.android.sdk.persistence.models.FailedItem;
-import org.hisp.dhis.android.sdk.synchronization.domain.faileditem.IFailedItemRepository;
 import org.hisp.dhis.android.sdk.persistence.models.FailedItem$Table;
+import org.hisp.dhis.android.sdk.synchronization.domain.faileditem.IFailedItemRepository;
 
 public class FailedItemRepository implements IFailedItemRepository {
 

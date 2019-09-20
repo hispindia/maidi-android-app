@@ -32,10 +32,9 @@ package org.hisp.dhis.android.sdk.utils;
 import android.app.Activity;
 import android.content.Context;
 import android.content.DialogInterface;
-import androidx.fragment.app.FragmentManager;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
-
+import androidx.fragment.app.FragmentManager;
 import com.google.android.material.snackbar.Snackbar;
 import org.hisp.dhis.android.sdk.R;
 import org.hisp.dhis.android.sdk.events.LoadingMessageEvent;

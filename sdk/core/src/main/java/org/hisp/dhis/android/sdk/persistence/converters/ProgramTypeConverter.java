@@ -30,7 +30,6 @@
 package org.hisp.dhis.android.sdk.persistence.converters;
 
 import com.raizlabs.android.dbflow.converter.TypeConverter;
-
 import org.hisp.dhis.android.sdk.utils.api.ProgramType;
 
 @SuppressWarnings("unused")

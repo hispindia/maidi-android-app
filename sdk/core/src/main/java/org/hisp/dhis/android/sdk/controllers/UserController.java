@@ -30,24 +30,17 @@
 package org.hisp.dhis.android.sdk.controllers;
 
 import android.util.Log;
-
 import com.raizlabs.android.dbflow.sql.language.Delete;
-
-import org.hisp.dhis.android.sdk.network.DhisApi;
-import org.hisp.dhis.android.sdk.network.SessionManager;
-import org.hisp.dhis.android.sdk.network.APIException;
+import okhttp3.HttpUrl;
+import org.hisp.dhis.android.sdk.network.*;
 import org.hisp.dhis.android.sdk.persistence.models.UserAccount;
-import org.hisp.dhis.android.sdk.network.Credentials;
-import org.hisp.dhis.android.sdk.network.Session;
 import org.hisp.dhis.android.sdk.persistence.preferences.DateTimeManager;
 import org.hisp.dhis.android.sdk.persistence.preferences.LastUpdatedManager;
+import retrofit2.Response;
 
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
-
-import okhttp3.HttpUrl;
-import retrofit2.Response;
 
 /**
  * @author Araz Abishov <araz.abishov.gsoc@gmail.com>.

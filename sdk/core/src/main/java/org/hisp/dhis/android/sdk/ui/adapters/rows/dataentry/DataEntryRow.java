@@ -29,10 +29,10 @@
 
 package org.hisp.dhis.android.sdk.ui.adapters.rows.dataentry;
 
-import androidx.fragment.app.FragmentManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import androidx.fragment.app.FragmentManager;
 
 public interface DataEntryRow {
     View getView(FragmentManager fragmentManager, LayoutInflater inflater, View convertView, ViewGroup container);

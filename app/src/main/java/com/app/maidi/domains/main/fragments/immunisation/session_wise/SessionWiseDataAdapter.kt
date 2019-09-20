@@ -27,12 +27,6 @@ class SessionWiseDataAdapter : RecyclerView.Adapter<SessionWiseDataAdapter.Sessi
         return position.toLong()
     }
 
-    /*override fun onViewAttachedToWindow(holder: SessionWiseDataHolder) {
-        super.onViewAttachedToWindow(holder)
-        if(holder.itemId == immunisationList.lastIndex.toLong())
-            listener.onLoadSuccess()
-    }*/
-
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): SessionWiseDataHolder {
         var contentView = LayoutInflater.from(context).inflate(R.layout.item_session_wise_data, parent, false)
         return SessionWiseDataHolder(contentView)

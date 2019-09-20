@@ -31,10 +31,11 @@ package org.hisp.dhis.android.sdk.fragments.programoverview.registerrelationship
 
 import android.content.Context;
 import android.os.Bundle;
+import android.view.View;
 import androidx.loader.app.LoaderManager;
 import androidx.loader.content.Loader;
-import android.view.View;
 import com.raizlabs.android.dbflow.structure.Model;
+import org.hisp.dhis.android.sdk.R;
 import org.hisp.dhis.android.sdk.controllers.metadata.MetaDataController;
 import org.hisp.dhis.android.sdk.persistence.loaders.DbLoader;
 import org.hisp.dhis.android.sdk.persistence.loaders.Query;
@@ -43,7 +44,6 @@ import org.hisp.dhis.android.sdk.persistence.models.RelationshipType;
 import org.hisp.dhis.android.sdk.ui.adapters.SimpleAdapter;
 import org.hisp.dhis.android.sdk.ui.dialogs.AutoCompleteDialogAdapter;
 import org.hisp.dhis.android.sdk.ui.dialogs.AutoCompleteDialogFragment;
-import org.hisp.dhis.android.sdk.R;
 
 import java.util.ArrayList;
 import java.util.List;

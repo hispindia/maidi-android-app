@@ -30,7 +30,6 @@
 package org.hisp.dhis.android.sdk.events;
 
 import org.hisp.dhis.android.sdk.persistence.models.BaseSerializableModel;
-import org.hisp.dhis.android.sdk.persistence.models.TrackedEntityInstance;
 
 /**
  * Created by erling on 5/11/15.

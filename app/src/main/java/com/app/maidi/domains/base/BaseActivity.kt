@@ -1,15 +1,12 @@
 package com.app.maidi.domains.base
 
 import android.app.ActivityOptions
-import android.app.DatePickerDialog
 import android.app.Dialog
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
-import android.view.View
 import android.view.Window
-import android.widget.DatePicker
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
@@ -19,7 +16,6 @@ import com.hannesdorfmann.mosby3.mvp.MvpPresenter
 import com.hannesdorfmann.mosby3.mvp.MvpView
 import com.whiteelephant.monthpicker.MonthPickerDialog
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper
-import java.lang.Exception
 import java.util.*
 
 abstract class BaseActivity<V : MvpView, P : MvpPresenter<V>> : MvpActivity<V, P>(){

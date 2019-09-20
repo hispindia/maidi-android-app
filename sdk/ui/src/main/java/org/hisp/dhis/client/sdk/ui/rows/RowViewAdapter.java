@@ -28,18 +28,12 @@
 
 package org.hisp.dhis.client.sdk.ui.rows;
 
-import androidx.fragment.app.FragmentManager;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
-
+import androidx.fragment.app.FragmentManager;
 import androidx.recyclerview.widget.RecyclerView;
-import org.hisp.dhis.client.sdk.ui.models.FormEntity;
-import org.hisp.dhis.client.sdk.ui.models.FormEntityAction;
+import org.hisp.dhis.client.sdk.ui.models.*;
 import org.hisp.dhis.client.sdk.ui.models.FormEntityAction.FormEntityActionType;
-import org.hisp.dhis.client.sdk.ui.models.FormEntityCharSequence;
-import org.hisp.dhis.client.sdk.ui.models.FormEntityEditText;
-import org.hisp.dhis.client.sdk.ui.models.FormEntityFilter;
-import org.hisp.dhis.client.sdk.ui.models.Picker;
 
 import java.util.ArrayList;
 import java.util.HashMap;

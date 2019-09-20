@@ -96,9 +96,6 @@ class RegisteredCaseAdapter : RecyclerView.Adapter<RegisteredCaseAdapter.Registe
 
             holder.llChildInfo.setOnClickListener {
                 listener.onItemClicked(holder.layoutPosition)
-                /*var intent = Intent(activity, AdverseEventInformationActivity::class.java)
-                intent.putExtra(AdverseEventInformationActivity.TRACKED_ENTITY_INSTANCE_ID, trackedEntityInstance.uid)
-                activity.startActivity(intent)*/
             }
 
         }catch(exception : Exception){

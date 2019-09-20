@@ -2,13 +2,12 @@ package org.hisp.dhis.client.sdk.ui.adapters;
 
 import android.content.Context;
 import android.content.res.ColorStateList;
-import androidx.annotation.NonNull;
-import androidx.core.content.ContextCompat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
-
+import androidx.annotation.NonNull;
+import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 import org.hisp.dhis.android.sdk.ui.R;
 import org.hisp.dhis.client.sdk.ui.models.Picker;

@@ -30,15 +30,14 @@
 package org.hisp.dhis.android.sdk.ui.fragments.dataentry;
 
 import android.os.Bundle;
-import androidx.fragment.app.DialogFragment;
-import androidx.fragment.app.FragmentManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
-
+import androidx.fragment.app.DialogFragment;
+import androidx.fragment.app.FragmentManager;
 import org.hisp.dhis.android.sdk.R;
 import org.hisp.dhis.android.sdk.ui.adapters.ValidationErrorAdapter;
 

@@ -16,7 +16,6 @@ class ImmunisationDetailAdapter : RecyclerView.Adapter<ImmunisationDetailAdapter
 
     var context: Context
     var dataValues: ArrayList<Vaccine>
-    //lateinit var immunisationList: ArrayList<>
 
     constructor(context: Context, dataValues: ArrayList<Vaccine>) {
         this.context = context

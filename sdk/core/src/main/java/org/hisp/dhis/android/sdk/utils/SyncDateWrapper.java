@@ -2,7 +2,6 @@ package org.hisp.dhis.android.sdk.utils;
 
 import android.content.Context;
 import androidx.annotation.Nullable;
-
 import org.hisp.dhis.android.sdk.R;
 import org.hisp.dhis.client.sdk.ui.AppPreferences;
 import org.joda.time.DateTime;

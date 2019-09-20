@@ -34,7 +34,6 @@ import android.content.res.TypedArray;
 import android.util.AttributeSet;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-
 import androidx.cardview.widget.CardView;
 import org.hisp.dhis.android.sdk.R;
 

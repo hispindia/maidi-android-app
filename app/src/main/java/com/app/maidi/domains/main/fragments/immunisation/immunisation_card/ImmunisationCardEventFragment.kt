@@ -8,18 +8,19 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import butterknife.BindView
 import butterknife.ButterKnife
-import butterknife.OnClick
 import com.app.maidi.R
 import com.app.maidi.domains.base.BaseFragment
 import com.app.maidi.domains.main.MainActivity
 import com.app.maidi.domains.main.MainPresenter
 import com.app.maidi.domains.main.fragments.listener.OnItemClickListener
-import com.app.maidi.models.ImmunisationCard
 import com.app.maidi.utils.Constants
 import com.app.maidi.utils.LinearLayoutManagerWrapper
 import org.hisp.dhis.android.sdk.controllers.metadata.MetaDataController
 import org.hisp.dhis.android.sdk.controllers.tracker.TrackerController
-import org.hisp.dhis.android.sdk.persistence.models.*
+import org.hisp.dhis.android.sdk.persistence.models.Event
+import org.hisp.dhis.android.sdk.persistence.models.OrganisationUnit
+import org.hisp.dhis.android.sdk.persistence.models.Program
+import org.hisp.dhis.android.sdk.persistence.models.ProgramStage
 import org.hisp.dhis.android.sdk.ui.fragments.eventdataentry.EventDataEntryFragment
 
 class ImmunisationCardEventFragment: BaseFragment(), OnItemClickListener {

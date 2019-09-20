@@ -1,7 +1,6 @@
 package org.hisp.dhis.android.sdk.events;
 
 import android.content.Context;
-
 import com.google.android.material.snackbar.Snackbar;
 import org.hisp.dhis.android.sdk.R;
 

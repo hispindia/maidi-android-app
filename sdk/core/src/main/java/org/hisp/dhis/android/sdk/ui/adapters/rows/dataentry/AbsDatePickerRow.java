@@ -31,13 +31,12 @@ package org.hisp.dhis.android.sdk.ui.adapters.rows.dataentry;
 
 import android.app.DatePickerDialog;
 import android.content.Context;
-import androidx.fragment.app.FragmentManager;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
-
+import androidx.fragment.app.FragmentManager;
 import org.joda.time.DateTime;
 
 import java.text.ParseException;

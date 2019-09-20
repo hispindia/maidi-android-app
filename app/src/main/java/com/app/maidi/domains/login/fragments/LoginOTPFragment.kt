@@ -2,7 +2,6 @@ package com.app.maidi.domains.login.fragments
 
 import android.app.Activity
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -15,20 +14,13 @@ import com.app.maidi.R
 import com.app.maidi.domains.base.BaseFragment
 import com.app.maidi.domains.login.LoginActivity
 import com.app.maidi.domains.login.LoginPresenter
-import com.app.maidi.domains.login.LoginView
 import com.app.maidi.utils.Constants
 import com.google.firebase.FirebaseException
 import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException
 import com.google.firebase.auth.PhoneAuthCredential
 import com.google.firebase.auth.PhoneAuthProvider
 import com.squareup.otto.Subscribe
-import org.hisp.dhis.android.sdk.controllers.DhisService
-import org.hisp.dhis.android.sdk.controllers.LoadingController
-import org.hisp.dhis.android.sdk.events.LoadingMessageEvent
-import org.hisp.dhis.android.sdk.job.NetworkJob
-import org.hisp.dhis.android.sdk.network.APIException
 import org.hisp.dhis.android.sdk.persistence.Dhis2Application
-import org.hisp.dhis.android.sdk.persistence.preferences.ResourceType
 
 class LoginOTPFragment : BaseFragment(){
 
@@ -37,8 +29,6 @@ class LoginOTPFragment : BaseFragment(){
     lateinit var verificationId: String
     lateinit var resendToken: PhoneAuthProvider.ForceResendingToken
     lateinit var verificationChangeListener: PhoneAuthProvider.OnVerificationStateChangedCallbacks
-
-    private var isPulling: Boolean = false
 
     @BindView(R.id.fragment_login_input_otp_et_otp)
     lateinit var etOtp: EditText

@@ -1,12 +1,10 @@
 package org.hisp.dhis.android.sdk.ui.dialogs;
 
 import android.os.Bundle;
+import android.view.View;
 import androidx.loader.app.LoaderManager;
 import androidx.loader.content.Loader;
-import android.view.View;
-
 import com.raizlabs.android.dbflow.structure.Model;
-
 import org.hisp.dhis.android.sdk.R;
 import org.hisp.dhis.android.sdk.persistence.loaders.DbLoader;
 

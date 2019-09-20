@@ -12,7 +12,6 @@ import com.app.maidi.domains.base.BaseFragment
 import com.app.maidi.domains.login.LoginActivity
 import com.app.maidi.domains.login.LoginPresenter
 import com.google.android.material.textfield.TextInputEditText
-import org.hisp.dhis.android.sdk.persistence.preferences.AppPreferences
 
 class LoginMainFragment : BaseFragment() {
 

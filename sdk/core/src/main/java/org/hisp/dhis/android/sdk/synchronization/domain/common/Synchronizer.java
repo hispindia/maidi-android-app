@@ -1,7 +1,6 @@
 package org.hisp.dhis.android.sdk.synchronization.domain.common;
 
 import com.fasterxml.jackson.databind.JsonNode;
-
 import org.apache.commons.beanutils.ConversionException;
 import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.hisp.dhis.android.sdk.controllers.DhisController;
@@ -13,11 +12,10 @@ import org.hisp.dhis.android.sdk.persistence.models.FailedItem;
 import org.hisp.dhis.android.sdk.persistence.models.ImportSummary;
 import org.hisp.dhis.android.sdk.synchronization.domain.faileditem.IFailedItemRepository;
 import org.hisp.dhis.android.sdk.utils.StringConverter;
+import retrofit2.Response;
 
 import java.io.IOException;
 import java.util.List;
-
-import retrofit2.Response;
 
 public class Synchronizer {
     IFailedItemRepository mFailedItemRepository;

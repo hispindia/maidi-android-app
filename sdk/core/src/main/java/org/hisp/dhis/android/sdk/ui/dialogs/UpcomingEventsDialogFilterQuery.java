@@ -1,7 +1,6 @@
 package org.hisp.dhis.android.sdk.ui.dialogs;
 
 import android.content.Context;
-
 import org.hisp.dhis.android.sdk.persistence.loaders.Query;
 
 import java.util.ArrayList;

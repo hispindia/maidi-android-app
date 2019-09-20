@@ -31,12 +31,12 @@ package org.hisp.dhis.client.sdk.ui.fragments;
 import android.app.Activity;
 import android.content.Context;
 import android.os.Bundle;
-import androidx.annotation.Nullable;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.FrameLayout;
+import androidx.annotation.Nullable;
 //import org.hisp.dhis.client.sdk.ui.activities.INavigationHandler;
 
 public abstract class AbsSelectorFragment extends BaseFragment {

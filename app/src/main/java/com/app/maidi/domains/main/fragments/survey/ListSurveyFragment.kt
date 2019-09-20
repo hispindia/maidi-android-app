@@ -15,12 +15,15 @@ import com.app.maidi.domains.main.MainActivity
 import com.app.maidi.domains.main.MainPresenter
 import com.app.maidi.domains.main.fragments.listener.OnSurveyItemClickListener
 import com.app.maidi.utils.Constants
-import com.app.maidi.utils.LinearLayoutManagerWrapper
 import com.app.maidi.utils.DateUtils
+import com.app.maidi.utils.LinearLayoutManagerWrapper
 import com.app.maidi.widget.ExportPDF
 import org.hisp.dhis.android.sdk.controllers.metadata.MetaDataController
 import org.hisp.dhis.android.sdk.controllers.tracker.TrackerController
-import org.hisp.dhis.android.sdk.persistence.models.*
+import org.hisp.dhis.android.sdk.persistence.models.Event
+import org.hisp.dhis.android.sdk.persistence.models.OrganisationUnit
+import org.hisp.dhis.android.sdk.persistence.models.Program
+import org.hisp.dhis.android.sdk.persistence.models.ProgramStage
 import org.hisp.dhis.android.sdk.ui.fragments.eventdataentry.EventDataEntryFragment
 import org.joda.time.DateTime
 
@@ -90,7 +93,7 @@ class ListSurveyFragment : BaseFragment(), OnSurveyItemClickListener{
         try{
             var pdf = ExportPDF(mainActivity)
             var reportDate = DateTime.now().millis
-            var pdfFile = pdf.openDocument("Report_MAIDI_Survey_" + reportDate + ".pdf")
+            var pdfFile = pdf.openLandscapeDocument("Report_MAIDI_Survey_" + reportDate + ".pdf")
             var event = TrackerController.getEvent(exportEventId)
             var sections = TrackerController.getProgramStageSections(programStage.uid)
             var eventDate = ""
@@ -119,7 +122,6 @@ class ListSurveyFragment : BaseFragment(), OnSurveyItemClickListener{
 
             pdf.closeDocument()
             mainActivity.openExportFolderDialog(pdfFile)
-            //Toast.makeText(mainActivity, resources.getString(R.string.export_pdf_file_success), Toast.LENGTH_LONG).show()
         }catch (ex: Exception){
             Toast.makeText(mainActivity, resources.getString(R.string.export_pdf_file_failed), Toast.LENGTH_LONG).show()
         }

@@ -29,8 +29,6 @@
 
 package org.hisp.dhis.android.sdk.ui.fragments.eventdataentry;
 
-import android.util.Log;
-
 import org.hisp.dhis.android.sdk.persistence.models.ProgramIndicator;
 import org.hisp.dhis.android.sdk.ui.fragments.dataentry.AsyncHelperThread;
 

@@ -6,9 +6,6 @@ import org.hisp.dhis.android.sdk.synchronization.domain.enrollment.IEnrollmentRe
 import org.hisp.dhis.android.sdk.synchronization.domain.event.IEventRepository;
 import org.hisp.dhis.android.sdk.synchronization.domain.faileditem.IFailedItemRepository;
 
-import java.util.HashMap;
-import java.util.Map;
-
 public class SyncTrackedEntityInstanceUseCase {
     ITrackedEntityInstanceRepository mTrackedEntityInstanceRepository;
     IFailedItemRepository mFailedItemRepository;

@@ -1,34 +1,5 @@
 package org.hisp.dhis.android.sdk.activities;
 
-import android.app.Activity;
-import android.content.Intent;
-import android.os.Bundle;
-import androidx.annotation.NonNull;
-import androidx.fragment.app.Fragment;
-import android.view.MenuItem;
-import android.widget.Toast;
-import org.hisp.dhis.android.sdk.fragments.enrollment.EnrollmentDataEntryFragment;
-import org.hisp.dhis.android.sdk.fragments.enrollmentdate.EnrollmentDateFragment;
-import org.hisp.dhis.android.sdk.fragments.programoverview.ProgramOverviewFragment;
-import org.hisp.dhis.android.sdk.fragments.search.LocalSearchFragment;
-import org.hisp.dhis.android.sdk.fragments.search.LocalSearchResultFragment;
-import org.hisp.dhis.android.sdk.fragments.search.OnlineSearchFragment;
-import org.hisp.dhis.android.sdk.fragments.search.OnlineSearchResultFragment;
-import org.hisp.dhis.android.sdk.fragments.selectprogram.SelectProgramFragment;
-import org.hisp.dhis.android.sdk.fragments.settings.SettingsFragment;
-import org.hisp.dhis.android.sdk.fragments.trackedentityinstance.TrackedEntityInstanceDataEntryFragment;
-import org.hisp.dhis.android.sdk.fragments.trackedentityinstanceprofile.TrackedEntityInstanceProfileFragment;
-import org.hisp.dhis.android.sdk.fragments.upcomingevents.UpcomingEventsFragment;
-import org.hisp.dhis.android.sdk.persistence.models.TrackedEntityInstance;
-import org.hisp.dhis.android.sdk.ui.activities.OnBackPressedListener;
-import org.hisp.dhis.android.sdk.ui.fragments.eventdataentry.EventDataEntryFragment;
-import org.hisp.dhis.android.sdk.R;
-import org.hisp.dhis.client.sdk.ui.fragments.WrapperFragment;
-
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-
 public class HolderActivity /*extends AbsHomeActivity*/ {
 
     /*public static final String ARG_TYPE = "arg:FragmentType";

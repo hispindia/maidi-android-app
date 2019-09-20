@@ -1,14 +1,6 @@
 package org.hisp.dhis.android.sdk.synchronization.domain.event;
 
-import static android.R.attr.id;
-
-import static org.hisp.dhis.android.sdk.persistence.models.FailedItem.EVENT;
-
-import com.fasterxml.jackson.databind.JsonNode;
-
-import org.hisp.dhis.android.sdk.controllers.DhisController;
 import org.hisp.dhis.android.sdk.network.APIException;
-import org.hisp.dhis.android.sdk.persistence.models.ApiResponse;
 import org.hisp.dhis.android.sdk.persistence.models.Event;
 import org.hisp.dhis.android.sdk.persistence.models.FailedItem;
 import org.hisp.dhis.android.sdk.persistence.models.ImportSummary;
@@ -19,6 +11,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import static org.hisp.dhis.android.sdk.persistence.models.FailedItem.EVENT;
 
 
 public class EventSynchronizer extends Synchronizer {

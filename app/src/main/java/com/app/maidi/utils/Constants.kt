@@ -1,7 +1,6 @@
 package com.app.maidi.utils
 
 import com.app.maidi.BuildConfig
-import java.text.SimpleDateFormat
 
 class Constants{
     companion object{
@@ -17,7 +16,6 @@ class Constants{
 
         val DHIS2_SERVER_URL =
             if(BuildConfig.FLAVOR.equals("staging")) "https://maidi.icmr.org.in/dhis/api/"
-            else if(BuildConfig.FLAVOR.equals("production")) "http://eeb52f31.ngrok.io/dhis/api/"
             else "http://192.168.1.231:8080/dhis/api/"
 
         val BENEFICIARY_CHILD_REGISTRATION = "Child registration"
@@ -32,6 +30,5 @@ class Constants{
 
         val INDIA_PHONE_NUMBER_REGEX = "^[6-9]\\d{9}\$"
         val PHONE_NUMBER_PREFIX = "+91"
-        //val PHONE_NUMBER_PREFIX = "+84"
     }
 }

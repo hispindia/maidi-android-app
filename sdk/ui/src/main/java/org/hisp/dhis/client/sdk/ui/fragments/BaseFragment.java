@@ -30,9 +30,8 @@ package org.hisp.dhis.client.sdk.ui.fragments;
 
 import android.content.Context;
 import androidx.annotation.Nullable;
-import androidx.fragment.app.Fragment;
 import androidx.appcompat.widget.Toolbar;
-
+import androidx.fragment.app.Fragment;
 import org.hisp.dhis.client.sdk.ui.activities.BaseActivity;
 import org.hisp.dhis.client.sdk.ui.activities.NavigationCallback;
 import org.hisp.dhis.client.sdk.ui.activities.OnBackPressedCallback;

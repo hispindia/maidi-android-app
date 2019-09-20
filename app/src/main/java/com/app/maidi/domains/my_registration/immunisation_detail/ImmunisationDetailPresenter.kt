@@ -13,7 +13,7 @@ import org.hisp.dhis.android.sdk.network.ResponseHolder
 import org.hisp.dhis.android.sdk.persistence.models.Event
 import org.hisp.dhis.android.sdk.persistence.models.TrackedEntityInstance
 import org.joda.time.LocalDate
-import java.util.HashMap
+import java.util.*
 import javax.inject.Inject
 
 class ImmunisationDetailPresenter : BasePresenter<ImmunisationDetailView> {
@@ -43,16 +43,12 @@ class ImmunisationDetailPresenter : BasePresenter<ImmunisationDetailView> {
                         var programStage = TrackerController.getProgramStageByName(programId, Constants.IMMUNISATION)
                         var programDataElements = TrackerController.getProgramStageDataElements(programStage.uid)
                         var enrollment = TrackerController.getEnrollment(programId, trackedEntityInstance)
-                        //var programStages = TrackerController.getProgramStages(programId)
-                        //for(stage in programStages){
-                            //var dataElements = TrackerController.getProgramStageDataElements(stage.uid)
-                            for(dataElement in programDataElements){
-                                var element = TrackerController.getDataElement(dataElement.dataelement)
-                                if(!element.displayName.contains("Show")) {
-                                    vaccineList.add(Vaccine(element, null, "", false))
-                                }
+                        for(dataElement in programDataElements){
+                            var element = TrackerController.getDataElement(dataElement.dataelement)
+                            if(!element.displayName.contains("Show")) {
+                                vaccineList.add(Vaccine(element, null, "", false))
                             }
-                        //}
+                        }
 
                         for(event in events){
                             val map = HashMap<String, String>()

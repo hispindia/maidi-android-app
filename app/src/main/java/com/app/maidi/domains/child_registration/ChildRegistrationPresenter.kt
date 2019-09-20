@@ -1,27 +1,19 @@
 package com.app.maidi.domains.child_registration
 
 import com.app.maidi.domains.base.BasePresenter
-import com.app.maidi.networks.NetworkProvider
-import com.app.maidi.services.account.AccountService
-import io.reactivex.disposables.Disposable
-import org.apache.commons.lang3.mutable.Mutable
 import org.hisp.dhis.android.sdk.controllers.metadata.MetaDataController
 import org.hisp.dhis.android.sdk.controllers.tracker.TrackerController
-import org.hisp.dhis.android.sdk.persistence.models.*
-import java.util.ArrayList
+import org.hisp.dhis.android.sdk.persistence.models.Enrollment
+import org.hisp.dhis.android.sdk.persistence.models.Program
+import org.hisp.dhis.android.sdk.persistence.models.TrackedEntityAttributeValue
+import org.hisp.dhis.android.sdk.persistence.models.TrackedEntityInstance
+import java.util.*
 import javax.inject.Inject
 
 class ChildRegistrationPresenter : BasePresenter<ChildRegistrationView>{
 
-    var accountService: AccountService
-    var networkProvider: NetworkProvider
-    var disposable : Disposable? = null
-
     @Inject
-    constructor(networkProvider: NetworkProvider, accountService: AccountService){
-        this.networkProvider = networkProvider
-        this.accountService = accountService
-    }
+    constructor(){}
 
     fun getTrackedEntityAttributeValues(program: Program, trackedEntityInstance: TrackedEntityInstance) : List<TrackedEntityAttributeValue>{
         val trackedEntityAttributeValues = ArrayList<TrackedEntityAttributeValue>()

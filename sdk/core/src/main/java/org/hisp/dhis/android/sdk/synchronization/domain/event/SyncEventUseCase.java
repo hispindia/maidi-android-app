@@ -6,10 +6,8 @@ import org.hisp.dhis.android.sdk.persistence.models.TrackedEntityInstance;
 import org.hisp.dhis.android.sdk.synchronization.domain.enrollment.EnrollmentSynchronizer;
 import org.hisp.dhis.android.sdk.synchronization.domain.enrollment.IEnrollmentRepository;
 import org.hisp.dhis.android.sdk.synchronization.domain.faileditem.IFailedItemRepository;
-import org.hisp.dhis.android.sdk.synchronization.domain.trackedentityinstance
-        .ITrackedEntityInstanceRepository;
-import org.hisp.dhis.android.sdk.synchronization.domain.trackedentityinstance
-        .TrackedEntityInstanceSynchronizer;
+import org.hisp.dhis.android.sdk.synchronization.domain.trackedentityinstance.ITrackedEntityInstanceRepository;
+import org.hisp.dhis.android.sdk.synchronization.domain.trackedentityinstance.TrackedEntityInstanceSynchronizer;
 
 public class SyncEventUseCase {
 

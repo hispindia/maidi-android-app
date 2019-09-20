@@ -2,7 +2,7 @@ package org.hisp.dhis.android.sdk.synchronization.data.common;
 
 
 import com.fasterxml.jackson.databind.JsonNode;
-
+import okhttp3.ResponseBody;
 import org.apache.commons.beanutils.ConversionException;
 import org.hisp.dhis.android.sdk.controllers.DhisController;
 import org.hisp.dhis.android.sdk.network.APIException;
@@ -10,14 +10,10 @@ import org.hisp.dhis.android.sdk.network.DhisApi;
 import org.hisp.dhis.android.sdk.persistence.models.ApiResponse;
 import org.hisp.dhis.android.sdk.persistence.models.ImportSummary;
 import org.hisp.dhis.android.sdk.persistence.models.SystemInfo;
-import org.hisp.dhis.android.sdk.utils.NetworkUtils;
-import org.hisp.dhis.android.sdk.utils.StringConverter;
 import org.joda.time.DateTime;
+import retrofit2.Response;
 
 import java.io.IOException;
-
-import okhttp3.ResponseBody;
-import retrofit2.Response;
 
 
 public abstract class ARemoteDataSource {

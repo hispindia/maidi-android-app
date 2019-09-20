@@ -34,22 +34,18 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Binder;
 import android.os.IBinder;
-
-
-import org.hisp.dhis.android.sdk.R;
-import org.hisp.dhis.android.sdk.controllers.tracker.TrackerController;
+import okhttp3.HttpUrl;
 import org.hisp.dhis.android.sdk.events.LoadingMessageEvent;
 import org.hisp.dhis.android.sdk.events.UiEvent;
 import org.hisp.dhis.android.sdk.job.Job;
 import org.hisp.dhis.android.sdk.job.JobExecutor;
 import org.hisp.dhis.android.sdk.job.NetworkJob;
 import org.hisp.dhis.android.sdk.network.APIException;
-import org.hisp.dhis.android.sdk.persistence.Dhis2Application;
-import org.hisp.dhis.android.sdk.persistence.models.UserAccount;
 import org.hisp.dhis.android.sdk.network.Credentials;
+import org.hisp.dhis.android.sdk.persistence.Dhis2Application;
+import org.hisp.dhis.android.sdk.persistence.models.TrackedEntityInstance;
+import org.hisp.dhis.android.sdk.persistence.models.UserAccount;
 import org.hisp.dhis.android.sdk.persistence.preferences.ResourceType;
-
-import okhttp3.HttpUrl;
 import org.hisp.dhis.android.sdk.utils.UiUtils;
 
 /**
@@ -207,6 +203,25 @@ public final class DhisService extends Service {
         return job;
     }
 
+    public static void updateTrackedEntityInstance(final TrackedEntityInstance instance){
+        JobExecutor.enqueueJob(new NetworkJob<Object>(0,
+                null) {
+            @Override
+            public Object execute() throws APIException {
+                try {
+                    Dhis2Application.getEventBus().post(new UiEvent(UiEvent.UiEventType.START_SEND_DATA));
+                    UiUtils.postProgressMessage("Update status ...", LoadingMessageEvent.EventType.METADATA);
+                    DhisController.sendTrackedEntityInstanceData(instance);
+                    Dhis2Application.getEventBus().post(new UiEvent(UiEvent.UiEventType.SUCCESS_SEND_DATA));
+                }catch (APIException ex){
+                    Dhis2Application.getEventBus().post(new UiEvent(UiEvent.UiEventType.ERROR_SEND_DATA));
+                    throw ex;
+                }
+                return new Object();
+            }
+        });
+    }
+
     public static void sendEventData() {
         JobExecutor.enqueueJob(new NetworkJob<Object>(0,
                 null) {
@@ -245,14 +260,14 @@ public final class DhisService extends Service {
         });
     }
 
-    public static void updateData(final String content){
+    public static void updateData(final String statusMessage, final String content){
         JobExecutor.enqueueJob(new NetworkJob<Object>(0,
                 null) {
             @Override
             public Object execute() throws APIException {
                 try {
                     Dhis2Application.getEventBus().post(new UiEvent(UiEvent.UiEventType.START_SEND_DATA));
-                    UiUtils.postProgressMessage("Sending data ...", LoadingMessageEvent.EventType.METADATA);
+                    UiUtils.postProgressMessage(statusMessage, LoadingMessageEvent.EventType.METADATA);
                     DhisController.sendData();
                     UiEvent uiEvent = new UiEvent(UiEvent.UiEventType.SUCCESS_SEND_DATA);
                     uiEvent.setContent(content);

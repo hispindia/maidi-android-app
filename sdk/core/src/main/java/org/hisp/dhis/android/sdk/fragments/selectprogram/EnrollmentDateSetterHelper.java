@@ -32,9 +32,9 @@ package org.hisp.dhis.android.sdk.fragments.selectprogram;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.widget.DatePicker;
+import org.hisp.dhis.android.sdk.R;
 import org.hisp.dhis.android.sdk.persistence.models.TrackedEntityInstance;
 import org.hisp.dhis.android.sdk.ui.views.CustomDatePickerDialog;
-import org.hisp.dhis.android.sdk.R;
 import org.joda.time.DateTime;
 import org.joda.time.LocalDate;
 

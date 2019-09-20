@@ -12,7 +12,6 @@ import com.app.maidi.R
 import com.app.maidi.domains.main.fragments.listener.OnSurveyItemClickListener
 import kotlinx.android.synthetic.main.item_survey.view.*
 import org.hisp.dhis.android.sdk.persistence.models.Event
-import org.hisp.dhis.android.sdk.persistence.models.TrackedEntityInstance
 
 class ListSurveyAdapter : RecyclerView.Adapter<ListSurveyAdapter.ListSurveyViewHolder> {
 

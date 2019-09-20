@@ -30,7 +30,6 @@
 package org.hisp.dhis.android.sdk.persistence.loaders;
 
 import android.content.Context;
-
 import androidx.loader.content.AsyncTaskLoader;
 import com.raizlabs.android.dbflow.structure.Model;
 

@@ -9,12 +9,12 @@ import android.view.View;
 import android.widget.CompoundButton;
 import android.widget.Toast;
 import com.squareup.otto.Subscribe;
+import org.hisp.dhis.android.sdk.R;
 import org.hisp.dhis.android.sdk.events.LoadingMessageEvent;
 import org.hisp.dhis.android.sdk.events.UiEvent;
 import org.hisp.dhis.android.sdk.export.ExportData;
 import org.hisp.dhis.android.sdk.ui.views.FontButton;
 import org.hisp.dhis.android.sdk.ui.views.FontCheckBox;
-import org.hisp.dhis.android.sdk.R;
 
 import java.io.IOException;
 

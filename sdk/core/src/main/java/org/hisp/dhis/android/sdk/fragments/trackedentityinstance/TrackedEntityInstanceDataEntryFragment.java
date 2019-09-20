@@ -31,15 +31,14 @@ package org.hisp.dhis.android.sdk.fragments.trackedentityinstance;
 
 import android.content.DialogInterface;
 import android.os.Bundle;
-import androidx.loader.content.Loader;
-import androidx.appcompat.app.AppCompatActivity;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.loader.content.Loader;
 import com.raizlabs.android.dbflow.structure.Model;
 import com.squareup.otto.Subscribe;
 import org.hisp.dhis.android.sdk.R;
-import org.hisp.dhis.android.sdk.activities.HolderActivity;
 import org.hisp.dhis.android.sdk.controllers.ErrorType;
 import org.hisp.dhis.android.sdk.controllers.GpsController;
 import org.hisp.dhis.android.sdk.controllers.metadata.MetaDataController;

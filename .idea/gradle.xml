@@ -9,12 +9,10 @@
           <set>
             <option value="$PROJECT_DIR$" />
             <option value="$PROJECT_DIR$/ResideMenu" />
-            <option value="$PROJECT_DIR$/android_caf/caf" />
             <option value="$PROJECT_DIR$/app" />
             <option value="$PROJECT_DIR$/sdk/core" />
             <option value="$PROJECT_DIR$/sdk/ui" />
             <option value="$PROJECT_DIR$/sdk/utils" />
-            <option value="$PROJECT_DIR$/singledateandtimepicker" />
           </set>
         </option>
         <option name="resolveModulePerSourceSet" value="false" />

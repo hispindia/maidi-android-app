@@ -33,7 +33,6 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.raizlabs.android.dbflow.annotation.Column;
 import com.raizlabs.android.dbflow.annotation.NotNull;
 import com.raizlabs.android.dbflow.annotation.Table;
-
 import org.hisp.dhis.android.sdk.persistence.Dhis2Database;
 
 @Table(databaseName = Dhis2Database.NAME)

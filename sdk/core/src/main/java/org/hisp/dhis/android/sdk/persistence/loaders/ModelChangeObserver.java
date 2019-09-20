@@ -30,7 +30,6 @@
 package org.hisp.dhis.android.sdk.persistence.loaders;
 
 import android.util.Log;
-
 import com.raizlabs.android.dbflow.runtime.FlowContentObserver;
 import com.raizlabs.android.dbflow.structure.BaseModel;
 import com.raizlabs.android.dbflow.structure.Model;

@@ -29,7 +29,6 @@
 package org.hisp.dhis.client.sdk.ui.rows;
 
 import android.app.DatePickerDialog;
-import androidx.fragment.app.FragmentManager;
 import android.text.Editable;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -38,7 +37,7 @@ import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.TextView;
-
+import androidx.fragment.app.FragmentManager;
 import androidx.recyclerview.widget.RecyclerView;
 import org.hisp.dhis.android.sdk.ui.R;
 import org.hisp.dhis.client.sdk.ui.fragments.DatePickerDialogFragment;

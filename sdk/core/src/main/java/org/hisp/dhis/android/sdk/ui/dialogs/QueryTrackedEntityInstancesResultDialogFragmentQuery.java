@@ -31,7 +31,6 @@ package org.hisp.dhis.android.sdk.ui.dialogs;
 
 import android.content.Context;
 import android.util.Log;
-
 import org.hisp.dhis.android.sdk.controllers.GpsController;
 import org.hisp.dhis.android.sdk.controllers.metadata.MetaDataController;
 import org.hisp.dhis.android.sdk.persistence.loaders.Query;

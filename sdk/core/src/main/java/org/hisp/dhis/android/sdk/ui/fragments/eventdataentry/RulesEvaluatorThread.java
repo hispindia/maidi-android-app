@@ -32,7 +32,6 @@ package org.hisp.dhis.android.sdk.ui.fragments.eventdataentry;
 import org.hisp.dhis.android.sdk.persistence.Dhis2Application;
 import org.hisp.dhis.android.sdk.ui.fragments.dataentry.AsyncHelperThread;
 import org.hisp.dhis.android.sdk.ui.fragments.dataentry.DataEntryFragment;
-import org.hisp.dhis.android.sdk.ui.fragments.dataentry.HideLoadingDialogEvent;
 import org.hisp.dhis.android.sdk.ui.fragments.dataentry.RefreshListViewEvent;
 
 /**

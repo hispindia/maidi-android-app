@@ -1,10 +1,9 @@
 package org.hisp.dhis.android.sdk.utils;
 
-import static org.hisp.dhis.android.sdk.utils.Preconditions.isNull;
-
 import android.util.DisplayMetrics;
-import android.view.Display;
 import android.view.WindowManager;
+
+import static org.hisp.dhis.android.sdk.utils.Preconditions.isNull;
 
 /**
  * Created by ignac on 01/08/2017.

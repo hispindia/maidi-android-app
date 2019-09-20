@@ -6,8 +6,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
-import android.widget.BaseAdapter
-import android.widget.SpinnerAdapter
 import android.widget.TextView
 import com.app.maidi.R
 import org.hisp.dhis.android.sdk.persistence.models.OrganUnit
@@ -16,7 +14,6 @@ class ChildRegistrationAdapter : ArrayAdapter<OrganUnit>{
 
     var organUnits: List<OrganUnit>
     var layoutId: Int = -1
-    var selectedPosition: Int = -1
 
     constructor(context: Context, layoutId: Int, organUnits: List<OrganUnit>) : super(context, layoutId, organUnits){
         this.layoutId = layoutId
@@ -51,7 +48,6 @@ class ChildRegistrationAdapter : ArrayAdapter<OrganUnit>{
         if(convertView == null){
             view = LayoutInflater.from(context).inflate(layoutId, parent, false)
         }
-        var organUnit = organUnits.get(position)
         var tvTitle = view!!.findViewById<TextView>(R.id.item)
         tvTitle.setTextColor(Color.TRANSPARENT)
         return view

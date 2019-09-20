@@ -17,14 +17,13 @@ import com.app.maidi.domains.main.MainPresenter
 import com.app.maidi.models.ImmunisationCard
 import com.app.maidi.models.Vaccine
 import com.app.maidi.utils.Constants
-import com.app.maidi.utils.LinearLayoutManagerWrapper
 import com.app.maidi.utils.DateUtils
+import com.app.maidi.utils.LinearLayoutManagerWrapper
 import com.app.maidi.widget.ExportPDF
 import org.hisp.dhis.android.sdk.controllers.metadata.MetaDataController
 import org.hisp.dhis.android.sdk.persistence.models.OrganisationUnit
 import org.hisp.dhis.android.sdk.persistence.models.Program
 import org.joda.time.DateTime
-import java.lang.StringBuilder
 
 class ImmunisationCardFragment : BaseFragment() {
 

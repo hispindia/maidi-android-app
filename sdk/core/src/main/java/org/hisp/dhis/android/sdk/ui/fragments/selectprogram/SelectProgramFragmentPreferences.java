@@ -32,10 +32,8 @@ package org.hisp.dhis.android.sdk.ui.fragments.selectprogram;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.util.Pair;
-
 import com.raizlabs.android.dbflow.sql.builder.Condition;
 import com.raizlabs.android.dbflow.sql.language.Select;
-
 import org.hisp.dhis.android.sdk.controllers.metadata.MetaDataController;
 import org.hisp.dhis.android.sdk.persistence.models.OrganisationUnit;
 import org.hisp.dhis.android.sdk.persistence.models.OrganisationUnitProgramRelationship;

@@ -31,7 +31,6 @@ package org.hisp.dhis.android.sdk.persistence.preferences;
 
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.util.Log;
 
 import static org.hisp.dhis.android.sdk.utils.Preconditions.isNull;
 

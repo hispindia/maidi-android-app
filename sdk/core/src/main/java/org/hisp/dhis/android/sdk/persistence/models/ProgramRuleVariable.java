@@ -33,11 +33,9 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.raizlabs.android.dbflow.annotation.Column;
 import com.raizlabs.android.dbflow.annotation.Table;
-
 import org.hisp.dhis.android.sdk.persistence.Dhis2Database;
 import org.hisp.dhis.android.sdk.utils.api.ProgramRuleVariableSourceType;
 import org.hisp.dhis.android.sdk.utils.api.ValueType;
-import org.joda.time.DateTime;
 
 import java.util.List;
 import java.util.Map;

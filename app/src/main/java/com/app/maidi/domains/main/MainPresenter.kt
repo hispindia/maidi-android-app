@@ -4,34 +4,58 @@ import com.app.maidi.domains.base.BasePresenter
 import com.app.maidi.models.Dose
 import com.app.maidi.models.ImmunisationCard
 import com.app.maidi.models.Vaccine
-import com.app.maidi.networks.NetworkProvider
-import com.app.maidi.services.account.AccountService
 import com.app.maidi.utils.Constants
-import com.app.maidi.utils.DateUtils
 import com.app.maidi.utils.MethodUtils
-import io.reactivex.disposables.Disposable
 import org.hisp.dhis.android.sdk.controllers.tracker.TrackerController
 import org.hisp.dhis.android.sdk.job.JobExecutor
 import org.hisp.dhis.android.sdk.job.NetworkJob
 import org.hisp.dhis.android.sdk.network.APIException
 import org.hisp.dhis.android.sdk.network.ResponseHolder
-import org.hisp.dhis.android.sdk.persistence.models.*
-import org.joda.time.DateTime
+import org.hisp.dhis.android.sdk.persistence.models.DataElement
+import org.hisp.dhis.android.sdk.persistence.models.Enrollment
+import org.hisp.dhis.android.sdk.persistence.models.Event
+import org.hisp.dhis.android.sdk.persistence.models.TrackedEntityInstance
 import org.joda.time.Days
 import org.joda.time.LocalDate
-import org.joda.time.format.DateTimeFormat
 import javax.inject.Inject
 
 class MainPresenter : BasePresenter<MainView> {
 
-    var accountService: AccountService
-    var networkProvider: NetworkProvider
-    var disposable : Disposable? = null
-
     @Inject
-    constructor(networkProvider: NetworkProvider, accountService: AccountService){
-        this.networkProvider = networkProvider
-        this.accountService = accountService
+    constructor(){
+    }
+
+    // CHILD REGISTRATION MODULE
+    fun getRegisteredBeneficariesInstances(orgUnitId: String, programId: String){
+        if(isViewAttached){
+            view.showLoading()
+        }
+
+        try{
+            JobExecutor.enqueueJob<ResponseHolder<Any>>(object : NetworkJob<Any>(1, null) {
+
+                @Throws(APIException::class)
+                override fun execute(): Any {
+                    var trackedEntityInstances = TrackerController.queryLocalTrackedEntityInstances(orgUnitId, programId)
+                    var filterTrackedEntityInstances = arrayListOf<TrackedEntityInstance>()
+
+                    for(instance in trackedEntityInstances){
+                        val enrollment = TrackerController.getEnrollment(instance)
+                        if(!enrollment.status.equals(Enrollment.CANCELLED)){
+                            filterTrackedEntityInstances.add(instance)
+                        }
+                    }
+
+                    if(isViewAttached)
+                        view.getRegisteredBeneficariesInstances(filterTrackedEntityInstances)
+
+                    return Any()
+                }
+            })
+        }catch(exception : APIException){
+            if(isViewAttached)
+                view.getApiFailed(exception)
+        }
     }
 
     // AEFI MODULE
@@ -87,8 +111,6 @@ class MainPresenter : BasePresenter<MainView> {
                 view.getApiFailed(exception)
         }
     }
-
-
 
     // IMMUNISATION SUB-MODULE
     fun getImmunisationTrackedEntityInstances(orgUnitId: String, programId: String){
@@ -189,7 +211,6 @@ class MainPresenter : BasePresenter<MainView> {
         }
 
     }
-
 
 
     // ------- SESSION WISE SUB-MODULE ----------- //
@@ -305,7 +326,6 @@ class MainPresenter : BasePresenter<MainView> {
 
                 scheduleVaccineList = MethodUtils.createScheduleVaccineList(
                     LocalDate(org.hisp.dhis.android.sdk.utils.support.DateUtils.parseDate(enrollment.incidentDate)),
-                    //LocalDate.now(),
                     LocalDate(org.hisp.dhis.android.sdk.utils.support.DateUtils.parseDate(sessionDate)).plusDays(3),
                     injectedVaccineList,
                     vaccineList
@@ -412,7 +432,6 @@ class MainPresenter : BasePresenter<MainView> {
                 immunisationCard.trackedEntityInstance = trackedEntityInstance
                 immunisationCard.vaccineList = sessionVaccineList
 
-                //var isHasVaccineOnSession = false
                 for(vaccine in sessionVaccineList){
                     if(vaccine.isInjected) {
                         immunisationCardList.add(immunisationCard)
@@ -462,7 +481,6 @@ class MainPresenter : BasePresenter<MainView> {
     // -------END - SESSION WISE SUB-MODULE ----------- //
 
 
-
     // SURVEY MODULE
     fun getSurveyEntities(orgUnitId: String, programId: String){
         if(isViewAttached){
@@ -490,6 +508,8 @@ class MainPresenter : BasePresenter<MainView> {
         }
     }
 
+
+    // WORKPLAN MODULE
     fun getWorkplanEntities(orgUnitId: String, programId: String){
         if(isViewAttached){
             view.showLoading()

@@ -29,9 +29,9 @@
 
 package org.hisp.dhis.android.sdk.job;
 
+import org.hisp.dhis.android.sdk.network.APIException;
 import org.hisp.dhis.android.sdk.network.ResponseHolder;
 import org.hisp.dhis.android.sdk.network.SessionManager;
-import org.hisp.dhis.android.sdk.network.APIException;
 import org.hisp.dhis.android.sdk.persistence.Dhis2Application;
 import org.hisp.dhis.android.sdk.persistence.preferences.ResourceType;
 

@@ -10,7 +10,6 @@ import org.hisp.dhis.android.sdk.R;
 import org.hisp.dhis.android.sdk.ui.fragments.dataentry.DataEntryFragmentSection;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 
 public class ChangeSectionAdapter extends ArrayAdapter<DataEntryFragmentSection> {

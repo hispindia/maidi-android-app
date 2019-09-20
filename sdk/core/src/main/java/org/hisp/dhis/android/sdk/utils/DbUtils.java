@@ -29,11 +29,7 @@
 
 package org.hisp.dhis.android.sdk.utils;
 
-import static org.hisp.dhis.android.sdk.persistence.models.BaseIdentifiableObject.toMap;
-import static org.hisp.dhis.android.sdk.utils.Preconditions.isNull;
-
 import com.raizlabs.android.dbflow.runtime.TransactionManager;
-
 import org.hisp.dhis.android.sdk.persistence.Dhis2Database;
 import org.hisp.dhis.android.sdk.persistence.models.BaseIdentifiableObject;
 import org.hisp.dhis.android.sdk.persistence.models.BaseValue;
@@ -44,6 +40,9 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
+
+import static org.hisp.dhis.android.sdk.persistence.models.BaseIdentifiableObject.toMap;
+import static org.hisp.dhis.android.sdk.utils.Preconditions.isNull;
 
 /**
  * This class is intended to process list of DbOperations

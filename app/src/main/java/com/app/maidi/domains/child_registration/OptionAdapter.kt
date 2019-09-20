@@ -14,7 +14,6 @@ class OptionAdapter : ArrayAdapter<Option> {
 
     var optionList: List<Option>
     var layoutId: Int = -1
-    var selectedPosition: Int = -1
 
     constructor(context: Context, layoutId: Int, optionList: List<Option>) : super(context, layoutId, optionList) {
         this.layoutId = layoutId

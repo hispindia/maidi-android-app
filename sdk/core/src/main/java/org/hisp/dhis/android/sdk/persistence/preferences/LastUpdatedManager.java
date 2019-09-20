@@ -31,12 +31,9 @@ package org.hisp.dhis.android.sdk.persistence.preferences;
 
 import android.content.Context;
 import android.content.SharedPreferences;
-
-
+import okhttp3.HttpUrl;
 import org.hisp.dhis.android.sdk.network.Credentials;
 import org.hisp.dhis.android.sdk.network.Session;
-
-import okhttp3.HttpUrl;
 
 import static org.hisp.dhis.android.sdk.utils.Preconditions.isNull;
 

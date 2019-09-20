@@ -30,10 +30,6 @@
 package org.hisp.dhis.android.sdk.fragments.upcomingevents;
 
 import android.os.Bundle;
-import androidx.loader.app.LoaderManager;
-import androidx.loader.content.Loader;
-import androidx.appcompat.app.ActionBar;
-import androidx.appcompat.app.AppCompatActivity;
 import android.util.Pair;
 import android.view.ContextMenu;
 import android.view.MenuItem;
@@ -41,9 +37,12 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.LinearLayout;
 import android.widget.TableLayout;
+import androidx.appcompat.app.ActionBar;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.loader.app.LoaderManager;
+import androidx.loader.content.Loader;
 import com.raizlabs.android.dbflow.structure.Model;
 import org.hisp.dhis.android.sdk.R;
-import org.hisp.dhis.android.sdk.activities.HolderActivity;
 import org.hisp.dhis.android.sdk.controllers.metadata.MetaDataController;
 import org.hisp.dhis.android.sdk.controllers.tracker.TrackerController;
 import org.hisp.dhis.android.sdk.persistence.loaders.DbLoader;

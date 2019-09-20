@@ -6,12 +6,11 @@ import org.hisp.dhis.android.sdk.network.DhisApi;
 import org.hisp.dhis.android.sdk.persistence.models.Enrollment;
 import org.hisp.dhis.android.sdk.persistence.models.ImportSummary;
 import org.hisp.dhis.android.sdk.synchronization.data.common.ARemoteDataSource;
+import retrofit2.Response;
 
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
-
-import retrofit2.Response;
 
 
 public class EnrollmentRemoteDataSource extends ARemoteDataSource {

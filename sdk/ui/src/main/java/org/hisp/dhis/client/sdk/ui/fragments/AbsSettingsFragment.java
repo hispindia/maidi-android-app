@@ -34,7 +34,6 @@ import android.os.Bundle;
 import androidx.preference.ListPreference;
 import androidx.preference.Preference;
 import androidx.preference.PreferenceFragmentCompat;
-
 import org.hisp.dhis.android.sdk.ui.R;
 import org.hisp.dhis.client.sdk.ui.SettingPreferences;
 import org.hisp.dhis.client.sdk.ui.activities.BaseActivity;

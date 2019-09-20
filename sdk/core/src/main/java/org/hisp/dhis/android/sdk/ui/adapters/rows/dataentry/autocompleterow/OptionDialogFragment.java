@@ -2,10 +2,8 @@ package org.hisp.dhis.android.sdk.ui.adapters.rows.dataentry.autocompleterow;
 
 import android.os.Bundle;
 import android.view.View;
-
 import com.raizlabs.android.dbflow.sql.builder.Condition;
 import com.raizlabs.android.dbflow.sql.language.Select;
-
 import org.hisp.dhis.android.sdk.R;
 import org.hisp.dhis.android.sdk.persistence.models.Option;
 import org.hisp.dhis.android.sdk.persistence.models.Option$Table;

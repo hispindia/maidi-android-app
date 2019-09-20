@@ -29,21 +29,13 @@
 
 package org.hisp.dhis.android.sdk.controllers.metadata;
 
-import static org.hisp.dhis.android.sdk.utils.NetworkUtils.unwrapResponse;
-
 import android.content.Context;
 import android.util.Log;
-
 import com.raizlabs.android.dbflow.sql.builder.Condition;
 import com.raizlabs.android.dbflow.sql.language.Delete;
 import com.raizlabs.android.dbflow.sql.language.Select;
-
 import org.hisp.dhis.android.sdk.R;
-import org.hisp.dhis.android.sdk.controllers.ApiEndpointContainer;
-import org.hisp.dhis.android.sdk.controllers.DhisController;
-import org.hisp.dhis.android.sdk.controllers.LoadingController;
-import org.hisp.dhis.android.sdk.controllers.ResourceController;
-import org.hisp.dhis.android.sdk.controllers.SyncStrategy;
+import org.hisp.dhis.android.sdk.controllers.*;
 import org.hisp.dhis.android.sdk.controllers.wrappers.AssignedProgramsWrapper;
 import org.hisp.dhis.android.sdk.controllers.wrappers.OptionSetWrapper;
 import org.hisp.dhis.android.sdk.controllers.wrappers.ProgramWrapper;
@@ -62,13 +54,9 @@ import org.hisp.dhis.client.sdk.ui.AppPreferencesImpl;
 import org.joda.time.DateTime;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Hashtable;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
+
+import static org.hisp.dhis.android.sdk.utils.NetworkUtils.unwrapResponse;
 
 /**
  * @author Simen Skogly Russnes on 19.02.15.

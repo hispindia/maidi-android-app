@@ -35,7 +35,6 @@ import android.util.AttributeSet;
 import android.util.TypedValue;
 import android.view.View;
 import android.widget.FrameLayout;
-
 import androidx.cardview.widget.CardView;
 import org.hisp.dhis.android.sdk.R;
 
