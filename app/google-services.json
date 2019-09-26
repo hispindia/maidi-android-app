@@ -1,42 +1,42 @@
 {
   "project_info": {
-    "project_number": "15292701146",
-    "firebase_url": "https://demomaidi.firebaseio.com",
-    "project_id": "demomaidi",
-    "storage_bucket": "demomaidi.appspot.com"
+    "project_number": "888403773110",
+    "firebase_url": "https://maidi-50b6f.firebaseio.com",
+    "project_id": "maidi-50b6f",
+    "storage_bucket": "maidi-50b6f.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:15292701146:android:544df16c5f57f036",
+        "mobilesdk_app_id": "1:888403773110:android:ecc0170c1f88dc3df00817",
         "android_client_info": {
           "package_name": "com.app.maidi"
         }
       },
       "oauth_client": [
         {
-          "client_id": "15292701146-na6re83u2cfds2kd5gc02ktg8pa988eu.apps.googleusercontent.com",
+          "client_id": "888403773110-ur65i0b1ma1dmnqk805cchh4q6aeffun.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
             "package_name": "com.app.maidi",
-            "certificate_hash": "b5ca805b1386ad26e80aaae74107f9b69b7df1bd"
+            "certificate_hash": "2db82c906ffd5b9d446b9f84c3c7a3a506b556e2"
           }
         },
         {
-          "client_id": "15292701146-rmjkkl7t05d64g3acb24fqcpo7u8d6fk.apps.googleusercontent.com",
+          "client_id": "888403773110-cig1pnof0o4smo313rpddtk1tt9nerg8.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyBlAE5X9ycBRw5_LYZNiS7IPBeSTF9dN48"
+          "current_key": "AIzaSyDPjcc4h6iAF-Ljx8NlhAANZeddOX8Sgfg"
         }
       ],
       "services": {
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "15292701146-rmjkkl7t05d64g3acb24fqcpo7u8d6fk.apps.googleusercontent.com",
+              "client_id": "888403773110-cig1pnof0o4smo313rpddtk1tt9nerg8.apps.googleusercontent.com",
               "client_type": 3
             }
           ]
